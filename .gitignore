@@ -50,3 +50,13 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+
+# Folder
+debug/
+.settings/
+
+# Files
+*.cfg
+*.launch
+.mxproject
