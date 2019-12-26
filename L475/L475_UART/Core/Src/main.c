@@ -26,6 +26,10 @@
 #include <stdio.h>
 #include <string.h>
 
+// Contains the _write and _read functions (_weak can override)
+// Already included by the stdio.h library, (Kept here to view the source code)
+//#include <unistd.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -96,14 +100,45 @@ int main(void) {
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
+#define RX_SIZE 512
+	static int count = 0;
+	static uint8_t rx_data[RX_SIZE];
+	static uint8_t d;
 
-	uint8_t tx_data[] = "Hello World\r\n";
+	static uint8_t tx_data[] = "UART_Transmit_IT -> Hello World\r\n";
+
+	printf("Starting\r\n");
+	// Does not poll
+	HAL_UART_Transmit_IT(&huart1, tx_data, strlen((const char *)tx_data));
+
+	// ! IMPORTANT, if scanf timeout and returns 0, len becomes -1
+	// Scanf then stops blocking i.e keeps returning -1 -> TODO, Investigate
+	int value;
+	int len = scanf("%d", &value);
+	printf("Length: %d, Value: %d\r\n", len, value);
 	while (1) {
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
-		HAL_UART_Transmit(&huart1, tx_data, strlen((const char*)tx_data), 1000);
-		HAL_Delay(1000);
+		// NOTE, Reading data using interrupt
+		// NOTE, Can be used by freeRTOS to get data and fill a buffer
+		HAL_StatusTypeDef status = HAL_UART_Receive_IT(&huart1, &d,
+				1 * sizeof(uint8_t));
+
+		if (status == HAL_OK) {
+			if (d == 0 || d == '\n' || d == '\r') {
+				printf("Data: %s\r\n", rx_data);
+				count = 0;
+				memset(rx_data, 0, sizeof(rx_data) / sizeof(uint8_t));
+			} else {
+				printf("d: %d c: %c x: 0x%x\r\n", status, d, d);
+				rx_data[count] = d;
+				if (count < RX_SIZE) {
+					count++;
+				}
+			}
+		}
+// END
 	}
 	/* USER CODE END 3 */
 }
@@ -204,6 +239,41 @@ static void MX_GPIO_Init(void) {
 }
 
 /* USER CODE BEGIN 4 */
+
+/**
+ * IMP, Make sure you return the length of the transfered data
+ * Failing to do so will send the bytes that have NOT been sent (continuously)
+ */
+int _write(int fd, void *buf, size_t nbyte) {
+	HAL_StatusTypeDef status = HAL_UART_Transmit(&huart1, (uint8_t*) buf, nbyte,
+			1000);
+	return (status == HAL_OK) ? nbyte : 0;
+}
+
+/**
+ * NOTE, This fails when count = 0 (returns -1 and scanf has strange behaviour -> TODO)
+ * To replicate the strange behaviour,
+ * - change UINT32_MAX to a smaller value, i.e 10000 (10 seconds) and let it timeout.
+ * - Uncomment the printf debugging line `Count ret`
+ * - Check the return value of scanf (will be -1)
+ * - Scanf stops being blocked because of this behaviour and keeps returning -1
+ */
+int _read(int fd, void *buf, size_t nbyte) {
+	uint8_t d = 0;
+	size_t count = 0;
+
+	uint8_t *ptr = (uint8_t*) buf;
+	HAL_StatusTypeDef status = HAL_UART_Receive(&huart1, &d,
+			1 * sizeof(uint8_t), UINT32_MAX);
+	if (status == HAL_OK && d != 0) {
+		ptr[0] = d;
+		putchar(d); // NOTE, Put this back onto the console
+		count++;
+	}
+
+//	printf("Count ret: %d\r\n", count);
+	return count;
+}
 
 /* USER CODE END 4 */
 
