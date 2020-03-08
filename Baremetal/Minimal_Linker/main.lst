@@ -1,0 +1,66 @@
+
+main.elf:     file format elf32-littlearm
+main.elf
+architecture: arm, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x08000000
+
+Program Header:
+    LOAD off    0x00010000 vaddr 0x08000000 paddr 0x08000000 align 2**16
+         filesz 0x00000408 memsz 0x00000408 flags r-x
+private flags = 5000200: [Version5 EABI] [soft-float ABI]
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn  Flags
+  0 .text         00000408  08000000  08000000  00010000  2**2  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .stack        00000000  20000000  20000000  00010408  2**0  CONTENTS
+  2 .debug_info   000000fa  00000000  00000000  00010408  2**0  CONTENTS, READONLY, DEBUGGING
+  3 .debug_abbrev 0000008b  00000000  00000000  00010502  2**0  CONTENTS, READONLY, DEBUGGING
+  4 .debug_aranges 00000020  00000000  00000000  0001058d  2**0  CONTENTS, READONLY, DEBUGGING
+  5 .debug_ranges 00000010  00000000  00000000  000105ad  2**0  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   00000037  00000000  00000000  000105bd  2**0  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    0000014d  00000000  00000000  000105f4  2**0  CONTENTS, READONLY, DEBUGGING
+  8 .comment      0000007f  00000000  00000000  00010741  2**0  CONTENTS, READONLY
+  9 .ARM.attributes 00000033  00000000  00000000  000107c0  2**0  CONTENTS, READONLY
+ 10 .debug_frame  00000030  00000000  00000000  000107f4  2**2  CONTENTS, READONLY, DEBUGGING
+SYMBOL TABLE:
+08000000 l    d  .text	00000000 .text
+20000000 l    d  .stack	00000000 .stack
+00000000 l    d  .debug_info	00000000 .debug_info
+00000000 l    d  .debug_abbrev	00000000 .debug_abbrev
+00000000 l    d  .debug_aranges	00000000 .debug_aranges
+00000000 l    d  .debug_ranges	00000000 .debug_ranges
+00000000 l    d  .debug_line	00000000 .debug_line
+00000000 l    d  .debug_str	00000000 .debug_str
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .ARM.attributes	00000000 .ARM.attributes
+00000000 l    d  .debug_frame	00000000 .debug_frame
+00000000 l    df *ABS*	00000000 main.c
+080003fc g     F .text	0000000c __main
+08000000 g     O .text	000003fc isr_vector
+
+
+
+Disassembly of section .text:
+
+08000000 <isr_vector>:
+ 8000000:	00 04 00 20 fd 03 00 08 00 00 00 00 00 00 00 00     ... ............
+	...
+
+080003fc <__main>:
+__main():
+D:\Repositories\STM32-Repo\Baremetal\Minimal_Linker/main.c:26
+// rodata section
+const int const_init = 10;
+static const int const_static_init = 10;
+
+void __main(void)
+{
+ 80003fc:	b480      	push	{r7}
+ 80003fe:	af00      	add	r7, sp, #0
+D:\Repositories\STM32-Repo\Baremetal\Minimal_Linker/main.c:27
+}
+ 8000400:	bf00      	nop
+ 8000402:	46bd      	mov	sp, r7
+ 8000404:	bc80      	pop	{r7}
+ 8000406:	4770      	bx	lr

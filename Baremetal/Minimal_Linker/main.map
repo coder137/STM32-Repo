@@ -1,0 +1,114 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+const_uninit        0x4               main.o
+global_uninit       0x4               main.o
+
+Discarded input sections
+
+ .text          0x00000000        0x0 main.o
+ .data          0x00000000        0x0 main.o
+ .bss           0x00000000        0x0 main.o
+ .data.global_init
+                0x00000000        0x4 main.o
+ .data.static_init
+                0x00000000        0x4 main.o
+ .bss.static_uninit
+                0x00000000        0x4 main.o
+ .bss.const_static_uninit
+                0x00000000        0x4 main.o
+ .rodata.const_init
+                0x00000000        0x4 main.o
+ .rodata.const_static_init
+                0x00000000        0x4 main.o
+ COMMON         0x00000000        0x8 main.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+flash            0x08000000         0x00100000         xr
+ram              0x20000000         0x00018000         xrw
+ram2             0x10000000         0x00008000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD main.o
+START GROUP
+LOAD c:/program files (x86)/gnu tools arm embedded/6 2017-q2-update/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m\libgcc.a
+LOAD c:/program files (x86)/gnu tools arm embedded/6 2017-q2-update/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m\libc.a
+END GROUP
+
+.text           0x08000000      0x408
+ *(.isr_vector*)
+ .isr_vector    0x08000000      0x3fc main.o
+                0x08000000                isr_vector
+ *(.text*)
+ .text.__main   0x080003fc        0xc main.o
+                0x080003fc                __main
+ *(.rodata*)
+
+.glue_7         0x08000408        0x0
+ .glue_7        0x08000408        0x0 linker stubs
+
+.glue_7t        0x08000408        0x0
+ .glue_7t       0x08000408        0x0 linker stubs
+
+.vfp11_veneer   0x08000408        0x0
+ .vfp11_veneer  0x08000408        0x0 linker stubs
+
+.v4_bx          0x08000408        0x0
+ .v4_bx         0x08000408        0x0 linker stubs
+
+.iplt           0x08000408        0x0
+ .iplt          0x08000408        0x0 main.o
+
+.rel.dyn        0x08000408        0x0
+ .rel.iplt      0x08000408        0x0 main.o
+
+.bss
+ *(.bss*)
+ *(COMMON)
+
+.data
+ *(.data*)
+
+.igot.plt       0x20000000        0x0 load address 0x08000408
+ .igot.plt      0x20000000        0x0 main.o
+
+.stack          0x20000000        0x0 load address 0x08000408
+                0x20000000                . = ALIGN (0x8)
+OUTPUT(main.elf elf32-littlearm)
+
+.debug_info     0x00000000       0xfa
+ .debug_info    0x00000000       0xfa main.o
+
+.debug_abbrev   0x00000000       0x8b
+ .debug_abbrev  0x00000000       0x8b main.o
+
+.debug_aranges  0x00000000       0x20
+ .debug_aranges
+                0x00000000       0x20 main.o
+
+.debug_ranges   0x00000000       0x10
+ .debug_ranges  0x00000000       0x10 main.o
+
+.debug_line     0x00000000       0x37
+ .debug_line    0x00000000       0x37 main.o
+
+.debug_str      0x00000000      0x14d
+ .debug_str     0x00000000      0x14d main.o
+                                0x167 (size before relaxing)
+
+.comment        0x00000000       0x7f
+ .comment       0x00000000       0x7f main.o
+                                 0x80 (size before relaxing)
+
+.ARM.attributes
+                0x00000000       0x33
+ .ARM.attributes
+                0x00000000       0x33 main.o
+
+.debug_frame    0x00000000       0x30
+ .debug_frame   0x00000000       0x30 main.o

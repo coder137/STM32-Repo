@@ -1,0 +1,3 @@
+# Exclude these files from root level .gitignore
+!main.map
+!main.lst
