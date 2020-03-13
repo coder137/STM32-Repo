@@ -58,6 +58,16 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define ISM43362_RST_Pin GPIO_PIN_8
+#define ISM43362_RST_GPIO_Port GPIOE
+#define ISM43362_BOOT0_Pin GPIO_PIN_12
+#define ISM43362_BOOT0_GPIO_Port GPIOB
+#define ISM43362_WAKEUP_Pin GPIO_PIN_13
+#define ISM43362_WAKEUP_GPIO_Port GPIOB
+#define ISM43362_SPI3_CSN_Pin GPIO_PIN_0
+#define ISM43362_SPI3_CSN_GPIO_Port GPIOE
+#define ISM43362_DRDY_EXTI1_Pin GPIO_PIN_1
+#define ISM43362_DRDY_EXTI1_GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
