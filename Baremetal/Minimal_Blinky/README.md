@@ -8,6 +8,9 @@
   - [Adding the CMSIS Files](#adding-the-cmsis-files)
   - [Update CMake](#update-cmake)
 - [Baremetal Blink](#baremetal-blink)
+- [Flashing](#flashing)
+  - [Flashing from Command Line](#flashing-from-command-line)
+  - [Flashing from CMake](#flashing-from-cmake)
 
 # Minimal_Blinky
 
@@ -74,7 +77,10 @@ For the sake of this project we will take the CMSIS Files from the STM32 Softwar
 
 ## Update CMake
 
-Update your includes by using `target_include_directories(${USER_PROJECT_TARGET} PRIVATE "startup/cmsis" "startup/device")`
+Update your includes by using
+```cmake
+target_include_directories(${USER_PROJECT_TARGET} PRIVATE "startup/cmsis" "startup/device")
+```
 
 # Baremetal Blink
 
@@ -94,3 +100,46 @@ Inside the **doc folder** we use the **STM32L4x5 Reference Manual** to understan
 - Using `__NOP`
   - Assembly instruction for `nop`
   - Burning CPU cycles during delay
+
+# Flashing
+
+Download the [STM32Prog Tool](https://www.st.com/en/development-tools/stm32cubeprog.html)
+
+## Flashing from Command Line
+
+```bash
+# Help
+STM32_Programmer_CLI.exe --help
+
+# Find ST-LINK based devices
+STM32_Programmer_CLI.exe -l st-link
+
+# Flash the code
+# Connect and then write to appropriate location
+STM32_Programmer_CLI.exe -c port=SWD sn=<st-link sn> -w <project.bin> 0x08000000
+```
+
+## Flashing from CMake
+
+```cmake
+set(ST_PROGRAMMER "STM32_Programmer_CLI.exe")
+add_custom_target(
+  find_device
+  COMMAND ${ST_PROGRAMMER} -l st-link
+  VERBATIM USES_TERMINAL)
+
+add_custom_target(
+  flash
+  DEPENDS ${USER_PROJECT_TARGET}
+  COMMAND STM32_Programmer_CLI.exe -c port=SWD sn=066CFF323338424E43146025 -w
+          ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin 0x08000000
+  VERBATIM USES_TERMINAL)
+```
+
+```bash
+# Find Device
+cmake --build build --target find_device
+
+# Flash Device
+cmake --build build --target flash
+```
