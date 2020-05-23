@@ -1,3 +1,7 @@
+#include <stdint.h>
+
+#include "stm32l475xx.h"
+
 void __main(void);
 
 __attribute__((section(".isr_vector"))) const void (*isr_vector[240])(void) = {
@@ -6,24 +10,27 @@ __attribute__((section(".isr_vector"))) const void (*isr_vector[240])(void) = {
 };
 
 // COMMON section
-int global_uninit;
-const int const_uninit;
+uint32_t global_uninit;
+const uint8_t const_uninit;
 
 // data section
-int global_init = 10;
-static int static_init = 10;
+uint32_t global_init = 10;
+uint8_t global_init_1 = 10;
+// missing
+static uint8_t static_init = 10;
 
 // bss section
-static int static_uninit;
-static const int const_static_uninit;
+uint32_t bss_init_0 = 0;
+uint8_t bss_init_0_1 = 0;
+static uint32_t static_uninit;
+static const uint8_t const_static_uninit;
 
 // rodata section
-const int const_init = 10;
-static const int const_static_init = 10;
+const uint32_t const_init = 10;
+const uint8_t const_init_1 = 10;
 
-#include <stdint.h>
-
-#include "stm32l475xx.h"
+// missing
+static const uint8_t const_static_init = 10;
 
 static void _spin_delay(uint32_t delay);
 

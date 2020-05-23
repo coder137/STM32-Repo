@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Set your constants here
-set(PROJECT_NAME "minimal_linker_cmake")
+set(PROJECT_NAME "minimal_blinky")
 
 # Project start
 set(CMAKE_TOOLCHAIN_FILE "toolchain.cmake")
@@ -16,7 +16,7 @@ add_executable(${USER_PROJECT_TARGET} src/main.c)
 
 # Project Variables
 set(COMMON_C_FLAGS
-    -Os
+    -O0
     -mcpu=cortex-m4
     -mthumb
     -mfloat-abi=hard
@@ -25,13 +25,15 @@ set(COMMON_C_FLAGS
     -g
     -pipe)
 set(USER_C_FLAGS -std=c99 -fmessage-length=0 -ffunction-sections
-                 -fdata-sections)
+                 -fdata-sections -fstack-usage)
 
 set(USER_LINK_FLAGS
     -nostartfiles
     # -specs=nano.specs -specs=nosys.specs "SHELL:-u _printf_float" "SHELL:-u
     # _scanf_float"
-    -Wl,--gc-sections
+    -nostdlib
+    -static
+    # -Wl,--gc-sections
     -Wl,-Map,${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
     -T${PROJECT_SOURCE_DIR}/linker/layout_stm32l4.ld)
 
@@ -65,7 +67,7 @@ add_custom_command(
           ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf
   VERBATIM USES_TERMINAL)
 
-# Custom Target to Flash Hardware
+# TODO, Shift this to a new .cmake file Custom Target to Flash Hardware
 set(ST_PROGRAMMER "STM32_Programmer_CLI.exe")
 add_custom_target(
   find_device
@@ -75,6 +77,6 @@ add_custom_target(
 add_custom_target(
   flash
   DEPENDS ${USER_PROJECT_TARGET}
-  COMMAND STM32_Programmer_CLI.exe -c port=SWD sn=066CFF323338424E43146025 -w
+  COMMAND ${ST_PROGRAMMER} -c port=SWD sn=066CFF323338424E43146025 -w
           ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin 0x08000000
   VERBATIM USES_TERMINAL)

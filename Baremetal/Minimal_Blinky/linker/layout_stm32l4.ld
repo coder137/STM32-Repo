@@ -5,6 +5,8 @@
  * 
  * - http://tty.uchuujin.de/2016/02/stm32-from-scratch-bare-minimals/
  * - http://tty.uchuujin.de/2016/03/stm32-from-scratch-enableing-c-c++-features/
+ * 
+ * LOCATION COUNTER is always VMA
  */
 
 MEMORY
@@ -17,22 +19,25 @@ MEMORY
 SECTIONS
 {
   .text : {
-    KEEP(*(.isr_vector*))
+    *(.isr_vector*)
     *(.text*)
     *(.rodata*)
+    . = ALIGN(4);
+    _etext = .;
   } > flash
 
-  .bss (NOLOAD) : {
-    *(.bss*)
-    *(COMMON)
-  } > ram
-
   .data : {
+    _sdata = .;
     *(.data*)
+    . = ALIGN(4);
+    _edata = .;
   } > ram AT > flash /* ram is vma, flash is lma */
 
-  /* Check might not be needed */
-  .stack : {
-    . = ALIGN(8);
+  .bss : {
+    _sbss = .;
+    *(.bss*)
+    *(COMMON)
+    . = ALIGN(4);
+    _ebss = .;
   } > ram
 }
