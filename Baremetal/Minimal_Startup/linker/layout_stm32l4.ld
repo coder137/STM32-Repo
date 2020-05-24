@@ -1,6 +1,8 @@
 /**
  * References:
  * - https://sourceware.org/binutils/docs/ld/Basic-Script-Concepts.html#Basic-Script-Concepts
+ * - https://sourceware.org/binutils/docs/ld/Builtin-Functions.html#Builtin-Functions
+ * 
  * - https://arobenko.gitbooks.io/bare_metal_cpp/content/
  * 
  * - http://tty.uchuujin.de/2016/02/stm32-from-scratch-bare-minimals/
@@ -66,3 +68,5 @@ SECTIONS
     _ebss = .;
   } > ram
 }
+
+_lma_data = LOADADDR(.data);
