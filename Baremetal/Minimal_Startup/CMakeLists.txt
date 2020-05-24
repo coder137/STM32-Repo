@@ -8,7 +8,7 @@ set(CMAKE_TOOLCHAIN_FILE "toolchain.cmake")
 project(${PROJECT_NAME})
 
 set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
-add_executable(${USER_PROJECT_TARGET} src/main.c)
+add_executable(${USER_PROJECT_TARGET} src/main.c src/isr_vector.c)
 
 # TODO, Add more files here
 

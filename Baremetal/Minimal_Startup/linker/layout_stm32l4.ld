@@ -16,6 +16,31 @@ MEMORY
   ram2 (rwx)   : ORIGIN = 0x10000000, LENGTH = 32K
 }
 
+/*************************************************
+                                                  *
+     64K RAM +-----Stack Top   +-----+ 32K RAM    *
+             |    ||           |     |            *
+             |    \/           |     |            *
+             |     |           |     |            *
+             |     |           |     |            *
+             |    /\ heap      |    /\            *
+             |    || overflow  |    ||            *
+             .-----.           +-----Heap Start   *
+             |bbbbb|           0x2000000          *
+             |bbbbb| *bss                         *
+             .-----.                              *
+             |ddddd|                              *
+             |ddddd| *data                        *
+             .-----.                              *
+            0x1000000                             *
+                                                  *
+**************************************************
+*/
+
+__base_ram = ORIGIN(ram);
+__end_ram = __base_ram + LENGTH(ram);
+__istack = __end_ram;
+
 SECTIONS
 {
   .text : {
