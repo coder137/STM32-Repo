@@ -4,6 +4,23 @@
 [Install CMAKE](https://cmake.org/cmake/help/latest/index.html)
 [Fastbit Embedded Brain Academy Linker Script](https://www.youtube.com/watch?v=B7oKdUvRhQQ)
 
+## High Level Overview of Baremetal Cross Compilation Process
+
+- Write / Get the linker script
+  - Support for `.text`, `.data` and `.bss` sections
+  - Support for C Standard Library
+  - Support for C++ Standard Library
+- Write the Startup File (CMSIS)
+  - Initialize the ISR Vector Table
+  - Set the Stack Pointer at the first address
+  - Implement the Reset Handler
+- Implement the Reset Handler
+  - Copy the `.data` section from Flash to RAM (LMA to VMA)
+  - Initialize the `.bss` section to 0
+    - Data initialized to 0 is stored here
+    - Data uninitialized also needs to be set to 0 and stored here
+- Call the main service routine
+
 ## Important
 
 ### **dump** folder
@@ -21,12 +38,12 @@
   - Very minimal Blinky example (NOT Complete)
   - Does not contain complete startup, .bss implementation and copy functions
   - Can be flashed onto the microcontroller to see led blinking
-- [ ] Minimal_Linker_Startup
+- [ ] Minimal_Startup
   - Using the Minimal Blinky to write startup files 
-- [ ] Minimal_Linker_CMSIS
+- [ ] Minimal_CMSIS
   - Using the ARM CMSIS Base Toolchain 
   - Device specific data added
-- [ ] Minimal_Linker_C_Stdlib
+- [ ] Minimal_C_Stdlib
   -  Adding the C Standard library
   -  Using syscalls implementation
 
