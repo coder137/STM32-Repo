@@ -35,7 +35,9 @@ set(USER_LINK_FLAGS
     -static
     # -Wl,--gc-sections
     -Wl,-Map,${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
-    -T${PROJECT_SOURCE_DIR}/startup/linker/layout_stm32l4.ld)
+#     -T${PROJECT_SOURCE_DIR}/startup/linker/layout_stm32l4.ld
+    -T${PROJECT_SOURCE_DIR}/startup/linker/gcc_arm.ld
+    )
 
 # ? debugging
 message("\nDEBUGGING")
@@ -48,6 +50,9 @@ target_compile_options(${USER_PROJECT_TARGET} PRIVATE ${COMMON_C_FLAGS}
                                                       ${USER_C_FLAGS})
 target_link_options(${USER_PROJECT_TARGET} PRIVATE ${COMMON_C_FLAGS}
                     ${USER_LINK_FLAGS})
+
+# Required for stm32l4xx.h file
+target_compile_definitions(${USER_PROJECT_TARGET} PRIVATE "STM32L475xx")
 include(startup/startup.cmake)
 include(arm/arm.cmake)
 

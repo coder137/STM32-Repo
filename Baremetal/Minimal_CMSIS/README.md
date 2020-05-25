@@ -1,5 +1,9 @@
 - [Minimal CMSIS](#minimal-cmsis)
 - [Current Links](#current-links)
+- [[NEW] Integration with CMSIS](#new-integration-with-cmsis)
+  - [High Level Overview](#high-level-overview)
+  - [Technical Overview](#technical-overview)
+- [OLDER](#older)
 - [Pre-requisite](#pre-requisite)
 - [Integrating with CMake](#integrating-with-cmake)
   - [NOTE](#note)
@@ -21,6 +25,55 @@ AIM: Integrate the ARM CMSIS stack with the STM32 Device files
 # Current Links
 
 - [ARM CMSIS](https://developer.arm.com/tools-and-software/embedded/cmsis)
+
+# [NEW] Integration with CMSIS
+
+## High Level Overview
+
+- Get the ARM CMSIS **Cortex M Includes**
+  - No Configuration required
+- Get the ARM Device **C Startup File** and **Linker Script**
+  - C Startup File requires Hardware specific includes
+  - ARM Linker Script requires ROM, RAM based configurations
+- Get the Hardware specific files from **STM32 Device Repository**
+  - No Configuration required
+- Write your **Entry Point C File** and call `main`
+- Write your application code in `main`
+
+## Technical Overview
+
+- ARM Folder contains CMSIS Cortex M Drivers
+  - These can be obtained from [the CMSIS Github Repository](https://github.com/ARM-software/CMSIS_5)
+  - Take a look under `Core/Include`
+- Copy the **Linker Script** from the Device folder
+  - `CMSIS_5/Device/ARM/ARMCM4/Source/GCC/gcc_arm.ld`
+  - **IMP** Make sure you initialize the below mentioned variables
+    - **__ROM_BASE**, **__ROM_SIZE** (Flash size of your controller)
+    - **__RAM_BASE**, **__RAM_SIZE** (RAM size of your controller)
+    - **__STACK_SIZE**, **__HEAP_SIZE** (Stack and Heap size of your controller)
+- We also need our device specific startup code.
+  - We get this from [the STM32 Github Repository](https://github.com/STMicroelectronics/STM32Cube_MCU_Overall_Offer)
+  - Take a look under `Drivers/CMSIS/Device`
+  - Files to copy
+    - Sources `system_stm32l4xx`
+    - Include Folder `Include`
+- The `startup_stm32l4xx.c` is startup file from the **ARM CMSIS_5 Device Folder**
+    - `CMSIS_5/Device/ARM/ARMCM4/Source/startup_ARMCM4.c`
+    - Copy and rename this file
+    - Delete the initial includes and add the stm32 specific includes here
+
+- Entry Point inside **startup_stm32l4xx.c**
+  - Inside the `Reset_Handler` function there is a macro function called `__PROGRAM_START`
+  - `__PROGRAM_START` internally initializes the bss and copies the data section
+  - It also calls the `extern void _start(void)` function
+  - This needs to be defined by us and what runs after the Low Level has been completed
+- Create a file `entry_point.c` and add this above function `void _start(void)`
+  - Inside this function put your call to `int main()`
+
+
+# OLDER
+
+Relevant Documentation and Links from previous projects 
 
 # Pre-requisite
 
