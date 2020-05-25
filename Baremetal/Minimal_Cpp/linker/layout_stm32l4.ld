@@ -53,6 +53,20 @@ SECTIONS
     _etext = .;
   } > flash
 
+  /* C++ exception unwinding information */
+  .ARM.extab :
+  {
+    *(.ARM.extab* .gnu.linkonce.armextab.*)
+  } > flash
+
+  /* C++ Index entries for section unwinding */
+  __exidx_start = .;
+  .ARM.exidx :
+  {
+    *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+  } > flash
+  __exidx_end = .;
+
   .data : {
     _sdata = .;
     *(.data*)

@@ -1,4 +1,4 @@
-- [Minimal CPpp](#minimal-cppp)
+- [Minimal Cpp](#minimal-cpp)
 - [Current Links](#current-links)
 - [Pre-requisite](#pre-requisite)
 - [Integrating with CMake](#integrating-with-cmake)
@@ -12,7 +12,7 @@
   - [Flashing from Command Line](#flashing-from-command-line)
   - [Flashing from CMake](#flashing-from-cmake)
 
-# Minimal CPpp
+# Minimal Cpp
 
 AIM: Write application level code in Cpp
 

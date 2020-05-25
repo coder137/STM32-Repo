@@ -8,7 +8,7 @@ set(CMAKE_TOOLCHAIN_FILE "toolchain.cmake")
 project(${PROJECT_NAME})
 
 set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
-add_executable(${USER_PROJECT_TARGET} src/main.c src/isr_vector.c)
+add_executable(${USER_PROJECT_TARGET} src/main.cpp src/isr_vector.c)
 
 # TODO, Add more files here
 
@@ -24,8 +24,8 @@ set(COMMON_C_FLAGS
     -Wall
     -g
     -pipe)
-set(USER_C_FLAGS -std=c99 -fmessage-length=0 -ffunction-sections
-                 -fdata-sections -fstack-usage)
+set(USER_C_FLAGS # -std=c99
+    -fmessage-length=0 -ffunction-sections -fdata-sections -fstack-usage)
 
 set(USER_LINK_FLAGS
     -nostartfiles

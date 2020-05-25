@@ -48,17 +48,19 @@
 - [ ] Minimal_C_Stdlib
   -  Adding the C Standard library
   -  Using syscalls implementation
+- [ ] Minimal_RTOS
+  - Adding `FreeRTOS` to the device
+  - Writing device specific FreeRTOS.h files
 
 ## C++ Programming
 
-- [ ] Minimal_Linker_Cpp
+- [x] Minimal_Cpp
   - Adding C++
-  - Constructor, Destructor
+  - Constructor
+- [ ] Minimal_Cpp_Advanced
   - Templates
   - C++11 Features
-- [ ] Minimal_Linker_Cpp_Stdlib
+  - Add other features and testing
+- [ ] Minimal_Cpp_Stdlib
   - Using the C++ Standard libraries
   - `<algorithm>` and static allocation based functions
-- [ ] Minimal_Linker_RTOS
-  - Adding FreeRTOS to the device
-  - Writing device specific FreeRTOS.h files
