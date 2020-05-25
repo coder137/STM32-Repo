@@ -1,8 +1,10 @@
 # List
 
-[Install the arm-none-eabi-* toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
-[Install CMAKE](https://cmake.org/cmake/help/latest/index.html)
-[Fastbit Embedded Brain Academy Linker Script](https://www.youtube.com/watch?v=B7oKdUvRhQQ)
+- [Install the arm-none-eabi-* toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+- [Install CMAKE](https://cmake.org/cmake/help/latest/index.html)
+- [Fastbit Embedded Brain Academy Linker Script](https://www.youtube.com/watch?v=B7oKdUvRhQQ)
+- [ARM CMSIS_5 Github](https://github.com/ARM-software/CMSIS_5)
+- [STM32 Github](https://github.com/STMicroelectronics/STM32Cube_MCU_Overall_Offer)
 
 ## High Level Overview of Baremetal Cross Compilation Process
 
@@ -38,9 +40,9 @@
   - Very minimal Blinky example (NOT Complete)
   - Does not contain complete startup, .bss implementation and copy functions
   - Can be flashed onto the microcontroller to see led blinking
-- [ ] Minimal_Startup
-  - Using the Minimal Blinky to write startup files 
-- [ ] Minimal_CMSIS
+- [x] Minimal_Startup
+  - Using the Minimal Blinky to write startup files for your linker script
+- [x] Minimal_CMSIS
   - Using the ARM CMSIS Base Toolchain 
   - Device specific data added
 - [ ] Minimal_C_Stdlib
