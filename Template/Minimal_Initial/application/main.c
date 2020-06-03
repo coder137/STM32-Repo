@@ -1,47 +1,30 @@
-#include "stm32l475xx.h"
 #include <stdint.h>
 
-static void init(void);
-static void reset(void);
-static void set(void);
+#include "gpio/gpio.h"
 
 static void _spin_delay(uint32_t delay);
 
 int main(void) {
-  init();
-  set();
+  RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+
+  GPIO_s config = {};
+  config.mode = GPIO_mode_OUTPUT;
+  config.type = GPIO_type_PUSH_PULL;
+  config.speed = GPIO_speed_LOW_SPEED;
+  config.pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
+
+  gpio__init(&config, GPIOA, 5);
+  gpio__set(&config);
+
   while (1) {
     _spin_delay(1000 * 1000);
-    reset();
+    gpio__reset(&config);
 
     _spin_delay(1000 * 1000);
-    set();
+    gpio__set(&config);
   }
 
   return 0;
-}
-
-static void init(void) {
-  RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
-  GPIOA->BRR |= (1 << 5); // Reset the pin here
-
-  // Set the mode
-  GPIOA->MODER &= ~(3 << 10);
-  GPIOA->MODER |= (1 << 10); // 01 00 00 00 00 00
-
-  // Check these registers
-  GPIOA->OTYPER &= ~(1 << 5); // set to 0
-  GPIOA->OSPEEDR &= ~(3 << 10);
-  GPIOA->PUPDR &= ~(3 << 10);
-}
-
-static void reset(void) {
-  GPIOA->BRR = (1 << 5); // Reset
-}
-
-static void set(void) {
-  // Set the pin here
-  GPIOA->BSRR |= (1 << 5);
 }
 
 static void _spin_delay(uint32_t delay) {
