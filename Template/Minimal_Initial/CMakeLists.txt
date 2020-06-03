@@ -19,6 +19,7 @@ target_link_options(${USER_PROJECT_TARGET} PRIVATE ${COMMON_C_FLAGS}
 
 # TODO, Add more subdirectories here
 add_subdirectory(l0_lowlevel)
+add_subdirectory(modules)
 
 # Tools
 include(cmake/compile.cmake)

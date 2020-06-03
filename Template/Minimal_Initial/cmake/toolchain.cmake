@@ -12,7 +12,7 @@ set(CMAKE_CXX_COMPILER_WORKS 1)
 
 # Project Variables
 set(COMMON_C_FLAGS
-    -O0
+    -Os
     -mcpu=cortex-m4
     -mthumb
     -mfloat-abi=hard
@@ -31,12 +31,4 @@ set(USER_LINK_FLAGS
     -static
     -Wl,--gc-sections
     -Wl,-Map,${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
-    -T${PROJECT_SOURCE_DIR}/l0_lowlevel/linker/gcc_arm.ld
-    )
-
-# ? debugging
-# message("\nDEBUGGING")
-# message("COMMON_FLAGS: ${COMMON_C_FLAGS}")
-# message("USER_COMPILE_C_FLAGS: ${USER_C_FLAGS}")
-# message("USER_LINK_FLAGS: ${USER_LINK_FLAGS}")
-# message("-------DONE------\n\n")
+    -T${PROJECT_SOURCE_DIR}/l0_lowlevel/linker/gcc_arm.ld)
