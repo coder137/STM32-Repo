@@ -33,6 +33,7 @@ int main(void) {
   gpio__init(&config, GPIOA, 5);
   gpio__set(&config);
 
+  // UART Config
   UART_s uart_config = {};
   uart_config.baud_rate = 115200U;
   uart_config.stop_bit = UART_stop_bit_1_0;
