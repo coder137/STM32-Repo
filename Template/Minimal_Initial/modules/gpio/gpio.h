@@ -32,6 +32,26 @@ typedef enum {
   GPIO_pull_RESERVED,
 } GPIO_pull_e;
 
+typedef enum {
+  GPIO_alternate_0,
+  GPIO_alternate_1,
+  GPIO_alternate_2,
+  GPIO_alternate_3,
+  GPIO_alternate_4,
+  GPIO_alternate_5,
+  GPIO_alternate_6,
+  GPIO_alternate_7,
+
+  GPIO_alternate_8,
+  GPIO_alternate_9,
+  GPIO_alternate_10,
+  GPIO_alternate_11,
+  GPIO_alternate_12,
+  GPIO_alternate_13,
+  GPIO_alternate_14,
+  GPIO_alternate_15,
+} GPIO_alternate_e;
+
 // Main GPIO Configuration
 typedef struct {
   GPIO_TypeDef *port;
@@ -41,6 +61,7 @@ typedef struct {
   GPIO_type_e type;
   GPIO_speed_e speed;
   GPIO_pull_e pull;
+  GPIO_alternate_e alternate;
 } GPIO_s;
 
 void gpio__init(GPIO_s *config, GPIO_TypeDef *port, uint32_t pin);

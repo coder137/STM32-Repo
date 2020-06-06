@@ -16,27 +16,24 @@ int main(void) {
   // Activate GPIOB
   RCC->AHB2ENR |= (1 << 1);
 
+  // UART Pin Selection
   GPIO_s config = {};
   config.mode = GPIO_mode_ALTERNATE_FUNCTION;
   config.type = GPIO_type_PUSH_PULL;
   config.speed = GPIO_speed_VERY_HIGH_SPEED;
   config.pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
-
+  config.alternate = GPIO_alternate_7;
   gpio__init(&config, GPIOB, 6);
-  config.port->AFR[0] &= ~(0xF << 24);
-  config.port->AFR[0] |= (7 << 24);
-
   gpio__init(&config, GPIOB, 7);
-  config.port->AFR[0] &= ~(0xF << 28);
-  config.port->AFR[0] |= (7 << 28);
 
+  // GPIO Update
   config.mode = GPIO_mode_OUTPUT;
   config.speed = GPIO_speed_LOW_SPEED;
 
   gpio__init(&config, GPIOA, 5);
   gpio__set(&config);
 
-  UART_s uart_config;
+  UART_s uart_config = {};
   uart_config.baud_rate = 115200U;
   uart_config.stop_bit = UART_stop_bit_1_0;
   uart_config.word_length = UART_word_length_8;

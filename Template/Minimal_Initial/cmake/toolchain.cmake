@@ -26,8 +26,7 @@ set(USER_C_FLAGS -std=c99 -fmessage-length=0 -ffunction-sections
 set(USER_LINK_FLAGS
     -nostartfiles
     # -specs=nano.specs -specs=nosys.specs "SHELL:-u _printf_float" "SHELL:-u
-    # _scanf_float"
-    -nostdlib
+    # _scanf_float" -nostdlib
     -static
     -Wl,--gc-sections
     -Wl,-Map,${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
