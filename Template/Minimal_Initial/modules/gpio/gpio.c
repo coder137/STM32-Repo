@@ -59,6 +59,14 @@ void gpio__reset(const GPIO_s *config) {
   config->port->BRR = brr_data;
 }
 
+bool gpio__get(const GPIO_s *config) {
+  bool ispressed = false;
+  if (config->mode == GPIO_mode_INPUT) {
+    ispressed = (config->port->IDR >> config->pin) & 0x01;
+  }
+  return ispressed;
+}
+
 // STATIC FUNCTION DEFINITIONS
 static void gpio__update_moder(const GPIO_s *config) {
   uint32_t moder_data = config->port->MODER;

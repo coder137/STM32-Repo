@@ -69,4 +69,6 @@ void gpio__init(GPIO_s *config, GPIO_TypeDef *port, uint32_t pin);
 void gpio__set(const GPIO_s *config);
 void gpio__reset(const GPIO_s *config);
 
+bool gpio__get(const GPIO_s *config);
+
 #endif

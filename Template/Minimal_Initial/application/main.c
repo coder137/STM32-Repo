@@ -15,6 +15,8 @@ int main(void) {
   RCC->AHB2ENR |= (1 << 0);
   // Activate GPIOB
   RCC->AHB2ENR |= (1 << 1);
+  // Activate GPIOC
+  RCC->AHB2ENR |= (1 << 2);
 
   // UART Pin Selection
   GPIO_s config = {};
@@ -33,6 +35,14 @@ int main(void) {
   gpio__init(&config, GPIOA, 5);
   gpio__set(&config);
 
+  GPIO_s input_config = {};
+  config.mode = GPIO_mode_INPUT;
+  config.type = GPIO_type_PUSH_PULL;
+  config.speed = GPIO_speed_LOW_SPEED;
+  // * NOTE, Has an external Pullup already
+  config.pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
+  gpio__init(&input_config, GPIOC, 13);
+
   // UART Config
   UART_s uart_config = {};
   uart_config.baud_rate = 115200U;
@@ -44,6 +54,13 @@ int main(void) {
     _spin_delay(1000 * 1000);
     gpio__reset(&config);
     uart__write_string(&uart_config, "Hello World\r\n");
+    bool ispressed = gpio__get(&input_config);
+
+    if (ispressed) {
+      uart__write_string(&uart_config, "Not Pressed\r\n");
+    } else {
+      uart__write_string(&uart_config, "Pressed\r\n");
+    }
 
     _spin_delay(1000 * 1000);
     gpio__set(&config);
