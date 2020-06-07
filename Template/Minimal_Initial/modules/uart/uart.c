@@ -6,7 +6,7 @@
 
 // Constants
 static const uint8_t CR1_UE = 0;
-static const uint8_t CR1_TE = 3;
+static const uint8_t CR1_RE = 2;
 static const uint8_t CR1_M0 = 12;
 static const uint8_t CR1_OVER8 = 15;
 static const uint8_t CR1_M1 = 28;
@@ -24,6 +24,7 @@ static void uart__set_word_length(UART_s *config);
 static void uart__set_stop_bit(UART_s *config);
 static void uart__set_baud_rate(UART_s *config);
 
+static void uart__set_mode(UART_s *config);
 // Section 40.5.2 -> UART Transmitter
 // Page 1340
 
@@ -55,7 +56,7 @@ void uart__init(UART_s *config, USART_TypeDef *usart) {
   uart__enable(config);
 
   // Activate TE Bit
-  config->usart->CR1 |= (1 << CR1_TE);
+  uart__set_mode(config);
 }
 
 void uart__write(const UART_s *config, const char data) {
@@ -85,6 +86,17 @@ void uart__write_string(const UART_s *config, const char *buffer) {
 
   while ((usart->ISR & (1 << ISR_TC)) == 0) {
   }
+}
+
+uint8_t uart__read(const UART_s *config) {
+  USART_TypeDef *usart = config->usart;
+
+  // Wait for RXNE bit to be set
+  while ((usart->ISR & (1 << 5)) == 0) {
+  }
+
+  uint8_t data = usart->RDR;
+  return data;
 }
 
 // STATIC FUNCTION DECLARATION
@@ -125,4 +137,11 @@ static void uart__set_baud_rate(UART_s *config) {
 
   const uint32_t usartdiv = (SystemCoreClock / config->baud_rate);
   usart->BRR = (usartdiv);
+}
+
+static void uart__set_mode(UART_s *config) {
+  uint32_t cr1_data = config->usart->CR1;
+  cr1_data &= ~(3 << CR1_RE);
+  cr1_data |= (config->mode << CR1_RE);
+  config->usart->CR1 = cr1_data;
 }
