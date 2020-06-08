@@ -55,16 +55,88 @@ void DebugMon_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void PendSV_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void SysTick_Handler(void) __attribute__((weak, alias("Default_Handler")));
 
-void Interrupt0_Handler(void) __attribute__((weak, alias("Default_Handler")));
-void Interrupt1_Handler(void) __attribute__((weak, alias("Default_Handler")));
-void Interrupt2_Handler(void) __attribute__((weak, alias("Default_Handler")));
-void Interrupt3_Handler(void) __attribute__((weak, alias("Default_Handler")));
-void Interrupt4_Handler(void) __attribute__((weak, alias("Default_Handler")));
-void Interrupt5_Handler(void) __attribute__((weak, alias("Default_Handler")));
-void Interrupt6_Handler(void) __attribute__((weak, alias("Default_Handler")));
-void Interrupt7_Handler(void) __attribute__((weak, alias("Default_Handler")));
-void Interrupt8_Handler(void) __attribute__((weak, alias("Default_Handler")));
-void Interrupt9_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void WWDG_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void PVD_PVM_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void RTC_TAMP_STAMP_Handler(void)
+    __attribute__((weak, alias("Default_Handler")));
+void RTC_WKUP_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void FLASH_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void RCC_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void EXTI0_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void EXTI1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void EXTI2_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void EXTI3_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void EXTI4_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA1_CH1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA1_CH2_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA1_CH3_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA1_CH4_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA1_CH5_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA1_CH6_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA1_CH7_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void ADC1_2_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void CAN1_TX_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void CAN1_RX0_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void CAN1_RX1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void CAN1_SCE_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void EXTI9_5_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM1_BRK_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM1_UP_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM1_TRG_COM_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM1_CC_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM2_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM3_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM4_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void I2C1_EV_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void I2C1_ER_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void I2C2_EV_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void I2C2_ER_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void SPI1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void SPI2_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void USART1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void USART2_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void USART3_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void EXTI15_10_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void RTC_ALARM_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DFSDM1_FLT3_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM8_BRK_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM8_UP_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM8_TRG_COM_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM8_CC_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void ADC3_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void FMC_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void SDMMC1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM5_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void SPI3_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void UART4_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void UART5_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM6_DAC_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TIM7_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA2_CH1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA2_CH2_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA2_CH3_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA2_CH4_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA2_CH5_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DFSDM1_FLT0_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DFSDM1_FLT1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DFSDM1_FLT2_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void COMP_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void LPTIM1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void LPTIM2_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void OTG_FS_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA2_CH6_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DMA2_CH7_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void LPUART1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void QUADSPI_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void I2C3_EV_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void I2C3_ER_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void SAI1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void SAI2_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void SWPMI1_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void TSC_Handler(void) __attribute__((weak, alias("Default_Handler")));
+
+void RNG_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void FPU_Handler(void) __attribute__((weak, alias("Default_Handler")));
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Vector table
@@ -75,7 +147,7 @@ void Interrupt9_Handler(void) __attribute__((weak, alias("Default_Handler")));
 #pragma GCC diagnostic ignored "-Wpedantic"
 #endif
 
-const VECTOR_TABLE_Type __VECTOR_TABLE[240] __VECTOR_TABLE_ATTRIBUTE = {
+const VECTOR_TABLE_Type __VECTOR_TABLE[] __VECTOR_TABLE_ATTRIBUTE = {
     (VECTOR_TABLE_Type)(&__INITIAL_SP), /*     Initial Stack Pointer */
     Reset_Handler,                      /*     Reset Handler */
     NMI_Handler,                        /* -14 NMI Handler */
@@ -94,17 +166,88 @@ const VECTOR_TABLE_Type __VECTOR_TABLE[240] __VECTOR_TABLE_ATTRIBUTE = {
     SysTick_Handler,                    /*  -1 SysTick Handler */
 
     /* Interrupts */
-    Interrupt0_Handler, /*   0 Interrupt 0 */
-    Interrupt1_Handler, /*   1 Interrupt 1 */
-    Interrupt2_Handler, /*   2 Interrupt 2 */
-    Interrupt3_Handler, /*   3 Interrupt 3 */
-    Interrupt4_Handler, /*   4 Interrupt 4 */
-    Interrupt5_Handler, /*   5 Interrupt 5 */
-    Interrupt6_Handler, /*   6 Interrupt 6 */
-    Interrupt7_Handler, /*   7 Interrupt 7 */
-    Interrupt8_Handler, /*   8 Interrupt 8 */
-    Interrupt9_Handler  /*   9 Interrupt 9 */
-                        /* Interrupts 10 .. 223 are left out */
+    WWDG_Handler,
+    PVD_PVM_Handler,
+    RTC_TAMP_STAMP_Handler,
+    RTC_WKUP_Handler,
+    FLASH_Handler,
+    RCC_Handler,
+    EXTI0_Handler,
+    EXTI1_Handler,
+    EXTI2_Handler,
+    EXTI3_Handler,
+    EXTI4_Handler,
+    DMA1_CH1_Handler,
+    DMA1_CH2_Handler,
+    DMA1_CH3_Handler,
+    DMA1_CH4_Handler,
+    DMA1_CH5_Handler,
+    DMA1_CH6_Handler,
+    DMA1_CH7_Handler,
+    ADC1_2_Handler,
+    CAN1_TX_Handler,
+    CAN1_RX0_Handler,
+    CAN1_RX1_Handler,
+    CAN1_SCE_Handler,
+    EXTI9_5_Handler,
+    TIM1_BRK_Handler,
+    TIM1_UP_Handler,
+    TIM1_TRG_COM_Handler,
+    TIM1_CC_Handler,
+    TIM2_Handler,
+    TIM3_Handler,
+    TIM4_Handler,
+    I2C1_EV_Handler,
+    I2C1_ER_Handler,
+    I2C2_EV_Handler,
+    I2C2_ER_Handler,
+    SPI1_Handler,
+    SPI2_Handler,
+    USART1_Handler,
+    USART2_Handler,
+    USART3_Handler,
+    EXTI15_10_Handler,
+    RTC_ALARM_Handler,
+    DFSDM1_FLT3_Handler,
+    TIM8_BRK_Handler,
+    TIM8_UP_Handler,
+    TIM8_TRG_COM_Handler,
+    TIM8_CC_Handler,
+    ADC3_Handler,
+    FMC_Handler,
+    SDMMC1_Handler,
+    TIM5_Handler,
+    SPI3_Handler,
+    UART4_Handler,
+    UART5_Handler,
+    TIM6_DAC_Handler,
+    TIM7_Handler,
+    DMA2_CH1_Handler,
+    DMA2_CH2_Handler,
+    DMA2_CH3_Handler,
+    DMA2_CH4_Handler,
+    DMA2_CH5_Handler,
+    DFSDM1_FLT0_Handler,
+    DFSDM1_FLT1_Handler,
+    DFSDM1_FLT2_Handler,
+    COMP_Handler,
+    LPTIM1_Handler,
+    LPTIM2_Handler,
+    OTG_FS_Handler,
+    DMA2_CH6_Handler,
+    DMA2_CH7_Handler,
+    LPUART1_Handler,
+    QUADSPI_Handler,
+    I2C3_EV_Handler,
+    I2C3_ER_Handler,
+    SAI1_Handler,
+    SAI2_Handler,
+    SWPMI1_Handler,
+    TSC_Handler,
+    0,
+    0,
+    RNG_Handler,
+    FPU_Handler,
 };
 
 #if defined(__GNUC__)

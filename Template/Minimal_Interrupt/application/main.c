@@ -1,5 +1,6 @@
 #include <stdint.h>
 
+#include "exti/exti.h"
 #include "gpio/gpio.h"
 #include "uart/uart.h"
 
@@ -7,46 +8,48 @@
 static GPIO_s output_config;
 static GPIO_s input_config;
 static UART_s uart_config;
+static EXTI_s gpioC13_interrupt_config;
 
 // Static Functions
 static void main__uart_init(void);
 static void main__gpio_output(void);
+
 static void main__gpio_input(void);
+static void main__gpio_input_external_interrupt(void);
+
 static void _spin_delay(uint32_t delay);
 
+volatile bool is_button_pressed = false;
+
+void EXTI15_10_Handler(void) {
+
+  if (exti__gpio_is_pending_interrupt(&gpioC13_interrupt_config)) {
+    exti__gpio_clear_pending_interrupt(&gpioC13_interrupt_config);
+
+    // Your logic here
+    is_button_pressed = true;
+  }
+}
+
 int main(void) {
-  // GPIO Update
-  main__gpio_output();
-  main__gpio_input();
 
   // UART Config
   main__uart_init();
   uart__write_string(&uart_config, "Hello World\r\n");
 
+  // GPIO Update
+  main__gpio_output();
+  main__gpio_input();
+  main__gpio_input_external_interrupt();
+
   while (1) {
-    _spin_delay(1000 * 1000);
-    gpio__reset(&output_config);
 
-    // Test gpio input
-    bool ispressed = gpio__get(&input_config);
-    if (ispressed) {
-      uart__write_string(&uart_config, "Not Pressed\r\n");
-    } else {
-      uart__write_string(&uart_config, "Pressed\r\n");
+    if (is_button_pressed) {
+      gpio__set(&output_config);
+      _spin_delay(1000 * 1000);
+      gpio__reset(&output_config);
+      is_button_pressed = false;
     }
-
-    // Test uart__read
-    // ! OE Error if you write more than one character here
-    // TODO, Solve using interrupts
-    uart__write_string(&uart_config, "Waiting for one character\r\n");
-    char value = (char)uart__read(&uart_config);
-    uart__write_string(&uart_config, "Read Value: ");
-    uart__write(&uart_config, value);
-    uart__write(&uart_config, '\r');
-    uart__write(&uart_config, '\n');
-
-    _spin_delay(1000 * 1000);
-    gpio__set(&output_config);
   }
 
   return 0;
@@ -103,4 +106,22 @@ static void _spin_delay(uint32_t delay) {
     __NOP();
     --delay;
   }
+}
+
+static void main__gpio_input_external_interrupt(void) {
+
+  RCC->APB2ENR |= (1 << 0);
+
+  // 0-3
+  // 4-7
+  // 8-11
+  // 12-15
+  SYSCFG->EXTICR[3] |= ((1 << 1) << 4); // Set the 13th bit
+
+  // Connected to External Pullup resistor
+  gpioC13_interrupt_config.type = EXTI_type_FALLING;
+  gpioC13_interrupt_config.pin = input_config.pin;
+  exti__gpio_register_interrupt(&gpioC13_interrupt_config);
+
+  NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
