@@ -1,3 +1,4 @@
+// clang-format off
 /**************************************************************************//**
  * @file     cmsis_gcc.h
  * @brief    CMSIS compiler GCC header file
