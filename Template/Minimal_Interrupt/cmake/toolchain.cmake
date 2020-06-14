@@ -10,6 +10,10 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 set(CMAKE_C_COMPILER_WORKS 1)
 set(CMAKE_CXX_COMPILER_WORKS 1)
 
+# https://gcc.gnu.org/onlinedocs/gcc-3.2/gcc/Warning-
+# Options.html#Warning%20Options
+set(WARNING_FLAGS -Wall -Werror)
+
 # Project Variables
 set(COMMON_C_FLAGS
     -Os
@@ -17,16 +21,17 @@ set(COMMON_C_FLAGS
     -mthumb
     -mfloat-abi=hard
     -mfpu=auto
-    -Wall
     -g
-    -pipe)
+    -pipe
+    ${WARNING_FLAGS})
 set(USER_C_FLAGS -std=c99 -fmessage-length=0 -ffunction-sections
                  -fdata-sections -fstack-usage)
 
 set(USER_LINK_FLAGS
     -nostartfiles
-    # -specs=nano.specs -specs=nosys.specs "SHELL:-u _printf_float" "SHELL:-u
-    # _scanf_float" -nostdlib
+    -specs=nano.specs
+    -specs=nosys.specs
+    # "SHELL:-u _printf_float" "SHELL:-u _scanf_float" -nostdlib
     -static
     -Wl,--gc-sections
     -Wl,-Map,${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map

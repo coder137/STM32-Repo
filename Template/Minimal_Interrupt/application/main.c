@@ -1,17 +1,18 @@
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "exti/exti.h"
 #include "gpio/gpio.h"
 #include "uart/uart.h"
 
-// State Variables
-static GPIO_s output_config;
-static GPIO_s input_config;
-static UART_s uart_config;
-static EXTI_s gpioC13_interrupt_config;
+/**
+ * STATIC FUNCTION DECLARATIONS
+ */
 
-// Static Functions
 static void main__uart_init(void);
+static void main__uart_interrupt_init(void);
+
 static void main__gpio_output(void);
 
 static void main__gpio_input(void);
@@ -19,7 +20,25 @@ static void main__gpio_input_external_interrupt(void);
 
 static void _spin_delay(uint32_t delay);
 
+/**
+ * STATE VARIABLES
+ */
+// GPIO OUTPUT
+static GPIO_s output_config;
+
+// GPIO INPUT
+static GPIO_s input_config;
+static EXTI_s gpioC13_interrupt_config;
 volatile bool is_button_pressed = false;
+
+// UART
+static UART_s uart_config;
+
+// UART RX
+#define RX_BUF_SIZE 255
+volatile bool is_newline = false;
+static uint8_t rx_buf[RX_BUF_SIZE];
+static uint32_t counter;
 
 void EXTI15_10_Handler(void) {
 
@@ -31,10 +50,23 @@ void EXTI15_10_Handler(void) {
   }
 }
 
-int main(void) {
+// TODO, Modify this to handle both RX and TX Interrupts
+// TODO, Handle Errors with this Interrupt system
+// TODO, Update this with FreeRTOS Queue system
+void USART1_Handler(void) {
+  uint8_t value = uart__read_from_interrupt(&uart_config);
+  rx_buf[counter] = value;
+  counter++;
 
+  if (value == 0x0d || value == 0x0a) {
+    is_newline = true;
+  }
+}
+
+int main(void) {
   // UART Config
   main__uart_init();
+  main__uart_interrupt_init();
   uart__write_string(&uart_config, "Hello World\r\n");
 
   // GPIO Update
@@ -49,6 +81,22 @@ int main(void) {
       _spin_delay(1000 * 1000);
       gpio__reset(&output_config);
       is_button_pressed = false;
+    }
+
+    if (is_newline) {
+      uart__write_string(&uart_config, "Printing\r\n");
+
+      // Print to console
+      for (int i = 0; i < counter; i++) {
+        char buf[15] = {0};
+        sprintf(buf, "%d : %x %c\r\n", i, rx_buf[i], rx_buf[i]);
+        uart__write_string(&uart_config, buf);
+      }
+
+      // Reset Values
+      memset(rx_buf, 0, sizeof(uint8_t) * RX_BUF_SIZE);
+      counter = 0;
+      is_newline = false;
     }
   }
 
@@ -76,6 +124,10 @@ static void main__uart_init(void) {
   uart_config.word_length = UART_word_length_8;
   uart_config.mode = UART_mode_RX_TX;
   uart__init(&uart_config, USART1);
+}
+
+static void main__uart_interrupt_init(void) {
+  uart__interrupt_init(&uart_config);
 }
 
 static void main__gpio_output(void) {
