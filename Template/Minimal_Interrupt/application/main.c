@@ -4,7 +4,9 @@
 
 #include "exti/exti.h"
 #include "gpio/gpio.h"
+
 #include "uart/uart.h"
+#include "uart/uart_interrupt.h"
 
 /**
  * STATIC FUNCTION DECLARATIONS
@@ -33,15 +35,16 @@ volatile bool is_button_pressed = false;
 
 // UART
 static UART_s uart_config;
+static UART_interrupt_s uart_interrupt_config;
 
 // UART RX
 #define RX_BUF_SIZE 255
-volatile bool is_newline = false;
+#define TX_BUF_SIZE 255
 static uint8_t rx_buf[RX_BUF_SIZE];
-static uint32_t counter;
+static uint8_t tx_buf[TX_BUF_SIZE];
+volatile bool is_newline = false;
 
 void EXTI15_10_Handler(void) {
-
   if (exti__gpio_is_pending_interrupt(&gpioC13_interrupt_config)) {
     exti__gpio_clear_pending_interrupt(&gpioC13_interrupt_config);
 
@@ -54,20 +57,32 @@ void EXTI15_10_Handler(void) {
 // TODO, Handle Errors with this Interrupt system
 // TODO, Update this with FreeRTOS Queue system
 void USART1_Handler(void) {
-  uint8_t value = uart__read_from_interrupt(&uart_config);
-  rx_buf[counter] = value;
-  counter++;
 
+  // TODO, Seperate out the process functions
+  // - uart_interrupt__process_read() -> RXNE
+  // - uart_interrupt__process_write() -> TXE and TC
+  uart_interrupt__process(&uart_interrupt_config);
+
+  // Check if we receive the newline value
+  // ! THIS IS A BUG, Wrap this inside the (ISR & (1 << 5) == 1) statement
+  // Causes the ISR Driver to continuously glitch out
+  uint8_t value = uart_interrupt_config
+                      .rx_buffer[uart_interrupt_config.rx_buffer_count - 1];
   if (value == 0x0d || value == 0x0a) {
     is_newline = true;
   }
 }
 
 int main(void) {
+
   // UART Config
   main__uart_init();
   main__uart_interrupt_init();
-  uart__write_string(&uart_config, "Hello World\r\n");
+
+  // uart__write_string(&uart_config, "Hello World\r\n");
+  // _spin_delay(1000 * 1000);
+  uart_interrupt__write_string(&uart_interrupt_config,
+                               "Hello from Interrupt\r\n");
 
   // GPIO Update
   main__gpio_output();
@@ -84,18 +99,25 @@ int main(void) {
     }
 
     if (is_newline) {
-      uart__write_string(&uart_config, "Printing\r\n");
+      // uart__write_string(&uart_config, "Printing\r\n");
+      uart_interrupt__write_string(&uart_interrupt_config, "Printing\r\n");
 
       // Print to console
-      for (int i = 0; i < counter; i++) {
-        char buf[15] = {0};
-        sprintf(buf, "%d : %x %c\r\n", i, rx_buf[i], rx_buf[i]);
+      for (int i = 0; i < uart_interrupt_config.rx_buffer_count; i++) {
+        char buf[20] = {0};
+        sprintf(buf, "%d : %x %c\r\n", i, uart_interrupt_config.rx_buffer[i],
+                uart_interrupt_config.rx_buffer[i]);
+        // sprintf(buf, "%d : %x %c\r\n", i, rx_buf[i], rx_buf[i]);
+
         uart__write_string(&uart_config, buf);
+        // ! This is currently a bug, read `USART1_Handler` above
+        // uart_interrupt__write_string(&uart_interrupt_config, buf);
       }
 
       // Reset Values
-      memset(rx_buf, 0, sizeof(uint8_t) * RX_BUF_SIZE);
-      counter = 0;
+      memset(uart_interrupt_config.rx_buffer, 0,
+             uart_interrupt_config.rx_buffer_length);
+      uart_interrupt_config.rx_buffer_count = 0;
       is_newline = false;
     }
   }
@@ -127,7 +149,15 @@ static void main__uart_init(void) {
 }
 
 static void main__uart_interrupt_init(void) {
-  uart__interrupt_init(&uart_config);
+  uart_interrupt_config.usart = uart_config.usart;
+  uart_interrupt_config.rx_buffer = rx_buf;
+  uart_interrupt_config.rx_buffer_length = RX_BUF_SIZE;
+  uart_interrupt_config.rx_buffer_count = 0;
+
+  uart_interrupt_config.tx_buffer = tx_buf;
+  uart_interrupt_config.tx_buffer_length = TX_BUF_SIZE;
+  uart_interrupt_config.tx_buffer_count = 0;
+  uart_interrupt__init(&uart_interrupt_config);
 }
 
 static void main__gpio_output(void) {

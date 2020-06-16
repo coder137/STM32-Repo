@@ -7,7 +7,7 @@
 // Constants
 static const uint8_t CR1_UE = 0;
 static const uint8_t CR1_RE = 2;
-// static const uint8_t CR1_RXINE = 5;
+
 static const uint8_t CR1_M0 = 12;
 static const uint8_t CR1_OVER8 = 15;
 static const uint8_t CR1_M1 = 28;
@@ -15,7 +15,7 @@ static const uint8_t CR1_M1 = 28;
 static const uint8_t CR2_STOP = 12;
 
 // static const uint8_t ISR_ORE = 3;
-// static const uint8_t ISR_RXNE = 5;
+static const uint8_t ISR_RXNE = 5;
 static const uint8_t ISR_TC = 6;
 static const uint8_t ISR_TXE = 7;
 
@@ -62,14 +62,6 @@ void uart__init(UART_s *config, USART_TypeDef *usart) {
   uart__set_mode(config);
 }
 
-void uart__interrupt_init(UART_s *config) {
-  // RX Interrupt
-  config->usart->CR1 |= (1 << 5);
-  // TODO, TX Interrupt
-
-  NVIC_EnableIRQ(USART1_IRQn);
-}
-
 void uart__write(const UART_s *config, const char data) {
   USART_TypeDef *usart = config->usart;
 
@@ -103,15 +95,11 @@ uint8_t uart__read(const UART_s *config) {
   USART_TypeDef *usart = config->usart;
 
   // Wait for RXNE bit to be set
-  while ((usart->ISR & (1 << 5)) == 0) {
+  while ((usart->ISR & (1 << ISR_RXNE)) == 0) {
   }
 
   uint8_t data = usart->RDR;
   return data;
-}
-
-uint8_t uart__read_from_interrupt(const UART_s *config) {
-  return (uint8_t)(config->usart->RDR);
 }
 
 // STATIC FUNCTION DECLARATION

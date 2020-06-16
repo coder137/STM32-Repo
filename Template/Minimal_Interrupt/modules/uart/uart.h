@@ -36,17 +36,12 @@ typedef struct {
 } UART_s;
 
 void uart__init(UART_s *config, USART_TypeDef *usart);
-void uart__interrupt_init(UART_s *config);
 
 void uart__write(const UART_s *config, const char data);
 void uart__write_string(const UART_s *config, const char *buffer);
 
 // ! Error could take place in this function
 // * OE (Overflow Error)
-// TODO, Update this with Interrupts (store data into a buffer when data is
-// recvd) OR
-// TODO, Return an error value as well from this function
 uint8_t uart__read(const UART_s *config);
-uint8_t uart__read_from_interrupt(const UART_s *config);
 
 #endif
