@@ -35,12 +35,6 @@ void uart_interrupt__init(UART_interrupt_s *interrupt_config) {
   NVIC_EnableIRQ(USART1_IRQn);
 }
 
-void uart_interrupt__write(const UART_interrupt_s *interrupt_config,
-                           uint8_t data) {
-  // Add this to the uart_queue
-  interrupt_config->usart->TDR = data;
-}
-
 void uart_interrupt__write_string(UART_interrupt_s *interrupt_config,
                                   char *data) {
 
@@ -49,26 +43,6 @@ void uart_interrupt__write_string(UART_interrupt_s *interrupt_config,
   uint8_t txe_enabled = (cr1_data >> CR1_TXEIE) & 0x01;
   uint8_t tc_enabled = (cr1_data >> CR1_TCIE) & 0x01;
   uint8_t combined = (txe_enabled << 1) | tc_enabled;
-
-  if (txe_enabled == 0) {
-    // Reset the value
-    memset(interrupt_config->tx_buffer, 0,
-           sizeof(uint8_t) * interrupt_config->tx_buffer_length);
-    interrupt_config->tx_buffer_count = 0;
-
-    // Copy the data
-    strncpy((char *)interrupt_config->tx_buffer, data,
-            interrupt_config->tx_buffer_length);
-
-    // Activate the data
-    usart->CR1 |= ((1 << CR1_TXEIE) | (1 << CR1_TCIE));
-  } else {
-    // Append the data to the buffer
-    strncat((char *)interrupt_config->tx_buffer, data,
-            interrupt_config->tx_buffer_length);
-  }
-
-  return;
 
   switch (combined) {
     // Both are OFF
@@ -125,19 +99,12 @@ void uart_interrupt__process(const UART_interrupt_s *interrupt_config) {
   // TODO, Return some value here
 }
 
+// TODO, Use Queues here
 static void uart_interrupt__process_rxne(UART_interrupt_s *interrupt_config) {
   // DONE, Add this to a RX Queue
   interrupt_config->rx_buffer[interrupt_config->rx_buffer_count] =
       (uint8_t)(interrupt_config->usart->RDR);
   interrupt_config->rx_buffer_count++;
-
-  // char buf[15] = {0};
-  // sprintf(buf, "i:%lx\r\n", uart_interrupt_config.usart->ISR);
-  // uart_i_write(buf);
-
-  // if (value == 0x0d || value == 0x0a) {
-  //   is_newline = true;
-  // }
 }
 
 static void uart_interrupt_process_txe(UART_interrupt_s *interrupt_config) {
