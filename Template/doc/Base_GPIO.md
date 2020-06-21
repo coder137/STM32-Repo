@@ -1,9 +1,11 @@
 - [Base_GPIO](#base_gpio)
 - [Registers](#registers)
 - [Functional Steps](#functional-steps)
-  - [Initialize](#initialize)
-  - [GPIO Output](#gpio-output)
-  - [GPIO Input](#gpio-input)
+  - [Initialize RCC](#initialize-rcc)
+  - [Initialize GPIO](#initialize-gpio)
+- [GPIO Specific](#gpio-specific)
+  - [GPIO Output Mode](#gpio-output-mode)
+  - [GPIO Input Mode](#gpio-input-mode)
 - [TIPS](#tips)
 
 # Base_GPIO
@@ -24,7 +26,13 @@ Writing a Basic GPIO driver for the STM32 Controller
 
 # Functional Steps
 
-## Initialize
+## Initialize RCC
+
+- Activate the `RCC_AHB` (Advanced High Performance bus) for particular GPIO pins
+  - By default the Peripherals are in the power off state
+  - This is done for power conservation
+
+## Initialize GPIO
 
 - MODER is used to select the various Modes of the Device
   - Input, Output, Alternate Function or Analog
@@ -40,7 +48,9 @@ Writing a Basic GPIO driver for the STM32 Controller
   - These details are mentioned in the **Hardware Manual** since they are hardware specific (Each MCU will have their own configurations)
   - AFR is used for UART in this case
 
-## GPIO Output
+# GPIO Specific
+
+## GPIO Output Mode
 
 - MODER needs to be in the Output Mode
 - OTYPER needs to be in Push Pull mode
@@ -52,7 +62,7 @@ Writing a Basic GPIO driver for the STM32 Controller
 - For setting the Pin HIGH -> BSRR 1 the appropriate pin location
 - For setting the Pin LOW -> BRR 1 the appropriate pin location
 
-## GPIO Input
+## GPIO Input Mode
 
 - MODER needs to be in the INPUT Mode
 - OTYPER needs to be in the Push Pull mode

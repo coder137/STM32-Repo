@@ -68,6 +68,6 @@ Templates for starting STM32 Projects
 
 ## Minimal Interrupt
 
-- Vector_Interrupt
-- EXTI_GPIO
-- Interrupt_UART
+- [x] Vector_Interrupt
+- [x] EXTI_GPIO
+- [x] Interrupt_UART
