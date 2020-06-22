@@ -8,6 +8,8 @@
 - [Document](#document)
   - [Minimal Initial](#minimal-initial)
   - [Minimal Interrupt](#minimal-interrupt)
+  - [Minimal FreeRTOS](#minimal-freertos)
+  - [Minimal C Stdlib](#minimal-c-stdlib)
 
 # Template
 
@@ -50,10 +52,13 @@ Templates for starting STM32 Projects
   - Writing 2 low level drivers GPIO and UART
 - [x] Minimal_Interrupt
   - Writing GPIO and UART using interrupts
+- [ ] Minimal_FreeRTOS
+  - Integrate Amazon FreeRTOS with the project
+  - Create example for `task` and `queue` systems
 - [ ] Minimal_C_Stdlib
   - Contains C Standard Library syscalls
+  - Updated interrupt drivers with FreeRTOS functions
   - Attached `printf` and `scanf` to UART low level driver 
-- [ ] Minimal_FreeRTOS
 
 # Document
 
@@ -71,3 +76,11 @@ Templates for starting STM32 Projects
 - [x] Vector_Interrupt
 - [x] EXTI_GPIO
 - [x] Interrupt_UART
+
+## Minimal FreeRTOS
+
+- [ ] Integrate_FreeRTOS
+
+## Minimal C Stdlib
+
+- [ ] Integrate_Newlib
