@@ -25,7 +25,9 @@
 /**
  * USER ADDDED
  */
+#include "FreeRTOS.h"
 #include "stm32l4xx.h"
+
 typedef void (*VECTOR_TABLE_Type)(void);
 
 /*----------------------------------------------------------------------------
@@ -34,6 +36,10 @@ typedef void (*VECTOR_TABLE_Type)(void);
 extern uint32_t __INITIAL_SP;
 
 extern __NO_RETURN void __PROGRAM_START(void);
+
+extern void vPortSVCHandler(void);
+extern void xPortPendSVHandler(void);
+extern void xPortSysTickHandler(void);
 
 /*----------------------------------------------------------------------------
   Internal References
@@ -159,11 +165,11 @@ const VECTOR_TABLE_Type __VECTOR_TABLE[] __VECTOR_TABLE_ATTRIBUTE = {
     0,                                  /*     Reserved */
     0,                                  /*     Reserved */
     0,                                  /*     Reserved */
-    SVC_Handler,                        /*  -5 SVCall Handler */
+    vPortSVCHandler,                    /*  -5 SVCall Handler */
     DebugMon_Handler,                   /*  -4 Debug Monitor Handler */
     0,                                  /*     Reserved */
-    PendSV_Handler,                     /*  -2 PendSV Handler */
-    SysTick_Handler,                    /*  -1 SysTick Handler */
+    xPortPendSVHandler,                 /*  -2 PendSV Handler */
+    xPortSysTickHandler,                /*  -1 SysTick Handler */
 
     /* Interrupts */
     WWDG_Handler,

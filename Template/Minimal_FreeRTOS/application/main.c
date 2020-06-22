@@ -8,6 +8,9 @@
 #include "uart/uart.h"
 #include "uart/uart_interrupt.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+
 /**
  * STATIC FUNCTION DECLARATIONS
  */
@@ -73,7 +76,30 @@ void USART1_Handler(void) {
   }
 }
 
+static void uart_task(void *arg) {
+  main__uart_init();
+  main__uart_interrupt_init();
+
+  uart_interrupt__write_string(&uart_interrupt_config,
+                               "Hello from Interrupt\r\n");
+
+  while (1) {
+    uart_interrupt__write_string(&uart_interrupt_config, "ON\r\n");
+    vTaskDelay(1000);
+    uart_interrupt__write_string(&uart_interrupt_config, "OFF\r\n");
+    vTaskDelay(1000);
+  }
+}
+
 int main(void) {
+  xTaskCreate(uart_task, "uart_task", 2000, NULL, 1, NULL);
+  vTaskStartScheduler();
+
+  // vTaskStartSchedular should never exit
+  while (1) {
+  }
+
+  return 0;
 
   // UART Config
   main__uart_init();

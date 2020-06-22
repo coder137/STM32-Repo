@@ -50,9 +50,39 @@ __RAM_SIZE = 0x00018000;
     <o1> Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
   </h>
   -----------------------------------------------------------------------------*/
-/* 50K of Stack size and 40K Heap size*/
-__STACK_SIZE = 0x0000C800;
-__HEAP_SIZE  = 0x0000A000;
+/**
+See Diagram below
+
+FreeRTOS Heap 4 allocated on BSS
+FreeRTOS allocation on BSS: 40K
+STACK SIZE to 20K
+HEAP SIZE to 10K
+Remaining unallocated memory = 96 - 40 - 20 - 10 = 26K
+DATA and other BSS can consume 26K
+**/
+__STACK_SIZE = 20K;
+__HEAP_SIZE  = 10K;
+
+/*************************************************
+                                                  *
+     64K RAM +-----Stack Top   +-----+ 32K RAM    *
+             |    ||           |     |            *
+             |    \/           |     |            *
+             |     |           |     |            *
+             |     |           |     |            *
+             |    /\ heap      |    /\            *
+             |    || overflow  |    ||            *
+             .-----.           +-----Heap Start   *
+             |bbbbb|           0x2000000          *
+             |bbbbb| *bss                         *
+             .-----.                              *
+             |ddddd|                              *
+             |ddddd| *data                        *
+             .-----.                              *
+            0x1000000                             *
+                                                  *
+**************************************************
+*/
 
 /*
  *-------------------- <<< end of configuration section >>> -------------------
