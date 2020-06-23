@@ -18,6 +18,9 @@ typedef struct {
   uint32_t rx_queue_length;
   uint32_t tx_queue_length;
 
+  // Transmit Complete Callback
+  void (*UART_transmit_complete_cb)(void);
+
   // Do not update this
   UART_interrupt_internal_s _internal;
 } UART_interrupt_s;

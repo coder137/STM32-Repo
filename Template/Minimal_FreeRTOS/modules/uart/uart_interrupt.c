@@ -118,7 +118,10 @@ static void uart_interrupt__process_tc(UART_interrupt_s *interrupt_config) {
   // Disable this interrupt
   interrupt_config->usart->CR1 &= ~(1 << CR1_TCIE);
 
-  // TODO, Run a function here
+  // Run the cb function
+  if (interrupt_config->UART_transmit_complete_cb != NULL) {
+    interrupt_config->UART_transmit_complete_cb();
+  }
 }
 
 static void

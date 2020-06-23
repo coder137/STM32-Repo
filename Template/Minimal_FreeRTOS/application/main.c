@@ -38,11 +38,16 @@ volatile bool is_button_pressed = false;
 // UART
 UART_s uart_config;
 static UART_interrupt_s uart_interrupt_config;
+volatile bool is_tc = false;
 
 // UART RX
 #define RX_BUF_SIZE 255
 #define TX_BUF_SIZE 255
 
+// MISC
+static QueueHandle_t qHandle;
+
+// INTERRUPTS
 void EXTI15_10_Handler(void) {
   if (exti__gpio_is_pending_interrupt(&gpioC13_interrupt_config)) {
     exti__gpio_clear_pending_interrupt(&gpioC13_interrupt_config);
@@ -52,19 +57,11 @@ void EXTI15_10_Handler(void) {
   }
 }
 
-static QueueHandle_t qHandle;
+void USART1_Handler(void) { uart_interrupt__process(&uart_interrupt_config); }
 
-// TODO, Modify this to handle both RX and TX Interrupts
-// TODO, Handle Errors with this Interrupt system
-// TODO, Update this with FreeRTOS Queue system
-void USART1_Handler(void) {
+static void USART1_Transmit_Complete_Cb(void) { is_tc = true; }
 
-  // TODO, Seperate out the process functions
-  // - uart_interrupt__process_read() -> RXNE
-  // - uart_interrupt__process_write() -> TXE and TC
-  uart_interrupt__process(&uart_interrupt_config);
-}
-
+// TASKS
 void uart_task(void *arg) {
 
   // uart_interrupt__write_string(&uart_interrupt_config,
@@ -113,15 +110,42 @@ void uart_receiver(void *arg) {
   }
 }
 
+void cb_checker(void *arg) {
+  while (1) {
+    if (is_tc) {
+      is_tc = false;
+
+      // Run
+      gpio__set(&output_config);
+      vTaskDelay(100);
+      gpio__reset(&output_config);
+    }
+  }
+}
+
+void blink_task(void *arg) {
+  while (1) {
+    gpio__set(&output_config);
+    vTaskDelay(1000);
+    gpio__reset(&output_config);
+    vTaskDelay(1000);
+  }
+}
+
 int main(void) {
   main__uart_init();
   main__uart_interrupt_init();
+
+  main__gpio_output();
+  gpio__reset(&output_config);
 
   qHandle = xQueueCreate(100, sizeof(uint8_t));
 
   // xTaskCreate(uart_task, "uart_task", 2000, NULL, 1, NULL);
   // xTaskCreate(sender_task, "sender", 2000, NULL, 1, NULL);
   xTaskCreate(uart_receiver, "uart_recevier", 2000, NULL, 1, NULL);
+  xTaskCreate(cb_checker, "tc_checker", 2000, NULL, 1, NULL);
+  // xTaskCreate(blink_task, "blink", 2000, NULL, 1, NULL);
   vTaskStartScheduler();
 
   // vTaskStartSchedular should never exit
@@ -158,6 +182,7 @@ void main__uart_interrupt_init(void) {
   uart_interrupt_config.usart = uart_config.usart;
   uart_interrupt_config.rx_queue_length = RX_BUF_SIZE;
   uart_interrupt_config.tx_queue_length = TX_BUF_SIZE;
+  uart_interrupt_config.UART_transmit_complete_cb = USART1_Transmit_Complete_Cb;
   uart_interrupt__init(&uart_interrupt_config);
 }
 
