@@ -9,21 +9,20 @@
 #include "uart/uart_interrupt.h"
 
 #include "FreeRTOS.h"
+#include "queue.h"
 #include "task.h"
 
 /**
  * STATIC FUNCTION DECLARATIONS
  */
 
-static void main__uart_init(void);
-static void main__uart_interrupt_init(void);
+void main__uart_init(void);
+void main__uart_interrupt_init(void);
 
-static void main__gpio_output(void);
+void main__gpio_output(void);
 
-static void main__gpio_input(void);
-static void main__gpio_input_external_interrupt(void);
-
-static void _spin_delay(uint32_t delay);
+void main__gpio_input(void);
+void main__gpio_input_external_interrupt(void);
 
 /**
  * STATE VARIABLES
@@ -37,15 +36,12 @@ static EXTI_s gpioC13_interrupt_config;
 volatile bool is_button_pressed = false;
 
 // UART
-static UART_s uart_config;
+UART_s uart_config;
 static UART_interrupt_s uart_interrupt_config;
 
 // UART RX
 #define RX_BUF_SIZE 255
 #define TX_BUF_SIZE 255
-static uint8_t rx_buf[RX_BUF_SIZE];
-static uint8_t tx_buf[TX_BUF_SIZE];
-volatile bool is_newline = false;
 
 void EXTI15_10_Handler(void) {
   if (exti__gpio_is_pending_interrupt(&gpioC13_interrupt_config)) {
@@ -56,6 +52,8 @@ void EXTI15_10_Handler(void) {
   }
 }
 
+static QueueHandle_t qHandle;
+
 // TODO, Modify this to handle both RX and TX Interrupts
 // TODO, Handle Errors with this Interrupt system
 // TODO, Update this with FreeRTOS Queue system
@@ -65,34 +63,65 @@ void USART1_Handler(void) {
   // - uart_interrupt__process_read() -> RXNE
   // - uart_interrupt__process_write() -> TXE and TC
   uart_interrupt__process(&uart_interrupt_config);
+}
 
-  // Check if we receive the newline value
-  // ! THIS IS A BUG, Wrap this inside the (ISR & (1 << 5) == 1) statement
-  // Causes the ISR Driver to continuously glitch out
-  uint8_t value = uart_interrupt_config
-                      .rx_buffer[uart_interrupt_config.rx_buffer_count - 1];
-  if (value == 0x0d || value == 0x0a) {
-    is_newline = true;
+void uart_task(void *arg) {
+
+  // uart_interrupt__write_string(&uart_interrupt_config,
+  //                              "Hello from Interrupt\r\n");
+  uart__write_string(&uart_config, "Hello Interrupt\r\n");
+
+  uint8_t data = 0;
+  char buf[20] = {0};
+
+  while (1) {
+    // uart_interrupt__write_string(&uart_interrupt_config, "ON\r\n");
+    // vTaskDelay(1000);
+    // uart_interrupt__write_string(&uart_interrupt_config, "OFF\r\n");
+    // vTaskDelay(1000);
+    xQueueReceive(qHandle, &data, portMAX_DELAY);
+    memset(buf, 0, 20 * sizeof(char));
+    sprintf(buf, "%x %d\r\n", data, data);
+
+    // uart_interrupt__write_string(&uart_interrupt_config, buf);
+    uart__write_string(&uart_config, buf);
+    vTaskDelay(1000);
   }
 }
 
-static void uart_task(void *arg) {
-  main__uart_init();
-  main__uart_interrupt_init();
+void sender_task(void *arg) {
+  uint8_t counter = 0;
+  while (1) {
+    xQueueSend(qHandle, &counter, 0);
+    counter++;
+    vTaskDelay(1000);
+  }
+}
 
+void uart_receiver(void *arg) {
   uart_interrupt__write_string(&uart_interrupt_config,
-                               "Hello from Interrupt\r\n");
+                               "Hello uart_receiver\r\n");
+
+  char buf[20] = {0};
 
   while (1) {
-    uart_interrupt__write_string(&uart_interrupt_config, "ON\r\n");
-    vTaskDelay(1000);
-    uart_interrupt__write_string(&uart_interrupt_config, "OFF\r\n");
-    vTaskDelay(1000);
+    uint8_t data = uart_interrupt__read(&uart_interrupt_config);
+
+    memset(buf, 0, 20 * sizeof(char));
+    sprintf(buf, "%x %c\r\n", data, data);
+    uart_interrupt__write_string(&uart_interrupt_config, buf);
   }
 }
 
 int main(void) {
-  xTaskCreate(uart_task, "uart_task", 2000, NULL, 1, NULL);
+  main__uart_init();
+  main__uart_interrupt_init();
+
+  qHandle = xQueueCreate(100, sizeof(uint8_t));
+
+  // xTaskCreate(uart_task, "uart_task", 2000, NULL, 1, NULL);
+  // xTaskCreate(sender_task, "sender", 2000, NULL, 1, NULL);
+  xTaskCreate(uart_receiver, "uart_recevier", 2000, NULL, 1, NULL);
   vTaskStartScheduler();
 
   // vTaskStartSchedular should never exit
@@ -100,59 +129,10 @@ int main(void) {
   }
 
   return 0;
-
-  // UART Config
-  main__uart_init();
-  main__uart_interrupt_init();
-
-  // uart__write_string(&uart_config, "Hello World\r\n");
-  // _spin_delay(1000 * 1000);
-  uart_interrupt__write_string(&uart_interrupt_config,
-                               "Hello from Interrupt\r\n");
-
-  // GPIO Update
-  main__gpio_output();
-  main__gpio_input();
-  main__gpio_input_external_interrupt();
-
-  while (1) {
-
-    if (is_button_pressed) {
-      gpio__set(&output_config);
-      _spin_delay(1000 * 1000);
-      gpio__reset(&output_config);
-      is_button_pressed = false;
-    }
-
-    if (is_newline) {
-      // uart__write_string(&uart_config, "Printing\r\n");
-      uart_interrupt__write_string(&uart_interrupt_config, "Printing\r\n");
-
-      // Print to console
-      for (int i = 0; i < uart_interrupt_config.rx_buffer_count; i++) {
-        char buf[20] = {0};
-        sprintf(buf, "%d : %x %c\r\n", i, uart_interrupt_config.rx_buffer[i],
-                uart_interrupt_config.rx_buffer[i]);
-        // sprintf(buf, "%d : %x %c\r\n", i, rx_buf[i], rx_buf[i]);
-
-        uart__write_string(&uart_config, buf);
-        // ! This is currently a bug, read `USART1_Handler` above
-        // uart_interrupt__write_string(&uart_interrupt_config, buf);
-      }
-
-      // Reset Values
-      memset(uart_interrupt_config.rx_buffer, 0,
-             uart_interrupt_config.rx_buffer_length);
-      uart_interrupt_config.rx_buffer_count = 0;
-      is_newline = false;
-    }
-  }
-
-  return 0;
 }
 
 // STATIC FUNCTION
-static void main__uart_init(void) {
+void main__uart_init(void) {
   // Activate USART1
   RCC->APB2ENR |= (1 << 14);
   // Activate GPIOB
@@ -174,19 +154,14 @@ static void main__uart_init(void) {
   uart__init(&uart_config, USART1);
 }
 
-static void main__uart_interrupt_init(void) {
+void main__uart_interrupt_init(void) {
   uart_interrupt_config.usart = uart_config.usart;
-  uart_interrupt_config.rx_buffer = rx_buf;
-  uart_interrupt_config.rx_buffer_length = RX_BUF_SIZE;
-  uart_interrupt_config.rx_buffer_count = 0;
-
-  uart_interrupt_config.tx_buffer = tx_buf;
-  uart_interrupt_config.tx_buffer_length = TX_BUF_SIZE;
-  uart_interrupt_config.tx_buffer_count = 0;
+  uart_interrupt_config.rx_queue_length = RX_BUF_SIZE;
+  uart_interrupt_config.tx_queue_length = TX_BUF_SIZE;
   uart_interrupt__init(&uart_interrupt_config);
 }
 
-static void main__gpio_output(void) {
+void main__gpio_output(void) {
   // Activate GPIOA
   RCC->AHB2ENR |= (1 << 0);
 
@@ -198,7 +173,7 @@ static void main__gpio_output(void) {
   gpio__set(&output_config);
 }
 
-static void main__gpio_input(void) {
+void main__gpio_input(void) {
   // Activate GPIOC
   RCC->AHB2ENR |= (1 << 2);
 
@@ -209,14 +184,7 @@ static void main__gpio_input(void) {
   gpio__init(&input_config, GPIOC, 13);
 }
 
-static void _spin_delay(uint32_t delay) {
-  while (delay) {
-    __NOP();
-    --delay;
-  }
-}
-
-static void main__gpio_input_external_interrupt(void) {
+void main__gpio_input_external_interrupt(void) {
 
   RCC->APB2ENR |= (1 << 0);
 
