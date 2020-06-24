@@ -5,6 +5,7 @@
   - [STM32L475xx Hardware Manual](#stm32l475xx-hardware-manual)
   - [PM0214 Programming Manual](#pm0214-programming-manual)
 - [Project Order](#project-order)
+- [Other Templates](#other-templates)
 - [Document](#document)
   - [Minimal Initial](#minimal-initial)
   - [Minimal Interrupt](#minimal-interrupt)
@@ -52,13 +53,27 @@ Templates for starting STM32 Projects
   - Writing 2 low level drivers GPIO and UART
 - [x] Minimal_Interrupt
   - Writing GPIO and UART using interrupts
-- [ ] Minimal_FreeRTOS
+- [x] Minimal_FreeRTOS
   - Integrate Amazon FreeRTOS with the project
   - Create example for `task` and `queue` systems
+  - Updated UART Interrupt with `queue`
+  - Fork from `Minimal_Interrupt`
 - [ ] Minimal_C_Stdlib
   - Contains C Standard Library syscalls
   - Updated interrupt drivers with FreeRTOS functions
   - Attached `printf` and `scanf` to UART low level driver 
+  - Fork from `Minimal_FreeRTOS`
+- [ ] Minimal_C_Final
+  - Updated CMake for global Clang Format
+  - Added C Unit-Test/Mock framework
+  - > TODO, Add more
+
+# Other Templates
+
+- [ ] Minimal_ThreadX
+  - Integrate Microsoft ThreadX with the project
+  - Create example for `task` and `queue` systems
+  - Fork from `Minimal_Interrupt` 
 
 # Document
 
@@ -79,7 +94,8 @@ Templates for starting STM32 Projects
 
 ## Minimal FreeRTOS
 
-- [ ] Integrate_FreeRTOS
+- [x] Integrate_FreeRTOS
+- [x] **FreeRTOS_and_ARM_NVIC**
 
 ## Minimal C Stdlib
 
