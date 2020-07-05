@@ -1,5 +1,5 @@
-#ifndef MODULES_EXTI_H
-#define MODULES_EXTI_H
+#ifndef DRIVER_EXTI_EXTI_H_
+#define DRIVER_EXTI_EXTI_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -26,4 +26,4 @@ void exti__gpio_clear_pending_interrupt(EXTI_s *config);
  * Software Interrupt (SWIER)
  */
 
-#endif
+#endif // DRIVER_EXTI_EXTI_H_

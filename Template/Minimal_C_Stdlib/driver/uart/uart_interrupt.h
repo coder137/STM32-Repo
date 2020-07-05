@@ -1,5 +1,5 @@
-#ifndef MODULES_UART_INTERRUPT_H
-#define MODULES_UART_INTERRUPT_H
+#ifndef DRIVER_UART_UART_INTERRUPT_H_
+#define DRIVER_UART_UART_INTERRUPT_H_
 
 #include <stdint.h>
 
@@ -36,4 +36,4 @@ uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config);
 // Used by Interrupt Function
 void uart_interrupt__process(const UART_interrupt_s *interrupt_config);
 
-#endif
+#endif // DRIVER_UART_UART_INTERRUPT_H_

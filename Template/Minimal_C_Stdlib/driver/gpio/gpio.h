@@ -1,5 +1,5 @@
-#ifndef MODULES_GPIO_H
-#define MODULES_GPIO_H
+#ifndef DRIVER_GPIO_GPIO_H_
+#define DRIVER_GPIO_GPIO_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -71,4 +71,4 @@ void gpio__reset(const GPIO_s *config);
 
 bool gpio__get(const GPIO_s *config);
 
-#endif
+#endif // DRIVER_GPIO_GPIO_H_

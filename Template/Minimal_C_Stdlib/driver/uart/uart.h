@@ -1,5 +1,5 @@
-#ifndef MODULES_UART_H
-#define MODULES_UART_H
+#ifndef DRIVER_UART_UART_H_
+#define DRIVER_UART_UART_H_
 
 #include <stdint.h>
 
@@ -44,4 +44,4 @@ void uart__write_string(const UART_s *config, const char *buffer);
 // * OE (Overflow Error)
 uint8_t uart__read(const UART_s *config);
 
-#endif
+#endif // DRIVER_UART_UART_H_
