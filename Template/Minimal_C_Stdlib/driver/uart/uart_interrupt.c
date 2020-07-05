@@ -68,6 +68,17 @@ void uart_interrupt__write_string(UART_interrupt_s *interrupt_config,
   uart_interrupt__write_activate(interrupt_config);
 }
 
+void uart_interrupt__write_string_n(UART_interrupt_s *interrupt_config,
+                                    char *data, size_t n) {
+  // First write the data
+  for (size_t i = 0; i < n; i++) {
+    xQueueSend(interrupt_config->_internal.tx_queue, &data[i], portMAX_DELAY);
+  }
+
+  // Then activate the interrupts
+  uart_interrupt__write_activate(interrupt_config);
+}
+
 uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config) {
   uint8_t data = 0;
   xQueueReceive(interrupt_config->_internal.rx_queue, &data, portMAX_DELAY);

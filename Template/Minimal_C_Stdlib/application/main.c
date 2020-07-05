@@ -15,10 +15,6 @@
 /**
  * STATIC FUNCTION DECLARATIONS
  */
-
-void main__uart_init(void);
-void main__uart_interrupt_init(void);
-
 void main__gpio_output(void);
 
 void main__gpio_input(void);
@@ -35,15 +31,6 @@ static GPIO_s input_config;
 static EXTI_s gpioC13_interrupt_config;
 volatile bool is_button_pressed = false;
 
-// UART
-UART_s uart_config;
-static UART_interrupt_s uart_interrupt_config;
-volatile bool is_tc = false;
-
-// UART RX
-#define RX_BUF_SIZE 255
-#define TX_BUF_SIZE 255
-
 // MISC
 static QueueHandle_t qHandle;
 
@@ -57,35 +44,7 @@ void EXTI15_10_Handler(void) {
   }
 }
 
-void USART1_Handler(void) { uart_interrupt__process(&uart_interrupt_config); }
-
-static void USART1_Transmit_Complete_Cb(void) { is_tc = true; }
-
 // TASKS
-void uart_task(void *arg) {
-
-  // uart_interrupt__write_string(&uart_interrupt_config,
-  //                              "Hello from Interrupt\r\n");
-  uart__write_string(&uart_config, "Hello Interrupt\r\n");
-
-  uint8_t data = 0;
-  char buf[20] = {0};
-
-  while (1) {
-    // uart_interrupt__write_string(&uart_interrupt_config, "ON\r\n");
-    // vTaskDelay(1000);
-    // uart_interrupt__write_string(&uart_interrupt_config, "OFF\r\n");
-    // vTaskDelay(1000);
-    xQueueReceive(qHandle, &data, portMAX_DELAY);
-    memset(buf, 0, 20 * sizeof(char));
-    sprintf(buf, "%x %d\r\n", data, data);
-
-    // uart_interrupt__write_string(&uart_interrupt_config, buf);
-    uart__write_string(&uart_config, buf);
-    vTaskDelay(1000);
-  }
-}
-
 void sender_task(void *arg) {
   uint8_t counter = 0;
   while (1) {
@@ -95,36 +54,9 @@ void sender_task(void *arg) {
   }
 }
 
-void uart_receiver(void *arg) {
-  uart_interrupt__write_string(&uart_interrupt_config,
-                               "Hello uart_receiver\r\n");
-
-  char buf[20] = {0};
-
-  while (1) {
-    uint8_t data = uart_interrupt__read(&uart_interrupt_config);
-
-    memset(buf, 0, 20 * sizeof(char));
-    sprintf(buf, "%x %c\r\n", data, data);
-    uart_interrupt__write_string(&uart_interrupt_config, buf);
-  }
-}
-
-void cb_checker(void *arg) {
-  while (1) {
-    if (is_tc) {
-      is_tc = false;
-
-      // Run
-      gpio__set(&output_config);
-      vTaskDelay(100);
-      gpio__reset(&output_config);
-    }
-  }
-}
-
 void blink_task(void *arg) {
   while (1) {
+    printf("Hello %s\r\n", __FUNCTION__);
     gpio__set(&output_config);
     vTaskDelay(1000);
     gpio__reset(&output_config);
@@ -133,9 +65,6 @@ void blink_task(void *arg) {
 }
 
 int main(void) {
-  main__uart_init();
-  main__uart_interrupt_init();
-
   main__gpio_output();
   gpio__reset(&output_config);
 
@@ -143,9 +72,9 @@ int main(void) {
 
   // xTaskCreate(uart_task, "uart_task", 2000, NULL, 1, NULL);
   // xTaskCreate(sender_task, "sender", 2000, NULL, 1, NULL);
-  xTaskCreate(uart_receiver, "uart_recevier", 2000, NULL, 1, NULL);
-  xTaskCreate(cb_checker, "tc_checker", 2000, NULL, 1, NULL);
-  // xTaskCreate(blink_task, "blink", 2000, NULL, 1, NULL);
+  // xTaskCreate(uart_receiver, "uart_recevier", 2000, NULL, 1, NULL);
+  // xTaskCreate(cb_checker, "tc_checker", 2000, NULL, 1, NULL);
+  xTaskCreate(blink_task, "blink", 2000, NULL, 1, NULL);
   vTaskStartScheduler();
 
   // vTaskStartSchedular should never exit
@@ -153,37 +82,6 @@ int main(void) {
   }
 
   return 0;
-}
-
-// STATIC FUNCTION
-void main__uart_init(void) {
-  // Activate USART1
-  RCC->APB2ENR |= (1 << 14);
-  // Activate GPIOB
-  RCC->AHB2ENR |= (1 << 1);
-
-  GPIO_s config = {};
-  config.mode = GPIO_mode_ALTERNATE_FUNCTION;
-  config.type = GPIO_type_PUSH_PULL;
-  config.speed = GPIO_speed_VERY_HIGH_SPEED;
-  config.pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
-  config.alternate = GPIO_alternate_7;
-  gpio__init(&config, GPIOB, 6);
-  gpio__init(&config, GPIOB, 7);
-
-  uart_config.baud_rate = 115200U;
-  uart_config.stop_bit = UART_stop_bit_1_0;
-  uart_config.word_length = UART_word_length_8;
-  uart_config.mode = UART_mode_RX_TX;
-  uart__init(&uart_config, USART1);
-}
-
-void main__uart_interrupt_init(void) {
-  uart_interrupt_config.usart = uart_config.usart;
-  uart_interrupt_config.rx_queue_length = RX_BUF_SIZE;
-  uart_interrupt_config.tx_queue_length = TX_BUF_SIZE;
-  uart_interrupt_config.UART_transmit_complete_cb = USART1_Transmit_Complete_Cb;
-  uart_interrupt__init(&uart_interrupt_config);
 }
 
 void main__gpio_output(void) {

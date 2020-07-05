@@ -30,6 +30,8 @@ void uart_interrupt__init(UART_interrupt_s *interrupt_config);
 void uart_interrupt__write(UART_interrupt_s *interrupt_config, uint8_t data);
 void uart_interrupt__write_string(UART_interrupt_s *interrupt_config,
                                   char *data);
+void uart_interrupt__write_string_n(UART_interrupt_s *interrupt_config,
+                                    char *data, size_t n);
 
 uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config);
 
