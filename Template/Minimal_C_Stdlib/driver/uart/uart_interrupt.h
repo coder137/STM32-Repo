@@ -33,7 +33,8 @@ void uart_interrupt__write_string(UART_interrupt_s *interrupt_config,
 void uart_interrupt__write_string_n(UART_interrupt_s *interrupt_config,
                                     char *data, size_t n);
 
-uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config);
+uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config,
+                             uint32_t wait_for);
 
 // Used by Interrupt Function
 void uart_interrupt__process(const UART_interrupt_s *interrupt_config);

@@ -32,7 +32,6 @@ static EXTI_s gpioC13_interrupt_config;
 volatile bool is_button_pressed = false;
 
 // MISC
-static QueueHandle_t qHandle;
 
 // INTERRUPTS
 void EXTI15_10_Handler(void) {
@@ -45,15 +44,6 @@ void EXTI15_10_Handler(void) {
 }
 
 // TASKS
-void sender_task(void *arg) {
-  uint8_t counter = 0;
-  while (1) {
-    xQueueSend(qHandle, &counter, 0);
-    counter++;
-    vTaskDelay(1000);
-  }
-}
-
 void blink_task(void *arg) {
   while (1) {
     printf("Hello %s\r\n", __FUNCTION__);
@@ -64,17 +54,20 @@ void blink_task(void *arg) {
   }
 }
 
+void uart_read(void *arg) {
+  char buf[20] = {0};
+  while (1) {
+    scanf("%s", buf);
+    printf("Data: %s\r\n", buf);
+  }
+}
+
 int main(void) {
   main__gpio_output();
   gpio__reset(&output_config);
 
-  qHandle = xQueueCreate(100, sizeof(uint8_t));
-
-  // xTaskCreate(uart_task, "uart_task", 2000, NULL, 1, NULL);
-  // xTaskCreate(sender_task, "sender", 2000, NULL, 1, NULL);
-  // xTaskCreate(uart_receiver, "uart_recevier", 2000, NULL, 1, NULL);
-  // xTaskCreate(cb_checker, "tc_checker", 2000, NULL, 1, NULL);
-  xTaskCreate(blink_task, "blink", 2000, NULL, 1, NULL);
+  xTaskCreate(blink_task, "printf test", 2000, NULL, 1, NULL);
+  xTaskCreate(uart_read, "scanf test", 2000, NULL, 2, NULL);
   vTaskStartScheduler();
 
   // vTaskStartSchedular should never exit

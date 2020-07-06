@@ -79,9 +79,10 @@ void uart_interrupt__write_string_n(UART_interrupt_s *interrupt_config,
   uart_interrupt__write_activate(interrupt_config);
 }
 
-uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config) {
+uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config,
+                             uint32_t wait_for) {
   uint8_t data = 0;
-  xQueueReceive(interrupt_config->_internal.rx_queue, &data, portMAX_DELAY);
+  xQueueReceive(interrupt_config->_internal.rx_queue, &data, wait_for);
   return data;
 }
 
