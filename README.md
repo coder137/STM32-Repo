@@ -8,10 +8,11 @@
     - [l1_third_party_device_dependent](#l1_third_party_device_dependent)
     - [l2_drivers](#l2_drivers)
   - [Device Independent folders](#device-independent-folders)
+    - [l3_board_specific](#l3_board_specific)
     - [l3_functional_third_party](#l3_functional_third_party)
     - [l4_user_module](#l4_user_module)
     - [l5_application](#l5_application)
-- [Goals](#goals)
+- [Roadmap](#roadmap)
 
 # STM32-Repo
 
@@ -34,6 +35,7 @@ STM32 Repository for learning HAL and CMSIS (Baremetal)
 
 - Baremetal
   - Low level Linker script and Learning
+  - Integrate critical external components to a project
 - doc
   - PDF Documents
 - L475
@@ -69,6 +71,8 @@ In this below structure to port our project to a different controller we would n
 +-- l2_drivers
 | +-- gpio_device_specific
 | +-- uart_device_specific
++-- l3_board_specific
+| +-- peripheral_initialization
 +-- l3_functional_third_party
 | +-- ring_buffer
 +-- l4_user_module
@@ -108,6 +112,11 @@ In this below structure to port our project to a different controller we would n
 - l4_user_module
 - l5_application
 
+### l3_board_specific
+
+- For internal board_specific initialization
+- Syscalls based externed functions
+
 ### l3_functional_third_party
 
 - Functional Third Party code integrated into the project
@@ -126,7 +135,7 @@ Writing code for various hardwares i.e
 - Application Logic for the project
 - `main.c` resides on the top level
 
-# Goals
+# Roadmap
 
 - Understanding your ARM Toolchain
   - [x] arm-none-eabi-*
@@ -155,6 +164,7 @@ Writing code for various hardwares i.e
   - [ ] gdb
 - Unit-Test and Mocking
   - [ ] Unity
+  - [ ] CppUTest
   - [ ] Google Tests
   - [ ] Catch
 - Third Party Modules
@@ -165,3 +175,4 @@ Writing code for various hardwares i.e
   - [ ] Static Analysis
   - [ ] Code Coverage
   - [ ] Continuous Integration
+  - [ ] Documentation Generator

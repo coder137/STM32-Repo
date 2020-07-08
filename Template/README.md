@@ -56,17 +56,12 @@ Templates for starting STM32 Projects
 - [x] Minimal_FreeRTOS
   - Integrate Amazon FreeRTOS with the project
   - Create example for `task` and `queue` systems
-  - Updated UART Interrupt with `queue`
-  - Fork from `Minimal_Interrupt`
-- [ ] Minimal_C_Stdlib
-  - Contains C Standard Library syscalls
   - Updated interrupt drivers with FreeRTOS functions
+  - Fork from `Minimal_Interrupt`
+- [x] Minimal_C_Stdlib
+  - Contains C Standard Library syscalls
   - Attached `printf` and `scanf` to UART low level driver 
   - Fork from `Minimal_FreeRTOS`
-- [ ] Minimal_C_Final
-  - Updated CMake for global Clang Format
-  - Added C Unit-Test/Mock framework
-  - > TODO, Add more
 
 # Other Templates
 
@@ -99,4 +94,6 @@ Templates for starting STM32 Projects
 
 ## Minimal C Stdlib
 
-- [ ] Integrate_Newlib
+- [x] Newlib_nano
+- [x] Newlib_sbrk
+- [x] Newlib_syscalls
