@@ -32,13 +32,15 @@ set(COMMON_C_FLAGS
     -pipe
     ${WARNING_FLAGS})
 set(USER_C_FLAGS -std=c99 -fmessage-length=0 -ffunction-sections
-                 -fdata-sections -fstack-usage)
+                 -fdata-sections -fstack-usage -nostdlib)
 
 set(USER_LINK_FLAGS
     -nostartfiles
     -specs=nano.specs
     -specs=nosys.specs
-    # "SHELL:-u _printf_float" "SHELL:-u _scanf_float" -nostdlib
+    -lc
+    -lm
+    # "SHELL:-u _printf_float" "SHELL:-u _scanf_float"
     -static
     -Wl,--gc-sections
     -Wl,-Map,${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
