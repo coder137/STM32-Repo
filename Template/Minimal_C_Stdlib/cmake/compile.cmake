@@ -27,3 +27,15 @@ add_custom_target(
   COMMAND ${ST_PROGRAMMER} -c port=SWD sn=066CFF323338424E43146025 -w
           ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin 0x08000000
   VERBATIM USES_TERMINAL)
+
+add_custom_target(
+  openocd_start_server
+  DEPENDS ${USER_PROJECT_TARGET}
+  COMMAND openocd.exe -f ${PROJECT_SOURCE_DIR}/stm32l4discovery.cfg
+  VERBATIM USES_TERMINAL)
+
+add_custom_target(
+  openocd_connect_client
+  DEPENDS ${USER_PROJECT_TARGET}
+  COMMAND arm-none-eabi-gdb.exe ${PROJECT_BINARY_DIR}/${USER_PROJECT_TARGET}
+  VERBATIM USES_TERMINAL)

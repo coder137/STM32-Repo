@@ -61,6 +61,7 @@ Templates for starting STM32 Projects
 - [x] Minimal_C_Stdlib
   - Contains C Standard Library syscalls
   - Attached `printf` and `scanf` to UART low level driver 
+  - Adding openocd debugging
   - Fork from `Minimal_FreeRTOS`
 
 # Other Templates
