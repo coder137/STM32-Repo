@@ -62,6 +62,9 @@ Templates for starting STM32 Projects
   - Contains C Standard Library syscalls
   - Attached `printf` and `scanf` to UART low level driver 
   - Adding openocd debugging
+    - openocd commandline
+    - openocd cmake integration
+    - openocd vscode integration with plugin
   - Fork from `Minimal_FreeRTOS`
 
 # Other Templates

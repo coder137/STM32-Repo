@@ -1,0 +1,15 @@
+{
+  "configurations": [
+    {
+      "cwd": "${workspaceFolder}",
+      "executable": "build/Minimal_C_Stdlib.elf",
+      "configFiles": [
+        "stm32l4discovery.cfg"
+      ],
+      "name": "Debug Microcontroller",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "openocd"
+    }
+  ]
+}

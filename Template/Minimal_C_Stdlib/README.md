@@ -1,5 +1,7 @@
 # DEBUGGING with openocd
 
+Copy the board configuration file
+
 ## Starting openocd server
 
 ```
@@ -49,3 +51,9 @@ cmake --build build --target openocd_connect_client
 ```
 
 > Run your commands similar to the steps given above
+
+# VSCode Integration with OpenOCD
+
+Install the **Cortex-Debug** plugin
+
+[OpenOCD Specific Configuration](https://github.com/Marus/cortex-debug/wiki/OpenOCD-Specific-Configuration)
