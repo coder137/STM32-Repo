@@ -1,3 +1,7 @@
 # Exclude these files from root level .gitignore
 build
-.vscode
+
+!stm32l4discovery.cfg
+
+.vscode/.cortex-debug*
+.vscode/settings.json

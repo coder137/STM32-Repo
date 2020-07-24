@@ -3,6 +3,8 @@
 
 static void _spin_delay(uint32_t delay);
 
+static int i;
+
 int main(void) {
 
   RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
@@ -20,11 +22,12 @@ int main(void) {
   // Set the pin here
   GPIOA->BSRR |= (1 << 5);
 
+  i = 1000;
   while (1) {
-    _spin_delay(1000 * 1000);
+    _spin_delay(1000 * i);
     GPIOA->BRR = (1 << 5); // Reset
 
-    _spin_delay(1000 * 1000);
+    _spin_delay(1000 * i);
     GPIOA->BSRR = (1 << 5); // Set
   }
 

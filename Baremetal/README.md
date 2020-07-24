@@ -45,12 +45,6 @@
 - [x] Minimal_CMSIS
   - Using the ARM CMSIS Base Toolchain 
   - Device specific data added
-- [ ] Minimal_C_Stdlib
-  -  Adding the C Standard library
-  -  Using syscalls implementation
-- [ ] Minimal_RTOS
-  - Adding `FreeRTOS` to the device
-  - Writing device specific FreeRTOS.h files
 
 ## C++ Programming
 
