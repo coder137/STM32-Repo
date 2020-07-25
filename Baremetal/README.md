@@ -40,6 +40,9 @@
   - Very minimal Blinky example (NOT Complete)
   - Does not contain complete startup, .bss implementation and copy functions
   - Can be flashed onto the microcontroller to see led blinking
+- [x] Minimal_Blinky_Meson
+  - Integrated the Meson build system
+  - Forked from Minimal_Blinky example 
 - [x] Minimal_Startup
   - Using the Minimal Blinky to write startup files for your linker script
 - [x] Minimal_CMSIS
@@ -53,7 +56,7 @@
   - Constructor
 - [ ] Minimal_Cpp_Advanced
   - Templates
-  - C++11 Features
+  - C++11/C++14 Features
   - Add other features and testing
 - [ ] Minimal_Cpp_Stdlib
   - Using the C++ Standard libraries
