@@ -1,0 +1,4 @@
+# Exclude these files from root level .gitignore
+build
+builddir
+.vscode
