@@ -44,7 +44,7 @@ static void initialize_data_section(void) {
   const uint8_t *start_of_lma_data = (uint8_t *)_lma_data; // lma
 
   const uint32_t size = end_of_vma_data - start_of_vma_data;
-  for (int i = 0; i < size; i++) {
+  for (uint32_t i = 0; i < size; i++) {
     start_of_vma_data = start_of_lma_data;
     start_of_vma_data++;
     start_of_lma_data++;

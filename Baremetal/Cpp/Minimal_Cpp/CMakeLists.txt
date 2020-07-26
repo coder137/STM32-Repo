@@ -15,17 +15,27 @@ add_executable(${USER_PROJECT_TARGET} src/main.cpp src/isr_vector.c)
 # TODO, Add more variables here
 
 # Project Variables
-set(COMMON_C_FLAGS
-    -O0
-    -mcpu=cortex-m4
-    -mthumb
-    -mfloat-abi=hard
-    -mfpu=auto
-    -Wall
-    -g
-    -pipe)
-set(USER_C_FLAGS # -std=c99
-    -fmessage-length=0 -ffunction-sections -fdata-sections -fstack-usage)
+set(USER_WARNING "-Wall -Wextra -Werror")
+
+# ~~~
+# -fstack-protector-strong
+set(USER_C_FLAGS
+    "-Os -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=auto -Wall -g -pipe -fmessage-length=0 -ffunction-sections -fdata-sections -fstack-usage -fno-exceptions -fno-non-call-exceptions -ffreestanding -fno-common -finline-small-functions -findirect-inlining ${USER_WARNING}"
+)
+# ~~~
+
+# ~~~
+# https://bitbashing.io/embedded-cpp.html
+# https://github.com/SJSU-Dev2/SJSU-Dev2/blob/master/makefile
+# https://stackoverflow.com/questions/34308720/where-is-dso-handle-defined
+set(USER_CPP_FLAGS
+    "${USER_C_FLAGS} -std=c++17 -fno-rtti -Woverloaded-virtual -fno-use-cxa-atexit"
+)
+# ~~~
+
+# Set the C and C++ Flags here
+set(CMAKE_C_FLAGS ${USER_C_FLAGS})
+set(CMAKE_CXX_FLAGS ${USER_CPP_FLAGS})
 
 set(USER_LINK_FLAGS
     -nostartfiles
@@ -39,13 +49,11 @@ set(USER_LINK_FLAGS
 
 # ? debugging
 message("\nDEBUGGING")
-message("COMMON_FLAGS: ${COMMON_C_FLAGS}")
 message("USER_COMPILE_C_FLAGS: ${USER_C_FLAGS}")
+message("USER_COMPILE_CXX_FLAGS: ${USER_CPP_FLAGS}")
 message("USER_LINK_FLAGS: ${USER_LINK_FLAGS}")
 message("-------DONE------\n\n")
 
-target_compile_options(${USER_PROJECT_TARGET} PRIVATE ${COMMON_C_FLAGS}
-                                                      ${USER_C_FLAGS})
 target_link_options(${USER_PROJECT_TARGET} PRIVATE ${COMMON_C_FLAGS}
                     ${USER_LINK_FLAGS})
 target_include_directories(${USER_PROJECT_TARGET} PRIVATE "startup/cmsis"

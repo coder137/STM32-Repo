@@ -3,7 +3,12 @@
 
 class Blink {
 public:
+  // NOTE: Constructors should not be used too much expect for
+  // setting internal variables
+  // NOTE: Do not use a constructor for hardware initialization
   Blink();
+
+  ~Blink();
 
   void init();
   void set();
@@ -11,8 +16,10 @@ public:
   void spin_delay(uint32_t delay);
 };
 
+// Needs -fno-use-cxa-atexit to work properly
+static Blink b;
+
 int main(void) {
-  Blink b;
   b.init();
 
   b.set();
@@ -29,6 +36,7 @@ int main(void) {
 }
 
 Blink::Blink() {}
+Blink::~Blink() {}
 
 void Blink::init() {
   RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
