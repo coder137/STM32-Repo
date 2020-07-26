@@ -1,3 +1,8 @@
 # Exclude these files from root level .gitignore
 build
-.vscode
+
+# Files
+.vscode/*.json
+
+!.vscode/launch.json
+!stm32l4discovery.cfg
