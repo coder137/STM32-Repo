@@ -8,7 +8,20 @@ set(CMAKE_TOOLCHAIN_FILE "toolchain.cmake")
 project(${PROJECT_NAME})
 
 set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
-add_executable(${USER_PROJECT_TARGET} src/main.cpp src/isr_vector.c)
+
+# ~~~
+# Functions vs Namespaces
+# add_executable(
+#   ${USER_PROJECT_TARGET}
+#   # src/main.c
+#   src/main.cpp src/isr_vector.c)
+# ~~~
+
+# Classes vs Structs
+add_executable(
+  ${USER_PROJECT_TARGET}
+  # src/class/main.c
+  src/class/main.cpp src/isr_vector.c)
 
 # TODO, Add more files here
 
