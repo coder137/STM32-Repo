@@ -14,7 +14,12 @@
 
 # Template
 
-Templates for starting STM32 Projects
+Application templates have been built on the **B-L475E-IOT01A STM32L4 based board**
+
+- Templates are extensions on Baremetal code
+- Templates differ from Baremetal code in the sense that they are on the application level
+  - Baremetal code deals with linker script and architecture based initialization
+  - Templates are based on microcontroller based code i.e application level
 
 # Reference Material 
 

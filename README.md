@@ -1,6 +1,8 @@
 - [STM32-Repo](#stm32-repo)
   - [Pre-Requisites](#pre-requisites)
   - [Links](#links)
+    - [STM32L4](#stm32l4)
+    - [STM32F7](#stm32f7)
 - [Repository Structure](#repository-structure)
 - [Project Structure](#project-structure)
   - [Device Dependent folders](#device-dependent-folders)
@@ -28,8 +30,15 @@ STM32 Repository for learning HAL and CMSIS (Baremetal)
 
 ## Links
 
+### STM32L4
+
 - [STM32 Website for B-L475E-IOT01A](https://www.st.com/en/evaluation-tools/b-l475e-iot01a.html)
-- L475_x examples use [the B-L475E-IOT01A board](https://os.mbed.com/platforms/ST-Discovery-L475E-IOT01A/) 
+- STM32L475_x examples use [the B-L475E-IOT01A board](https://os.mbed.com/platforms/ST-Discovery-L475E-IOT01A/) 
+
+### STM32F7
+
+- [STM32 Website for NUCLEO-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html)
+- STM32F7ZG examples use [the NUCLEO-F746ZG board](https://os.mbed.com/platforms/ST-Nucleo-F746ZG/)
 
 # Repository Structure
 
@@ -38,8 +47,8 @@ STM32 Repository for learning HAL and CMSIS (Baremetal)
   - Integrate critical external components to a project
 - doc
   - PDF Documents
-- L475
-  - STM32 L475 HAL Example
+- STM32_HAL
+  - STM32 HAL based examples for various microcontrollers
 - Template
   - Projects built after `Minimal_CMSIS` in Baremetal
   - Actual application level code

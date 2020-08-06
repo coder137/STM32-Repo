@@ -1,5 +1,7 @@
 # List
 
+Examples have been built on the **B-L475E-IOT01A STM32L4 based board**
+
 - [Install the arm-none-eabi-* toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 - [Install CMAKE](https://cmake.org/cmake/help/latest/index.html)
 - [Fastbit Embedded Brain Academy Linker Script](https://www.youtube.com/watch?v=B7oKdUvRhQQ)
