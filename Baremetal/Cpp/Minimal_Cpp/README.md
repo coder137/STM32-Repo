@@ -1,6 +1,7 @@
 - [Minimal Cpp](#minimal-cpp)
 - [Current Links](#current-links)
 - [Pre-requisite](#pre-requisite)
+- [C++ Pre-requisites](#c-pre-requisites)
 - [Integrating with CMake](#integrating-with-cmake)
   - [NOTE](#note)
 - [Adding File dependencies](#adding-file-dependencies)
@@ -31,6 +32,10 @@ AIM: Write application level code in Cpp
 - [Read this amazing tutorial](https://interrupt.memfault.com/blog/how-to-write-linker-scripts-for-firmware)
 - [Read the STM32 getting started from scratch guide](http://tty.uchuujin.de/2016/02/stm32-from-scratch-bare-minimals/)
 - [Github Link to the same](https://github.com/textshell/stm32-from-scratch)
+
+# C++ Pre-requisites
+
+- [Embedded C++ Gitbook](https://arobenko.gitbooks.io/bare_metal_cpp/content/)
 
 # Integrating with CMake
 

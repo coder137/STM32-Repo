@@ -17,11 +17,18 @@ set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
 #   src/main.cpp src/isr_vector.c)
 # ~~~
 
+# ~~~
 # Classes vs Structs
+# add_executable(
+#   ${USER_PROJECT_TARGET}
+#   # src/class/main.c
+#   src/class/main.cpp src/isr_vector.c)
+# ~~~
+
+# Virtual Classes
 add_executable(
   ${USER_PROJECT_TARGET}
-  # src/class/main.c
-  src/class/main.cpp src/isr_vector.c)
+  src/virtual/main.cpp src/isr_vector.c)
 
 # TODO, Add more files here
 
@@ -32,8 +39,9 @@ set(USER_WARNING "-Wall -Wextra -Werror")
 
 # ~~~
 # -fstack-protector-strong
+# https://arobenko.gitbooks.io/bare_metal_cpp/content/compiler_output/exceptions.html
 set(USER_C_FLAGS
-    "-Os -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=auto -Wall -g -pipe -fmessage-length=0 -ffunction-sections -fdata-sections -fstack-usage -fno-exceptions -fno-non-call-exceptions -ffreestanding -fno-common -finline-small-functions -findirect-inlining ${USER_WARNING}"
+    "-Os -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=auto -Wall -g -pipe -fmessage-length=0 -ffunction-sections -fdata-sections -fstack-usage -fno-exceptions -fno-unwind-tables -fno-non-call-exceptions -ffreestanding -fno-common -finline-small-functions -findirect-inlining ${USER_WARNING}"
 )
 # ~~~
 
@@ -67,7 +75,7 @@ message("USER_COMPILE_CXX_FLAGS: ${USER_CPP_FLAGS}")
 message("USER_LINK_FLAGS: ${USER_LINK_FLAGS}")
 message("-------DONE------\n\n")
 
-target_link_options(${USER_PROJECT_TARGET} PRIVATE ${COMMON_C_FLAGS}
+target_link_options(${USER_PROJECT_TARGET} PRIVATE
                     ${USER_LINK_FLAGS})
 target_include_directories(${USER_PROJECT_TARGET} PRIVATE "startup/cmsis"
                                                           "startup/device")
