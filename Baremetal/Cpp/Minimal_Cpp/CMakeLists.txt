@@ -25,10 +25,14 @@ set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
 #   src/class/main.cpp src/isr_vector.c)
 # ~~~
 
-# Virtual Classes
+# ~~~
+# Virtual Classes vs Templates
 add_executable(
   ${USER_PROJECT_TARGET}
-  src/virtual/main.cpp src/isr_vector.c)
+  # src/virtual/main.cpp
+  src/template/main.cpp
+  src/isr_vector.c)
+# ~~~
 
 # TODO, Add more files here
 
