@@ -29,8 +29,8 @@ set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
 # Virtual Classes vs Templates
 add_executable(
   ${USER_PROJECT_TARGET}
-  # src/virtual/main.cpp
-  src/template/main.cpp
+  src/virtual/main.cpp
+  # src/template/main.cpp
   src/isr_vector.c)
 # ~~~
 
@@ -39,7 +39,8 @@ add_executable(
 # TODO, Add more variables here
 
 # Project Variables
-set(USER_WARNING "-Wall -Wextra -Werror")
+set(USER_C_WARNING "-Wall -Wextra -Werror")
+set(USER_CPP_WARNING "-Wsuggest-override")
 
 # ~~~
 # -fstack-protector-strong
@@ -54,7 +55,7 @@ set(USER_C_FLAGS
 # https://github.com/SJSU-Dev2/SJSU-Dev2/blob/master/makefile
 # https://stackoverflow.com/questions/34308720/where-is-dso-handle-defined
 set(USER_CPP_FLAGS
-    "${USER_C_FLAGS} -std=c++17 -fno-rtti -Woverloaded-virtual -fno-use-cxa-atexit"
+    "${USER_C_FLAGS} -std=c++17 -fno-rtti -Woverloaded-virtual -fno-use-cxa-atexit -fno-threadsafe-statics -flto ${USER_CPP_WARNING}"
 )
 # ~~~
 

@@ -9,9 +9,15 @@
  * C++ with Classes without args (without constructor) = 1152
  * C++ with Classes without args (with constructor) = 1156
  *
- * C with Struct with args = 1188
- * C++ with Classes with args (with constructor) = 1188
- * Virtual C++ with Classes with args (with constructor) = 1228 (40 bytes more)
+ * - C with Struct with args = 1188
+ * - C++ with Classes with args (with constructor) = 1188
+ * - C++ with Classes with args with link time optimization (with constructor) =
+ * 1108 (80 bytes lesser than C version!)
+ * - Virtual C++ with Classes with args (with constructor) = 1228 (40 bytes
+ * more)
+ * - Virtual C++ with Classes with args with link time optimization (with
+ * constructor) = 1212 (24 bytes more than general example) i.e 16 bytes saved
+ * from above example
  *
  */
 #include "stm32l475xx.h"
@@ -29,10 +35,10 @@ class Blink : public VBlink {
 public:
   Blink(GPIO_TypeDef *port, std::uint8_t pin);
 
-  void init();
-  void set();
-  void reset();
-  void spin_delay(std::uint32_t delay);
+  void init() override;
+  void set() override;
+  void reset() override;
+  void spin_delay(std::uint32_t delay) override;
 
 private:
   GPIO_TypeDef *port;
