@@ -19,10 +19,17 @@
  * constructor) = 1212 (24 bytes more than general example) i.e 16 bytes saved
  * from above example
  *
+ * NOTE: Removing specialized constructor reduces the code size by 12-16 bytes
+ * OR,
+ * NOTE: Make the specialized constructor `constexpr`
+ * However virtual classes are still around 30-40 bytes larger than their
+ * non-virtual class counter parts
+ *
  */
 #include "stm32l475xx.h"
 #include <cstdint>
 
+// Abstract class
 class VBlink {
 public:
   virtual void init() = 0;
@@ -31,9 +38,10 @@ public:
   virtual void spin_delay(std::uint32_t delay) = 0;
 };
 
-class Blink : public VBlink {
+// Machine specific class
+class Blink final : public VBlink {
 public:
-  Blink(GPIO_TypeDef *port, std::uint8_t pin);
+  constexpr Blink(GPIO_TypeDef *port, std::uint8_t pin);
 
   void init() override;
   void set() override;
@@ -45,7 +53,8 @@ private:
   std::uint8_t pin;
 };
 
-Blink::Blink(GPIO_TypeDef *port, std::uint8_t pin) : port(port), pin(pin) {}
+constexpr Blink::Blink(GPIO_TypeDef *port, std::uint8_t pin)
+    : port(port), pin(pin) {}
 
 void Blink::init() {
   RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;

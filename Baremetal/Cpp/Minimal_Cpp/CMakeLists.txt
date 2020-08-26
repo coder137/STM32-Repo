@@ -46,7 +46,7 @@ set(USER_CPP_WARNING "-Wsuggest-override")
 # -fstack-protector-strong
 # https://arobenko.gitbooks.io/bare_metal_cpp/content/compiler_output/exceptions.html
 set(USER_C_FLAGS
-    "-Os -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=auto -Wall -g -pipe -fmessage-length=0 -ffunction-sections -fdata-sections -fstack-usage -fno-exceptions -fno-unwind-tables -fno-non-call-exceptions -ffreestanding -fno-common -finline-small-functions -findirect-inlining ${USER_WARNING}"
+    "-Os -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=auto -Wall -g -pipe -fmessage-length=0 -ffunction-sections -fdata-sections -fstack-usage -fno-exceptions -fno-unwind-tables -fno-non-call-exceptions -ffreestanding -fno-common -finline-small-functions -findirect-inlining -Wl,--print-memory-usage ${USER_WARNING}"
 )
 # ~~~
 
