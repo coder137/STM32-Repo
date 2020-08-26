@@ -22,11 +22,15 @@ STM32 Repository for learning HAL and CMSIS (Baremetal)
 
 ## Pre-Requisites
 
-- arm-none-eabi-* toolchain
+- `arm-none-eabi-*` GNU Toolchain
 - CMake
 - Ninja
-- Clang Format
-- VSCode (Integrated with above)
+- STM32CubeProgrammer
+- OpenOCD
+- VSCode Plugins
+  - CMake
+  - Cortex-Debug
+  - C/C++
 
 ## Links
 

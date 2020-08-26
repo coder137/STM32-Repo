@@ -54,12 +54,14 @@ Examples have been built on the **B-L475E-IOT01A STM32L4 based board**
 ## C++ Programming
 
 - [x] Minimal_Cpp
-  - Adding C++
-  - Constructor
-- [ ] Minimal_Cpp_Advanced
-  - Templates
-  - C++11/C++14 Features
-  - Add other features and testing
+  - Adding C++17 support to Linker script
+  - Functions vs Namespaced functions
+  - Classes vs Structs
+    - Constructor, Destructor code size considerations
+  - Virtual Classes vs Templates
+  - Custom flags for code size optimzation
 - [ ] Minimal_Cpp_Stdlib
-  - Using the C++ Standard libraries
-  - `<algorithm>` and static allocation based functions
+  - Dynamic memory allocation 
+  - Standard C++ library and syscalls
+- [ ] Minimal_Cpp_Advanced
+  - C++11/C++14/C++17 static library features
