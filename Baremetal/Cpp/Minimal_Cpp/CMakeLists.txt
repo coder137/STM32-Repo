@@ -29,7 +29,8 @@ set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
 # Virtual Classes vs Templates
 add_executable(
   ${USER_PROJECT_TARGET}
-  src/virtual/main.cpp
+  # src/virtual/main.cpp
+  src/virtual/main.c
   # src/template/main.cpp
   src/isr_vector.c)
 # ~~~
@@ -65,8 +66,8 @@ set(CMAKE_CXX_FLAGS ${USER_CPP_FLAGS})
 
 set(USER_LINK_FLAGS
     -nostartfiles
-    # -specs=nano.specs -specs=nosys.specs "SHELL:-u _printf_float" "SHELL:-u
-    # _scanf_float"
+    # -specs=nano.specs -specs=nosys.specs 
+    # "SHELL:-u _printf_float" "SHELL:-u_scanf_float"
     -nostdlib
     -static
     # -Wl,--gc-sections
