@@ -6,6 +6,9 @@
       "configFiles": [
         "stm32l4discovery.cfg"
       ],
+      "postLaunchCommands": [
+        "monitor arm semihosting enable",
+      ],
       "name": "Debug Microcontroller",
       "request": "launch",
       "type": "cortex-debug",

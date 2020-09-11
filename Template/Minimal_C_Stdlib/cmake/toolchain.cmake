@@ -36,12 +36,23 @@ set(USER_C_FLAGS -std=c99 -fmessage-length=0 -ffunction-sections
 
 set(USER_LINK_FLAGS
     -nostartfiles
-    -specs=nano.specs
-    -specs=nosys.specs
     -lc
     -lm
     # "SHELL:-u _printf_float" "SHELL:-u _scanf_float"
     -static
     -Wl,--gc-sections
     -Wl,-Map,${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
-    -T${PROJECT_SOURCE_DIR}/l0_lowlevel/linker/gcc_arm.ld)
+    -T${PROJECT_SOURCE_DIR}/l0_lowlevel/linker/gcc_arm.ld
+)
+
+set (USER_NO_SEMIHOSTING_FLAGS
+    -specs=nano.specs
+    -specs=nosys.specs
+)
+
+# Make sure you do not add your syscalls overrides
+# This will be provided by rdimon.specs
+set (USER_SEMIHOSTING_FLAGS 
+    -specs=nano.specs
+    -specs=rdimon.specs 
+)

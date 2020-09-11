@@ -57,12 +57,14 @@ void blink_task(void *arg) {
 void uart_read(void *arg) {
   char buf[20] = {0};
   while (1) {
+    printf("Waiting for data>\r\n");
     scanf("%s", buf);
     printf("Data: %s\r\n", buf);
   }
 }
 
 int main(void) {
+  printf("Starting main\r\n");
   main__gpio_output();
   gpio__reset(&output_config);
 
