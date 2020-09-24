@@ -18,7 +18,8 @@
 
 # STM32-Repo
 
-STM32 Repository for learning HAL and CMSIS (Baremetal)
+- STM32 Repository for learning HAL and CMSIS (Baremetal)
+- Developing an Enterprise-level Embedded software stack from scratch by identifying and integrating required components
 
 ## Pre-Requisites
 
@@ -155,6 +156,7 @@ Writing code for various hardwares i.e
   - [ ] clang for ARM
 - Cross Compilation with Buildsystems
   - [x] CMake
+  - [x] Meson
   - [ ] Bazel
   - [ ] Premake
 - ARM Linker Script
@@ -173,8 +175,9 @@ Writing code for various hardwares i.e
   - [ ] C++
   - [ ] Rust
 - Debugging
-  - [ ] openOCD
-  - [ ] gdb
+  - [x] openOCD
+  - [x] `arm-none-eabi-gdb`
+  - [x] Semihosting
 - Unit-Test and Mocking
   - [ ] Unity
   - [ ] CppUTest

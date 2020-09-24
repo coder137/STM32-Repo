@@ -106,3 +106,7 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
 - [x] Newlib_nano
 - [x] Newlib_sbrk
 - [x] Newlib_syscalls
+
+- [x] Openocd_gdb_cli
+- [x] Openocd_gdb_vscode
+- [x] Semihosting
