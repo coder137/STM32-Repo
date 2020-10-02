@@ -71,6 +71,9 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
     - openocd cmake integration
     - openocd vscode integration with plugin
   - Fork from `Minimal_FreeRTOS`
+- [ ] Minimal_Unit_Testing
+  - Unity and FFF from Assertion and Mocking
+  - Fork from `Minimal_C_Stdlib`
 
 # Other Templates
 
