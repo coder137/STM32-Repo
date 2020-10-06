@@ -4,6 +4,7 @@
 
 #include "exti/exti.h"
 #include "gpio/gpio.h"
+#include "rcc/rcc.h"
 
 #include "uart/uart.h"
 #include "uart/uart_interrupt.h"
@@ -81,7 +82,7 @@ int main(void) {
 
 void main__gpio_output(void) {
   // Activate GPIOA
-  RCC->AHB2ENR |= (1 << 0);
+  rcc__set_ahb2_peripheral_clock_enable(RCC_AHB2ENR_GPIOAEN);
 
   output_config.mode = GPIO_mode_OUTPUT;
   output_config.type = GPIO_type_PUSH_PULL;
@@ -93,7 +94,7 @@ void main__gpio_output(void) {
 
 void main__gpio_input(void) {
   // Activate GPIOC
-  RCC->AHB2ENR |= (1 << 2);
+  rcc__set_ahb2_peripheral_clock_enable(RCC_AHB2ENR_GPIOCEN);
 
   input_config.mode = GPIO_mode_INPUT;
   input_config.type = GPIO_type_PUSH_PULL;
