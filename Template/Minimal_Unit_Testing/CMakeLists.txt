@@ -1,9 +1,27 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Set your constants here
+# NOTE, These should be options
 set(PROJECT_NAME "Minimal_Unit_Testing")
 set(CONTROLLER_NAME "STM32L475xx")
 set(USE_SEMIHOSTING OFF)
+set(TESTING ON)
+
+if(TESTING)
+message("Configuring Testing")
+
+project(${PROJECT_NAME})
+
+include(CTest)
+enable_testing()
+
+include(cmake/testing.cmake)
+
+# TODO, Add more tests here
+add_subdirectory(HAL/test)
+
+else()
+message("Configuring ARM Project")
 
 # Project start
 set(CMAKE_TOOLCHAIN_FILE "cmake/toolchain.cmake")
@@ -42,3 +60,5 @@ add_subdirectory(third_party/FreeRTOS)
 
 # Tools
 include(cmake/compile.cmake)
+
+endif()
