@@ -37,6 +37,7 @@ endif()
 add_subdirectory(l0_lowlevel)
 add_subdirectory(driver)
 add_subdirectory(modules)
+add_subdirectory(HAL)
 add_subdirectory(third_party/FreeRTOS)
 
 # Tools

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+// From Driver
 #include "exti/exti.h"
 #include "gpio/gpio.h"
 #include "rcc/rcc.h"
@@ -9,6 +10,10 @@
 #include "uart/uart.h"
 #include "uart/uart_interrupt.h"
 
+// From HAL
+#include "output_gpio/output_gpio.h"
+
+// FreeRTOS
 #include "FreeRTOS.h"
 #include "queue.h"
 #include "task.h"
@@ -16,8 +21,6 @@
 /**
  * STATIC FUNCTION DECLARATIONS
  */
-void main__gpio_output(void);
-
 void main__gpio_input(void);
 void main__gpio_input_external_interrupt(void);
 
@@ -66,7 +69,7 @@ void uart_read(void *arg) {
 
 int main(void) {
   printf("Starting main\r\n");
-  main__gpio_output();
+  gpio_output__init(&output_config, GPIOA, 5, RCC_AHB2ENR_GPIOAEN);
   gpio__reset(&output_config);
 
   xTaskCreate(blink_task, "printf test", 2000, NULL, 1, NULL);
@@ -78,18 +81,6 @@ int main(void) {
   }
 
   return 0;
-}
-
-void main__gpio_output(void) {
-  // Activate GPIOA
-  rcc__set_ahb2_peripheral_clock_enable(RCC_AHB2ENR_GPIOAEN);
-
-  output_config.mode = GPIO_mode_OUTPUT;
-  output_config.type = GPIO_type_PUSH_PULL;
-  output_config.speed = GPIO_speed_LOW_SPEED;
-  output_config.pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
-  gpio__init(&output_config, GPIOA, 5);
-  gpio__set(&output_config);
 }
 
 void main__gpio_input(void) {
