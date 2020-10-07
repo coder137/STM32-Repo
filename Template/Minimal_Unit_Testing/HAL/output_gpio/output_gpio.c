@@ -2,7 +2,7 @@
 
 #include "rcc/rcc.h"
 
-void gpio_output__init(GPIO_s *output_config, GPIO_TypeDef *port, uint32_t pin,
+void output_gpio__init(GPIO_s *output_config, GPIO_TypeDef *port, uint32_t pin,
                        uint32_t rcc_config) {
   rcc__set_ahb2_peripheral_clock_enable(rcc_config);
 

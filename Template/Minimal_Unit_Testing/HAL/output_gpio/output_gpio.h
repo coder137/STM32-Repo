@@ -3,7 +3,7 @@
 
 #include "gpio/gpio.h"
 
-void gpio_output__init(GPIO_s *output_config, GPIO_TypeDef *port, uint32_t pin,
+void output_gpio__init(GPIO_s *output_config, GPIO_TypeDef *port, uint32_t pin,
                        uint32_t rcc_config);
 
 #endif

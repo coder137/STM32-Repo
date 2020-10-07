@@ -69,7 +69,7 @@ void uart_read(void *arg) {
 
 int main(void) {
   printf("Starting main\r\n");
-  gpio_output__init(&output_config, GPIOA, 5, RCC_AHB2ENR_GPIOAEN);
+  output_gpio__init(&output_config, GPIOA, 5, RCC_AHB2ENR_GPIOAEN);
   gpio__reset(&output_config);
 
   xTaskCreate(blink_task, "printf test", 2000, NULL, 1, NULL);

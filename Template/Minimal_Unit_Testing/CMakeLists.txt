@@ -17,8 +17,19 @@ enable_testing()
 
 include(cmake/testing.cmake)
 
+# TODO, Add more here
+set(TEST_INCLUDE_DIRECTORIES 
+    ${CMAKE_SOURCE_DIR}/driver
+    ${CMAKE_SOURCE_DIR}/l0_lowlevel/arm/cmsis/core
+    ${CMAKE_SOURCE_DIR}/l0_lowlevel/device/stm32
+)
+
+# TODO, Add more mocks here
+add_subdirectory(driver/gpio/mock)
+add_subdirectory(driver/rcc/mock)
+
 # TODO, Add more tests here
-add_subdirectory(HAL/test)
+add_subdirectory(HAL/output_gpio/test)
 
 else()
 message("Configuring ARM Project")
