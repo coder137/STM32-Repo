@@ -30,6 +30,7 @@ add_subdirectory(driver/rcc/mock)
 
 # TODO, Add more tests here
 add_subdirectory(HAL/output_gpio/test)
+add_subdirectory(HAL/input_gpio/test)
 
 else()
 message("Configuring ARM Project")

@@ -11,6 +11,7 @@
 #include "uart/uart_interrupt.h"
 
 // From HAL
+#include "input_gpio/input_gpio.h"
 #include "output_gpio/output_gpio.h"
 
 // FreeRTOS
@@ -67,12 +68,27 @@ void uart_read(void *arg) {
   }
 }
 
+void gpio_task(void *arg) {
+  while (1) {
+
+    // HIGH is not pressed
+    // LOW is pressed
+    if (gpio__get(&input_config) == false) {
+      printf("Pressed\r\n");
+    }
+
+    vTaskDelay(200);
+  }
+}
+
 int main(void) {
   printf("Starting main\r\n");
   output_gpio__init(&output_config, GPIOA, 5, RCC_AHB2ENR_GPIOAEN);
+  input_gpio__init(&input_config, GPIOC, 13, RCC_AHB2ENR_GPIOCEN);
   gpio__reset(&output_config);
 
   xTaskCreate(blink_task, "printf test", 2000, NULL, 1, NULL);
+  xTaskCreate(gpio_task, "gpio input test", 1000, NULL, 1, NULL);
   xTaskCreate(uart_read, "scanf test", 2000, NULL, 2, NULL);
   vTaskStartScheduler();
 
@@ -81,17 +97,6 @@ int main(void) {
   }
 
   return 0;
-}
-
-void main__gpio_input(void) {
-  // Activate GPIOC
-  rcc__set_ahb2_peripheral_clock_enable(RCC_AHB2ENR_GPIOCEN);
-
-  input_config.mode = GPIO_mode_INPUT;
-  input_config.type = GPIO_type_PUSH_PULL;
-  input_config.speed = GPIO_speed_LOW_SPEED;
-  input_config.pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
-  gpio__init(&input_config, GPIOC, 13);
 }
 
 void main__gpio_input_external_interrupt(void) {

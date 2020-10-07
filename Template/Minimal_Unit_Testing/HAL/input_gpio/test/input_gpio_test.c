@@ -4,7 +4,7 @@
 #include "mock_gpio.h"
 #include "mock_rcc.h"
 
-#include "output_gpio.h"
+#include "input_gpio.h"
 
 DEFINE_FFF_GLOBALS;
 
@@ -17,9 +17,9 @@ void setUp() {
 
 void tearDown() {}
 
-void gpio_output_init_test(void) {
-  GPIO_s output_config;
-  output_gpio__init(&output_config, GPIOA, 5, RCC_AHB2ENR_GPIOAEN);
+void gpio_input_init_test(void) {
+  GPIO_s input_config;
+  input_gpio__init(&input_config, GPIOC, 13, RCC_AHB2ENR_GPIOCEN);
 
   TEST_ASSERT_EQUAL_UINT16(
       rcc__set_ahb2_peripheral_clock_enable_fake.call_count, 1);
@@ -28,6 +28,6 @@ void gpio_output_init_test(void) {
 
 int main() {
   UNITY_BEGIN();
-  RUN_TEST(gpio_output_init_test);
+  RUN_TEST(gpio_input_init_test);
   return UNITY_END();
 }
