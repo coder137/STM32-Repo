@@ -15,6 +15,17 @@
     - [l4_user_module](#l4_user_module)
     - [l5_application](#l5_application)
 - [Roadmap](#roadmap)
+  - [Understanding your ARM Toolchain](#understanding-your-arm-toolchain)
+  - [Cross Compilation with Buildsystems](#cross-compilation-with-buildsystems)
+  - [ARM Linker Script](#arm-linker-script)
+  - [Platform](#platform)
+  - [RTOS](#rtos)
+  - [Languages](#languages)
+  - [Debugging](#debugging)
+  - [Unit-Test](#unit-test)
+  - [Mocking](#mocking)
+  - [Third Party Modules](#third-party-modules)
+  - [Tool Integration](#tool-integration)
 
 # STM32-Repo
 
@@ -151,44 +162,71 @@ Writing code for various hardwares i.e
 
 # Roadmap
 
-- Understanding your ARM Toolchain
-  - [x] arm-none-eabi-*
-  - [ ] clang for ARM
-- Cross Compilation with Buildsystems
-  - [x] CMake
-  - [x] Meson
-  - [ ] Bazel
-  - [ ] Premake
-- ARM Linker Script
-  - [x] Custom Linker Script
-  - [x] Custom Startup
-  - [x] Integrate CMSIS Linker Script
-  - [x] Integrated CMSIS Startup
-- Platform
-  - [x] CMSIS_5
-  - [x] STM32 HAL
-- RTOS
-  - [x] Amazon FreeRTOS
-  - [ ] Microsoft ThreadX
-- Languages
-  - [x] C
-  - [ ] C++
-  - [ ] Rust
-- Debugging
-  - [x] openOCD
-  - [x] `arm-none-eabi-gdb`
-  - [x] Semihosting
-- Unit-Test and Mocking
-  - [ ] Unity
-  - [ ] CppUTest
-  - [ ] Google Tests
-  - [ ] Catch
-- Third Party Modules
-  - [ ] Ring Buffer
-  - [ ] JSON Parser
-- Tool Integration
-  - [ ] Clang Format
-  - [ ] Static Analysis
-  - [ ] Code Coverage
-  - [ ] Continuous Integration
-  - [ ] Documentation Generator
+## Understanding your ARM Toolchain
+
+- [x] arm-none-eabi-*
+- [ ] clang for ARM
+
+## Cross Compilation with Buildsystems
+
+- [x] CMake
+- [x] Meson
+- [ ] Bazel
+- [ ] Premake
+- [ ] Scons
+
+## ARM Linker Script
+
+- [x] Custom Linker Script
+- [x] Custom Startup
+- [x] Integrate CMSIS Linker Script
+- [x] Integrated CMSIS Startup
+
+## Platform
+
+- [x] CMSIS_5
+- [x] STM32 HAL
+
+## RTOS
+
+- [x] Amazon FreeRTOS
+- [ ] Microsoft ThreadX
+
+## Languages
+
+- [x] C
+- [ ] C++
+- [ ] Rust
+
+## Debugging
+
+- [x] openOCD
+- [x] `arm-none-eabi-gdb`
+- [x] Semihosting
+
+## Unit-Test
+
+- [x] Unity
+- [ ] CppUTest
+- [ ] Google Tests
+- [ ] Catch
+
+## Mocking
+
+- [x] Fake Function Framework (FFF)
+- [ ] CMock
+- [ ] CppUMock
+- [ ] Google Mock
+
+## Third Party Modules
+
+- [ ] Ring Buffer
+- [ ] JSON Parser
+
+## Tool Integration
+
+- [ ] Clang Format
+- [ ] Static Analysis
+- [ ] Code Coverage
+- [ ] Continuous Integration
+- [ ] Documentation Generator

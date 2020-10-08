@@ -11,6 +11,7 @@
   - [Minimal Interrupt](#minimal-interrupt)
   - [Minimal FreeRTOS](#minimal-freertos)
   - [Minimal C Stdlib](#minimal-c-stdlib)
+  - [Minimal Unit Testing](#minimal-unit-testing)
 
 # Template
 
@@ -71,8 +72,11 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
     - openocd cmake integration
     - openocd vscode integration with plugin
   - Fork from `Minimal_FreeRTOS`
-- [ ] Minimal_Unit_Testing
-  - Unity and FFF from Assertion and Mocking
+- [x] Minimal_Unit_Testing
+  - Unity and FFF for Assertion and Mocking
+  - CMake and CTest
+    - Command line usage
+    - VSCode usage
   - Fork from `Minimal_C_Stdlib`
 
 # Other Templates
@@ -81,6 +85,9 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
   - Integrate Microsoft ThreadX with the project
   - Create example for `task` and `queue` systems
   - Fork from `Minimal_Interrupt` 
+- [ ] Minimal_Unit_Testing_Meson
+  - Unity and FFF for Assertion and Mocking
+  - Meson build system
 
 # Document
 
@@ -113,3 +120,8 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
 - [x] Openocd_gdb_cli
 - [x] Openocd_gdb_vscode
 - [x] Semihosting
+
+## Minimal Unit Testing
+
+**Open the `Minimal_Unit_Testing` project README**
+

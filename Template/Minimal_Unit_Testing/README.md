@@ -1,82 +1,12 @@
-- [DEBUGGING with openocd](#debugging-with-openocd)
-  - [Starting openocd server](#starting-openocd-server)
-  - [Starting GDB](#starting-gdb)
-    - [Running Commands](#running-commands)
-    - [Verify Data location](#verify-data-location)
-- [CMake Integration](#cmake-integration)
-  - [Starting OpenOCD Server](#starting-openocd-server-1)
-  - [Starting GDB](#starting-gdb-1)
-- [VSCode Integration with OpenOCD](#vscode-integration-with-openocd)
 - [Unit Testing and Mocking](#unit-testing-and-mocking)
-  - [IMPORTANT](#important)
   - [Configuring your Unit-Testing project](#configuring-your-unit-testing-project)
   - [Running the Unit Tests](#running-the-unit-tests)
 - [Adding your custom Unit-Test](#adding-your-custom-unit-test)
-  - [Add your include dependencies](#add-your-include-dependencies)
-
-# DEBUGGING with openocd
-
-Copy the board configuration file
-
-## Starting openocd server
-
-```
-openocd.exe -f stm32l4discovery.cfg
-```
-
-## Starting GDB
-
-```
-arm-none-eabi-gdb.exe <file>.elf
-```
-
-### Running Commands
-
-```
-target remote localhost:3333
-
-# The monitor command runs openocd commands
-monitor reset init
-
-monitor reset halt
-
-monitor flash write_image erase *.elf
-
-monitor resume
-```
-
-### Verify Data location
-
-```
-monitor mdw 0x20000000 4
-```
-
-# CMake Integration
-
-
-## Starting OpenOCD Server
-
-```
-cmake --build build --target openocd_start_server
-```
-
-## Starting GDB
-
-```
-cmake --build build --target openocd_connect_client
-```
-
-> Run your commands similar to the steps given above
-
-# VSCode Integration with OpenOCD
-
-Install the **Cortex-Debug** plugin
-
-[OpenOCD Specific Configuration](https://github.com/Marus/cortex-debug/wiki/OpenOCD-Specific-Configuration)
+  - [Writing your mocks](#writing-your-mocks)
+  - [Writing your tests](#writing-your-tests)
+- [IMPROVEMENTS](#improvements)
 
 # Unit Testing and Mocking
-
-## IMPORTANT
 
 - CMake can only have one compiler stored in its Cache
 - When building your ARM project you cannot have your native compiler testing as well
@@ -101,9 +31,44 @@ ctest -T test --output-on-failure
 
 # Adding your custom Unit-Test
 
-> TODO, Update this
+Add your own unit-tests on the HAL layer and above
 
-## Add your include dependencies 
+- NOTE: Low level register code cannot be and **should not be** mocked since they are writing directly to hardware
+- Your native compiler will throw a segmentation fault since you are using / reading and writing to memory addresses that are not permitted by your exectuable
 
-- As of now CMake does not have the capability to detect the include requirements of the file and make mocks
-- The include dependencies need to be manually added
+## Writing your mocks
+
+**See driver/gpio/mock**
+
+- [Read FFF docs](https://github.com/meekrosoft/fff)
+- To your dependent code create a header file and write your mocks there.
+  - This is done to avoid code duplication
+  - Later modules can easily reuse this interface
+- Include your include dependencies and make them have a **PUBLIC SCOPE**
+  - These will need to be used by Unit-Test executables
+- Update the root level CMakeLists.txt
+  - Under the `TESTING == TRUE` condition
+- These mocks will be CMAKE INTERFACES that can be directly used by the unit-tests
+
+## Writing your tests
+
+**See HAL/output_gpio/test**
+
+- [Read Unity docs](https://github.com/ThrowTheSwitch/Unity)
+- Add the source file you want to test out
+- Include the mocks INTERFACES
+- Include the test libraries (FFF and Unity)
+- Add your include paths
+- Update the root level CMakeLists.txt
+
+# IMPROVEMENTS
+
+- [ ] For now we need to manually add our include path requirements for every mock
+  - A common include path is setup in the root level CMakeLists.txt
+  - This is reused by the mock INTERFACES
+- [ ] We need to write a custom CMakeLists.txt every time we have we add a new mock or a unit-test
+  - Create functions / macros that can automate this task in CMake
+- [ ] UART Interrupt driver code is tightly coupled with FreeRTOS
+  - Seperate out the UART Interrupt register calls into a different module
+  - Shift th UART Interrupt code that is coupled with FreeRTOS into the HAL layer
+  - Write unit-tests and mocks for this
