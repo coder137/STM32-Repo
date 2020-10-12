@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.16)
 set(PROJECT_NAME "Minimal_Unit_Testing_Meson")
 set(CONTROLLER_NAME "STM32L475xx")
 set(USE_SEMIHOSTING OFF)
-set(TESTING OFF)
+set(TESTING ON)
 
 if(TESTING)
 message("Configuring Testing")
@@ -19,9 +19,10 @@ include(cmake/testing.cmake)
 
 # TODO, Add more here
 set(TEST_INCLUDE_DIRECTORIES 
-    ${CMAKE_SOURCE_DIR}/driver
     ${CMAKE_SOURCE_DIR}/l0_lowlevel/arm/cmsis/core
     ${CMAKE_SOURCE_DIR}/l0_lowlevel/device/stm32
+    ${CMAKE_SOURCE_DIR}/driver
+    ${CMAKE_SOURCE_DIR}/HAL
 )
 
 # TODO, Add more mocks here
