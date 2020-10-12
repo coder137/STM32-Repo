@@ -1,0 +1,1 @@
+option('stlink_sn', type: 'string', value: '', description: 'STM32 stlink software number\nRun `ninja find_devices -C build_directory` to find your device')

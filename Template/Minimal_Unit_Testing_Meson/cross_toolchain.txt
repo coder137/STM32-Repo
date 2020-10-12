@@ -1,0 +1,29 @@
+# Meson Cross-compilation File Base using GCC ARM
+# Requires that arm-none-eabi-* is found in your PATH
+# For more information: http://mesonbuild.com/Cross-compilation.html
+
+# *-gcc-ar is used over *-ar to support LTO flags.
+# Without -gcc-ar, LTO will generate a linker warning:
+# arm-none-eabi-ar: file.o: plugin needed to handle lto object
+[binaries]
+c = 'arm-none-eabi-gcc'
+cpp = 'arm-none-eabi-g++'
+ar = 'arm-none-eabi-gcc-ar'
+strip = 'arm-none-eabi-strip'
+
+# Used in custom targets
+objcopy = 'arm-none-eabi-objcopy'
+objdump = 'arm-none-eabi-objdump'
+size = 'arm-none-eabi-size'
+
+# Used for finding device and flashing
+stm32_programmer_cli = 'STM32_Programmer_CLI'
+
+[properties]
+needs_exe_wrapper = true
+
+[host_machine]
+system = 'none'
+cpu_family = 'arm'
+cpu = 'cortex-m4'
+endian = 'little'

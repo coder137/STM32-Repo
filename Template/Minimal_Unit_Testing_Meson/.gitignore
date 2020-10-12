@@ -11,3 +11,7 @@ build
 # Keep these for reference
 !.vscode/launch.json
 !.vscode/c_cpp_properties.json
+
+# Meson
+builddir
+build*
