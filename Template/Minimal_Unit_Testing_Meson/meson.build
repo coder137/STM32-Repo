@@ -61,6 +61,7 @@ add_global_arguments('-DSTM32L475xx',
 
 # For Unit Tests
 add_global_arguments('-DSTM32L475xx',
+  '-Wno-int-to-pointer-cast',
   language: 'c',
   native: true
 )
@@ -86,7 +87,6 @@ mock_inc_dirs = include_directories([
 ])
 
 # Add more Unit Tests here
-test_c_args = ['-Wno-int-to-pointer-cast']
 subdir('HAL/output_gpio/test')
 subdir('HAL/input_gpio/test')
 

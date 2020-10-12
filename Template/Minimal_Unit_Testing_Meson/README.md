@@ -1,32 +1,26 @@
-- [Unit Testing and Mocking](#unit-testing-and-mocking)
+- [Unit Testing and Mocking with Meson](#unit-testing-and-mocking-with-meson)
   - [Configuring your Unit-Testing project](#configuring-your-unit-testing-project)
   - [Running the Unit Tests](#running-the-unit-tests)
 - [Adding your custom Unit-Test](#adding-your-custom-unit-test)
   - [Writing your mocks](#writing-your-mocks)
   - [Writing your tests](#writing-your-tests)
-- [IMPROVEMENTS](#improvements)
 
-# Unit Testing and Mocking
+# Unit Testing and Mocking with Meson
 
-- CMake can only have one compiler stored in its Cache
-- When building your ARM project you cannot have your native compiler testing as well
-
+- Forked from Minimal_Unit_Testing
+- Added `meson.build` files
 
 ## Configuring your Unit-Testing project
 
-- Delete your build folder
-- In the **root level CMakeLists.txt** set your **TESTING** flag to **ON**
-- Reconfigure your project using the below command
-
-```cmake
-cmake -B build -G Ninja -D CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE
+```meson
+meson builddir --cross-file cross_toolchain.txt
 ```
 
 ## Running the Unit Tests
 
-- From the build directory
+- Verbose output for each unit test
 ```
-ctest -T test --output-on-failure
+meson test -C builddir -v
 ```
 
 # Adding your custom Unit-Test
@@ -44,11 +38,8 @@ Add your own unit-tests on the HAL layer and above
 - To your dependent code create a header file and write your mocks there.
   - This is done to avoid code duplication
   - Later modules can easily reuse this interface
-- Include your include dependencies and make them have a **PUBLIC SCOPE**
-  - These will need to be used by Unit-Test executables
-- Update the root level CMakeLists.txt
-  - Under the `TESTING == TRUE` condition
-- These mocks will be CMAKE INTERFACES that can be directly used by the unit-tests
+- Update the root level `meson.build` file and update the `mock_inc_dirs` path
+  - Contains the include path to your the mock header files
 
 ## Writing your tests
 
@@ -56,19 +47,10 @@ Add your own unit-tests on the HAL layer and above
 
 - [Read Unity docs](https://github.com/ThrowTheSwitch/Unity)
 - Add the source file you want to test out
-- Include the mocks INTERFACES
-- Include the test libraries (FFF and Unity)
-- Add your include paths
-- Update the root level CMakeLists.txt
-
-# IMPROVEMENTS
-
-- [ ] For now we need to manually add our include path requirements for every mock
-  - A common include path is setup in the root level CMakeLists.txt
-  - This is reused by the mock INTERFACES
-- [ ] We need to write a custom CMakeLists.txt every time we have we add a new mock or a unit-test
-  - Create functions / macros that can automate this task in CMake
-- [ ] UART Interrupt driver code is tightly coupled with FreeRTOS
-  - Seperate out the UART Interrupt register calls into a different module
-  - Shift th UART Interrupt code that is coupled with FreeRTOS into the HAL layer
-  - Write unit-tests and mocks for this
+- Create a `meson.build` file and create an **executable**
+  - Contains **sources**
+  - Contains **include directory** `inc_dirs`, `mock_inc_dirs` and `test_inc_dirs`
+  - Contains **library** link_with `unity_lib`
+  - Contains `native: true`
+- Create an **test** with the above executable
+  - `test('test_name', test_exe)`

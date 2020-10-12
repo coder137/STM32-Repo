@@ -12,6 +12,7 @@
   - [Minimal FreeRTOS](#minimal-freertos)
   - [Minimal C Stdlib](#minimal-c-stdlib)
   - [Minimal Unit Testing](#minimal-unit-testing)
+  - [Minimal Unit Testing Meson](#minimal-unit-testing-meson)
 
 # Template
 
@@ -85,9 +86,11 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
   - Integrate Microsoft ThreadX with the project
   - Create example for `task` and `queue` systems
   - Fork from `Minimal_Interrupt` 
-- [ ] Minimal_Unit_Testing_Meson
+- [x] Minimal_Unit_Testing_Meson
   - Unity and FFF for Assertion and Mocking
   - Meson build system
+  - Changes to source files have also been added to CMake and tested
+  - Forked from `Minimal_Unit_Testing`
 
 # Document
 
@@ -125,3 +128,6 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
 
 **Open the `Minimal_Unit_Testing` project README**
 
+## Minimal Unit Testing Meson
+
+**Open the `Minimal_Unit_Testing` project README**
