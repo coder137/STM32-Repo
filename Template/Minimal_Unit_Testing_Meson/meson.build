@@ -53,15 +53,42 @@ sources = l0_sources + driver_sources + modules_sources + freertos_sources + HAL
 # https://github.com/mesonbuild/meson/issues/5748
 inc_dirs = [l0_inc_dirs] + [driver_inc_dirs] + [modules_inc_dirs] + [freertos_inc_dirs] + [HAL_inc_dirs] + [application_inc_dirs]
 
-c_preprocessor_args = ['-DSTM32L475xx']
+# For Cross Compiled target
+add_global_arguments('-DSTM32L475xx',
+  language: 'c',
+  native: false
+)
+
+# For Unit Tests
+add_global_arguments('-DSTM32L475xx',
+  language: 'c',
+  native: true
+)
 
 project_elf = executable(meson.project_name()+'.elf', 
   sources, 
-  c_args : c_preprocessor_args + commonflags + cflags + warning_flags, 
+  c_args : commonflags + cflags + warning_flags, 
   link_args : commonflags + ldflags, 
   include_directories: inc_dirs, 
   native: false
 )
+
+# Unit Tests
+
+# Test Libraries
+test_inc_dirs = []
+subdir('testing')
+
+# Add more mocks include paths here
+mock_inc_dirs = include_directories([
+  'driver/rcc/mock',
+  'driver/gpio/mock'
+])
+
+# Add more Unit Tests here
+test_c_args = ['-Wno-int-to-pointer-cast']
+subdir('HAL/output_gpio/test')
+subdir('HAL/input_gpio/test')
 
 # Custom Target
 bin = custom_target('bin', 
@@ -111,9 +138,9 @@ find_devices = run_target('find_devices',
 # For flashing we want to set the stlink_sn number of the board dynamically
 stlink_sn = get_option('stlink_sn')
 if stlink_sn == ''
-  warning('Configure your STLINK_SN
+  warning('''Configure your STLINK_SN
   `meson configure -D stlink_sn=<your_stlink_sn>`
-  Run `ninja find_devices -c build_directory` to find your STM32 software number')
+  Run `ninja find_devices -c build_directory` to find your STM32 software number''')
 else
   flash = run_target('flash',
     command: [ stm32_programmer_cli, '-c', 'port=SWD', 'sn='+stlink_sn, '-w', bin, '0x08000000'],

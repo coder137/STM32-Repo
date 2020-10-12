@@ -20,7 +20,12 @@ size = 'arm-none-eabi-size'
 stm32_programmer_cli = 'STM32_Programmer_CLI'
 
 [properties]
-needs_exe_wrapper = true
+# Since we are using native tests are well we need to set this to false
+# ! If we try to test a cross compiled elf file we will get a crash
+# NOTE: if we set `needs_exe_wrapper` to true, NO unit tests will run
+# NOTE: if we do not set anything for the below flag i.e undefined, meson will make a guess whether we can run the unit-tests or no
+# In this case it is better to set the flag to false and make sure no cross compiled targets are unit-tested
+needs_exe_wrapper = false
 
 [host_machine]
 system = 'none'
