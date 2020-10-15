@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set your constants here
 set(PROJECT_NAME "minimal_cpp_libraries")
@@ -38,7 +40,7 @@ set(USER_C_FLAGS
 # https://github.com/SJSU-Dev2/SJSU-Dev2/blob/master/makefile
 # https://stackoverflow.com/questions/34308720/where-is-dso-handle-defined
 set(USER_CPP_FLAGS
-    "${USER_C_FLAGS} -std=c++17 -fno-rtti -Woverloaded-virtual -fno-use-cxa-atexit -fno-threadsafe-statics ${USER_CPP_WARNING}"
+    "${USER_C_FLAGS} -fno-rtti -Woverloaded-virtual -fno-use-cxa-atexit -fno-threadsafe-statics ${USER_CPP_WARNING}"
 )
 # ~~~
 

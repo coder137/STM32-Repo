@@ -1,28 +1,40 @@
 #include "stm32l475xx.h"
 #include <stdint.h>
 
+#include <bit>
+
 namespace blink {
 
 static void init() {
   RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
-  GPIOA->BRR |= (1 << 5); // Reset the pin here
+
+  uint32_t pin = 5; // will be passed as a class parameter
+  const uint32_t left_shift_1_5 = std::rotl(static_cast<uint32_t>(1), pin);
+  const uint32_t left_shift_1_10 = std::rotl(static_cast<uint32_t>(1), pin * 2);
+  const uint32_t left_shift_3_10 = std::rotl(static_cast<uint32_t>(3), pin * 2);
+
+  GPIOA->BRR |= left_shift_1_5; // Reset the pin here
 
   // Set the mode
-  GPIOA->MODER &= ~(3 << 10);
-  GPIOA->MODER |= (1 << 10); // 01 00 00 00 00 00
+  uint32_t moder_data = GPIOA->MODER;
+  moder_data &= ~left_shift_3_10;
+  moder_data |= left_shift_1_10; // 01 00 00 00 00 00
+  GPIOA->MODER = moder_data;
 
   // Check these registers
-  GPIOA->OTYPER &= ~(1 << 5); // set to 0
-  GPIOA->OSPEEDR &= ~(3 << 10);
-  GPIOA->PUPDR &= ~(3 << 10);
+  GPIOA->OTYPER &= ~left_shift_1_5; // set to 0
+  GPIOA->OSPEEDR &= ~left_shift_3_10;
+  GPIOA->PUPDR &= ~left_shift_3_10;
 }
 
 static void set() {
-  GPIOA->BSRR |= (1 << 5); // Set
+  constexpr uint32_t left_shift_1_5 = std::rotl(static_cast<uint32_t>(1), 5);
+  GPIOA->BSRR |= left_shift_1_5; // Set
 }
 
 static void reset() {
-  GPIOA->BRR = (1 << 5); // Reset
+  constexpr uint32_t left_shift_1_5 = std::rotl(static_cast<uint32_t>(1), 5);
+  GPIOA->BRR = left_shift_1_5; // Reset
 }
 
 static void spin_delay(uint32_t delay) {
