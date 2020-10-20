@@ -1,7 +1,24 @@
 #include "stm32l475xx.h"
-#include <stdint.h>
 
+#include <cstdint>
+
+#include <array>
 #include <bit>
+
+/**
+ *
+ * Present due to <array>
+ * <array>.at() has the potential to throw
+ *
+ */
+void std::__throw_out_of_range_fmt(char const *fmt, ...) {
+  // Get arguments using stdarg
+  // Use vprintf here to write
+  // Use the tinyprintf library
+  // Block execution here
+  while (1) {
+  }
+}
 
 namespace blink {
 

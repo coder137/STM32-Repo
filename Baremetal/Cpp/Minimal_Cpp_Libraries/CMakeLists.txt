@@ -9,6 +9,7 @@ set(PROJECT_NAME "minimal_cpp_libraries")
 set(CMAKE_TOOLCHAIN_FILE "toolchain.cmake")
 project(${PROJECT_NAME})
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
 
 # ~~~
@@ -24,14 +25,16 @@ add_executable(
 # TODO, Add more variables here
 
 # Project Variables
+set(USER_OPTIMIZATION_LEVEL "-O0")
 set(USER_C_WARNING "-Wall -Wextra -Werror")
 set(USER_CPP_WARNING "-Wsuggest-override")
+set(USER_EXCEPTIONS "-fno-exceptions -fno-unwind-tables -fno-non-call-exceptions")
 
 # ~~~
 # -fstack-protector-strong
 # https://arobenko.gitbooks.io/bare_metal_cpp/content/compiler_output/exceptions.html
 set(USER_C_FLAGS
-    "-Os -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=auto -Wall -g -pipe -fmessage-length=0 -ffunction-sections -fdata-sections -fstack-usage -fno-exceptions -fno-unwind-tables -fno-non-call-exceptions -ffreestanding -fno-common -finline-small-functions -findirect-inlining -Wl,--print-memory-usage ${USER_WARNING}"
+    "${USER_OPTIMIZATION_LEVEL} -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=auto -Wall -g -pipe -fmessage-length=0 -ffunction-sections -fdata-sections -fstack-usage   -ffreestanding -fno-common -finline-small-functions -findirect-inlining -Wl,--print-memory-usage ${USER_EXCEPTIONS} ${USER_WARNING}"
 )
 # ~~~
 
