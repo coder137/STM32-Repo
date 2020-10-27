@@ -21,3 +21,15 @@ macro(ess_data variable)
   list(TRANSFORM list_var PREPEND "${CMAKE_CURRENT_LIST_DIR}/")
   list(APPEND ${variable} ${list_var})
 endmacro()
+
+
+# Register a unit test
+function(ess_test test_name test_file actual_file)
+  add_executable(${test_name} ${test_file})
+  target_sources(${test_name} PRIVATE ${actual_file})
+  target_include_directories(${test_name} PRIVATE ${USER_TEST_DIRS})
+  target_link_libraries(${test_name} PRIVATE unity fff)
+  # Remove unnecessary warnings
+  target_compile_options(${test_name} PRIVATE -Wno-int-to-pointer-cast)
+  add_test(NAME ${test_name} COMMAND ${test_name})
+endfunction()

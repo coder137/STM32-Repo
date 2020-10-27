@@ -7,45 +7,14 @@ set(CONTROLLER_NAME "STM32L475xx")
 set(USE_SEMIHOSTING OFF)
 set(TESTING OFF)
 
-if(TESTING)
-message("Configuring Testing")
+if (NOT TESTING)
+  set(CMAKE_TOOLCHAIN_FILE "cmake/toolchain.cmake")
+endif()
 
-project(${PROJECT_NAME})
-
-include(CTest)
-enable_testing()
-
-include(cmake/testing.cmake)
-
-# TODO, Add more here
-set(TEST_INCLUDE_DIRECTORIES 
-    ${CMAKE_SOURCE_DIR}/driver
-    ${CMAKE_SOURCE_DIR}/l0_lowlevel/arm/cmsis/core
-    ${CMAKE_SOURCE_DIR}/l0_lowlevel/device/stm32
-)
-
-# TODO, Add more mocks here
-add_subdirectory(driver/gpio/mock)
-add_subdirectory(driver/rcc/mock)
-
-# TODO, Add more tests here
-add_subdirectory(HAL/output_gpio/test)
-add_subdirectory(HAL/input_gpio/test)
-
-else()
-message("Configuring ARM Project")
-
-# Project start
-
-# Toolchain file should be set before the project for compiler identification
-set(CMAKE_TOOLCHAIN_FILE "cmake/toolchain.cmake")
 project(${PROJECT_NAME})
 
 # CMake Settings
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# Cross Compilation Flags
-include(cmake/compile_flags.cmake)
 
 # CMake functions
 include(cmake/function.cmake)
@@ -57,51 +26,83 @@ ess_include(modules)
 ess_include(HAL)
 ess_include_script(third_party/FreeRTOS/FreeRTOS.cmake)
 
-# Project
-set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
-add_executable(${USER_PROJECT_TARGET}
-    application/main.c
-    ${l0_lowlevel_sources}
-    ${driver_sources}
-    ${modules_sources}
-    ${HAL_sources}
-    ${FreeRTOS_sources}
+set(USER_INCLUDE_DIRS 
+  ${l0_lowlevel_dirs}
+  ${driver_dirs}
+  ${modules_dirs}
+  ${HAL_dirs}
+  ${FreeRTOS_dirs}
 )
 
-target_include_directories(${USER_PROJECT_TARGET} PRIVATE
-    ${l0_lowlevel_dirs}
-    ${driver_dirs}
-    ${modules_dirs}
-    ${HAL_dirs}
-    ${FreeRTOS_dirs}
-)
+# Set Global requirements for both unit-tests and arm targets
+add_compile_definitions(${CONTROLLER_NAME})
 
-target_compile_definitions(${USER_PROJECT_TARGET} PRIVATE ${CONTROLLER_NAME})
-target_compile_options(${USER_PROJECT_TARGET} PRIVATE ${COMMON_C_FLAGS}
-                                                      ${USER_C_FLAGS})
+if (TESTING)
 
-if(USE_SEMIHOSTING)
-  message("Configuring Project with Semihosting")
-  target_link_options(${USER_PROJECT_TARGET} PRIVATE 
-  ${COMMON_C_FLAGS}
-  ${USER_SEMIHOSTING_FLAGS}
-  ${USER_LINK_FLAGS}
+  message("Configuring Testing")
+  
+  include(CTest)
+  enable_testing()
+
+  # Unit Testing libraries
+  include(cmake/testing.cmake)
+
+  # TODO, Add more mocks here
+  include(driver/rcc/mock/include.cmake)
+  include(driver/gpio/mock/include.cmake)
+
+  # TODO, Update this w.r.t the mocks above
+  set(USER_TEST_DIRS 
+      ${USER_INCLUDE_DIRS}
+      ${rcc_mock_include_dirs}
+      ${gpio_mock_include_dirs}
   )
-  target_compile_definitions(${USER_PROJECT_TARGET} PRIVATE SEMIHOSTING=1)
+
+  # TODO, Add more tests here
+  add_subdirectory(HAL/output_gpio/test)
+  add_subdirectory(HAL/input_gpio/test)
+
+  # TODO, Add code coverage tool
+
 else()
-  message("Turning Semihosting off")
+
+  message("Configuring ARM Project")
+
+  # Cross Compilation Flags
+  include(cmake/compile_flags.cmake)
+
+  # Cross Compiled project
+  set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
+  add_executable(${USER_PROJECT_TARGET}
+      application/main.c
+      ${l0_lowlevel_sources}
+      ${driver_sources}
+      ${modules_sources}
+      ${HAL_sources}
+      ${FreeRTOS_sources}
+  )
+
+  target_include_directories(${USER_PROJECT_TARGET} PRIVATE
+     ${USER_INCLUDE_DIRS}
+  )
+
+  target_compile_options(${USER_PROJECT_TARGET} PRIVATE 
+      ${COMMON_C_FLAGS}
+      ${USER_C_FLAGS}
+  )
+
   target_link_options(${USER_PROJECT_TARGET} PRIVATE 
     ${COMMON_C_FLAGS}
-    ${USER_NO_SEMIHOSTING_FLAGS}
     ${USER_LINK_FLAGS}
   )
-endif()
 
-# Tools
-include(cmake/compile.cmake)
-# TODO, Add Static Analysis tool
-# TODO, Add documentation generator tool
-# TODO, Add code coverage tool
+  # Features
+  include(cmake/cross/semihosting.cmake)
+
+  # Tools
+  include(cmake/compile.cmake)
+  # TODO, Add Static Analysis tool
+  # TODO, Add documentation generator tool
 
 endif()
 

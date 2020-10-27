@@ -4,7 +4,7 @@
 #include "mock_gpio.h"
 #include "mock_rcc.h"
 
-#include "input_gpio.h"
+#include "input_gpio/input_gpio.h"
 
 DEFINE_FFF_GLOBALS;
 
