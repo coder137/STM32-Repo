@@ -36,11 +36,45 @@ else()
 message("Configuring ARM Project")
 
 # Project start
+
+# Toolchain file should be set before the project for compiler identification
 set(CMAKE_TOOLCHAIN_FILE "cmake/toolchain.cmake")
 project(${PROJECT_NAME})
 
+# CMake Settings
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Cross Compilation Flags
+include(cmake/compile_flags.cmake)
+
+# CMake functions
+include(cmake/function.cmake)
+
+# TODO, Add more subdirectory includes here
+ess_include(l0_lowlevel)
+ess_include(driver)
+ess_include(modules)
+ess_include(HAL)
+ess_include_script(third_party/FreeRTOS/FreeRTOS.cmake)
+
+# Project
 set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
-add_executable(${USER_PROJECT_TARGET} application/main.c)
+add_executable(${USER_PROJECT_TARGET}
+    application/main.c
+    ${l0_lowlevel_sources}
+    ${driver_sources}
+    ${modules_sources}
+    ${HAL_sources}
+    ${FreeRTOS_sources}
+)
+
+target_include_directories(${USER_PROJECT_TARGET} PRIVATE
+    ${l0_lowlevel_dirs}
+    ${driver_dirs}
+    ${modules_dirs}
+    ${HAL_dirs}
+    ${FreeRTOS_dirs}
+)
 
 target_compile_definitions(${USER_PROJECT_TARGET} PRIVATE ${CONTROLLER_NAME})
 target_compile_options(${USER_PROJECT_TARGET} PRIVATE ${COMMON_C_FLAGS}
@@ -63,14 +97,12 @@ else()
   )
 endif()
 
-# TODO, Add more subdirectories here
-add_subdirectory(l0_lowlevel)
-add_subdirectory(driver)
-add_subdirectory(modules)
-add_subdirectory(HAL)
-add_subdirectory(third_party/FreeRTOS)
-
 # Tools
 include(cmake/compile.cmake)
+# TODO, Add Static Analysis tool
+# TODO, Add documentation generator tool
+# TODO, Add code coverage tool
 
 endif()
+
+# TODO, Add Clang format tool

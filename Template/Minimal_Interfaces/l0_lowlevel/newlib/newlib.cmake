@@ -1,4 +1,7 @@
 if (NOT USE_SEMIHOSTING)
   message("Adding newlib-nano overrides")
-  target_sources(${USER_PROJECT_TARGET} PRIVATE syssbrk.c syscalls.c)
+  ess_data(l0_lowlevel_sources 
+      syssbrk.c
+      syscalls.c
+  )
 endif()
