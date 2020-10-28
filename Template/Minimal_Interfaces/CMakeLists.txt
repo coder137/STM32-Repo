@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.16)
 set(PROJECT_NAME "Minimal_Interfaces")
 set(CONTROLLER_NAME "STM32L475xx")
 set(USE_SEMIHOSTING OFF)
-set(TESTING OFF)
+option(TESTING OFF)
 
 if (NOT TESTING)
   set(CMAKE_TOOLCHAIN_FILE "cmake/toolchain.cmake")
@@ -18,6 +18,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # CMake functions
 include(cmake/function.cmake)
+include(cmake/test/target.cmake)
 
 # TODO, Add more subdirectory includes here
 ess_include(l0_lowlevel)
