@@ -1,22 +1,10 @@
-#ifndef DRIVER_GPIO_GPIO_H_
-#define DRIVER_GPIO_GPIO_H_
+#ifndef DRIVER_GPIO_INTERNAL_H_
+#define DRIVER_GPIO_INTERNAL_H_
 
 #include <stdbool.h>
 #include <stdint.h>
 
 #include "stm32l4xx.h"
-
-typedef enum {
-  GPIO_mode_INPUT,
-  GPIO_mode_OUTPUT,
-  GPIO_mode_ALTERNATE_FUNCTION,
-  GPIO_mode_ANALOG_MODE,
-} GPIO_mode_e;
-
-typedef enum {
-  GPIO_type_PUSH_PULL,
-  GPIO_type_OPEN_DRAIN,
-} GPIO_type_e;
 
 typedef enum {
   GPIO_speed_LOW_SPEED,
@@ -52,23 +40,13 @@ typedef enum {
   GPIO_alternate_15,
 } GPIO_alternate_e;
 
-// Main GPIO Configuration
-typedef struct {
-  GPIO_TypeDef *port;
-  uint32_t pin;
+typedef GPIO_TypeDef GPIO_TypeDef;
 
-  GPIO_mode_e mode;
-  GPIO_type_e type;
+// Internal data requirements
+typedef struct {
   GPIO_speed_e speed;
   GPIO_pull_e pull;
   GPIO_alternate_e alternate;
-} GPIO_s;
+} GPIO_internal_s;
 
-void gpio__init(GPIO_s *config, GPIO_TypeDef *port, uint32_t pin);
-
-void gpio__set(const GPIO_s *config);
-void gpio__reset(const GPIO_s *config);
-
-bool gpio__get(const GPIO_s *config);
-
-#endif // DRIVER_GPIO_GPIO_H_
+#endif

@@ -4,7 +4,7 @@
 
 // From Driver
 #include "exti/exti.h"
-#include "gpio/gpio.h"
+#include "gpio.h"
 #include "rcc/rcc.h"
 
 #include "uart/uart.h"
@@ -73,7 +73,7 @@ void gpio_task(void *arg) {
 
     // HIGH is not pressed
     // LOW is pressed
-    if (gpio__get(&input_config) == false) {
+    if (gpio__read(&input_config) == false) {
       printf("Pressed\r\n");
     }
 

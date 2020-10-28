@@ -37,6 +37,7 @@ void gpio__init(GPIO_s *config, GPIO_TypeDef *port, uint32_t pin) {
   // Set TYPE
   gpio__update_otyper(config);
 
+  // Internal stuff
   // Set SPEED
   gpio__update_ospeedr(config);
 
@@ -59,7 +60,15 @@ void gpio__reset(const GPIO_s *config) {
   config->port->BRR = brr_data;
 }
 
-bool gpio__get(const GPIO_s *config) {
+void gpio__write(const GPIO_s *config, uint8_t value) {
+  if (value == 0) {
+    gpio__reset(config);
+  } else {
+    gpio__set(config);
+  }
+}
+
+bool gpio__read(const GPIO_s *config) {
   bool ispressed = false;
   if (config->mode == GPIO_mode_INPUT) {
     ispressed = (config->port->IDR >> config->pin) & 0x01;
@@ -85,14 +94,14 @@ static void gpio__update_otyper(const GPIO_s *config) {
 static void gpio__update_ospeedr(const GPIO_s *config) {
   uint32_t ospeedr_data = config->port->OSPEEDR;
   gpio__reset_byte_2(&ospeedr_data, config->pin);
-  gpio__set_byte_2(&ospeedr_data, config->pin, config->speed);
+  gpio__set_byte_2(&ospeedr_data, config->pin, config->_internal.speed);
   config->port->OSPEEDR = ospeedr_data;
 }
 
 static void gpio__update_pupdr(const GPIO_s *config) {
   uint32_t pupdr_data = config->port->PUPDR;
   gpio__reset_byte_2(&pupdr_data, config->pin);
-  gpio__set_byte_2(&pupdr_data, config->pin, config->pull);
+  gpio__set_byte_2(&pupdr_data, config->pin, config->_internal.pull);
   config->port->PUPDR = pupdr_data;
 }
 
@@ -110,7 +119,7 @@ static void gpio__update_afr(const GPIO_s *config) {
     // Compute
     uint32_t afr_data = config->port->AFR[index];
     afr_data &= ~(0xF << shift);
-    afr_data |= (config->alternate << shift);
+    afr_data |= (config->_internal.alternate << shift);
 
     // Write to memory only once
     config->port->AFR[index] = afr_data;

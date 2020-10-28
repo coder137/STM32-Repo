@@ -9,4 +9,6 @@ ess_data(driver_sources
     uart/uart_interrupt.c
 )
 
-ess_data(driver_dirs .)
+ess_data(driver_dirs 
+    .
+)
