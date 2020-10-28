@@ -49,8 +49,8 @@ if (TESTING)
   include(cmake/testing.cmake)
 
   # TODO, Add more mocks here
-  include(driver/rcc/mock/include.cmake)
-  include(driver/gpio/mock/include.cmake)
+  include(driver/${CONTROLLER_NAME}/rcc/mock/include.cmake)
+  include(driver/${CONTROLLER_NAME}/gpio/mock/include.cmake)
 
   # TODO, Update this w.r.t the mocks above
   set(USER_TEST_DIRS 
