@@ -1,5 +1,5 @@
-#ifndef INTERFACE_GPIO_H_
-#define INTERFACE_GPIO_H_
+#ifndef DRIVER_INTERFACE_GPIO_H_
+#define DRIVER_INTERFACE_GPIO_H_
 
 #include <stdint.h>
 
@@ -11,16 +11,23 @@ typedef enum {
   GPIO_mode_OUTPUT,
   GPIO_mode_ALTERNATE_FUNCTION,
   GPIO_mode_ANALOG_MODE,
-} GPIO_driver_mode_e;
+} GPIO_mode_e;
 
 typedef enum {
   GPIO_type_PUSH_PULL,
   GPIO_type_OPEN_DRAIN,
-} GPIO_driver_type_e;
+} GPIO_type_e;
+
+typedef enum {
+  GPIO_pull_NO_PULLUP_OR_PULLDOWN,
+  GPIO_pull_PULLUP,
+  GPIO_pull_PULLDOWN,
+} GPIO_pull_e;
 
 typedef struct {
-  GPIO_driver_mode_e mode;
-  GPIO_driver_type_e type;
+  GPIO_mode_e mode;
+  GPIO_type_e type;
+  GPIO_pull_e pull;
 
   // Hardware specific should be typedef'ed
   GPIO_TypeDef *port;

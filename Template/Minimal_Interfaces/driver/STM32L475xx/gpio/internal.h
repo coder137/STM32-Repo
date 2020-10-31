@@ -14,13 +14,6 @@ typedef enum {
 } GPIO_speed_e;
 
 typedef enum {
-  GPIO_pull_NO_PULLUP_OR_PULLDOWN,
-  GPIO_pull_PULLUP,
-  GPIO_pull_PULLDOWN,
-  GPIO_pull_RESERVED,
-} GPIO_pull_e;
-
-typedef enum {
   GPIO_alternate_0,
   GPIO_alternate_1,
   GPIO_alternate_2,
@@ -45,8 +38,9 @@ typedef GPIO_TypeDef GPIO_TypeDef;
 // Internal data requirements
 typedef struct {
   GPIO_speed_e speed;
-  GPIO_pull_e pull;
   GPIO_alternate_e alternate;
 } GPIO_internal_s;
+
+// NOTE, Should not contains any architecture specific functions
 
 #endif

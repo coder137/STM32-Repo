@@ -44,8 +44,9 @@ static void system_uart__init() {
   GPIO_s config = {};
   config.mode = GPIO_mode_ALTERNATE_FUNCTION;
   config.type = GPIO_type_PUSH_PULL;
+  config.pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
+
   config._internal.speed = GPIO_speed_VERY_HIGH_SPEED;
-  config._internal.pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
   config._internal.alternate = GPIO_alternate_7;
   gpio__init(&config, GPIOB, USART1_TX_PIN);
   gpio__init(&config, GPIOB, USART1_RX_PIN);

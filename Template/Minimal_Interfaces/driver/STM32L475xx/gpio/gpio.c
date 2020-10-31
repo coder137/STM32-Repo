@@ -61,11 +61,10 @@ void gpio__reset(const GPIO_s *config) {
 }
 
 void gpio__write(const GPIO_s *config, uint8_t value) {
-  if (value == 0) {
-    gpio__reset(config);
-  } else {
-    gpio__set(config);
-  }
+  uint32_t odr_data = config->port->ODR;
+  gpio__reset_byte_1(&odr_data, config->pin);
+  gpio__set_byte_1(&odr_data, config->pin, value);
+  config->port->ODR = odr_data;
 }
 
 bool gpio__read(const GPIO_s *config) {
@@ -101,7 +100,7 @@ static void gpio__update_ospeedr(const GPIO_s *config) {
 static void gpio__update_pupdr(const GPIO_s *config) {
   uint32_t pupdr_data = config->port->PUPDR;
   gpio__reset_byte_2(&pupdr_data, config->pin);
-  gpio__set_byte_2(&pupdr_data, config->pin, config->_internal.pull);
+  gpio__set_byte_2(&pupdr_data, config->pin, config->pull);
   config->port->PUPDR = pupdr_data;
 }
 
