@@ -7,7 +7,7 @@
 #include "gpio.h"
 #include "rcc/rcc.h"
 
-#include "uart/uart.h"
+#include "uart.h"
 #include "uart/uart_interrupt.h"
 
 // From HAL

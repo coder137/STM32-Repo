@@ -2,8 +2,6 @@
 
 #include <stdint.h>
 
-#include "stm32l4xx.h"
-
 // Constants
 static const uint8_t CR1_UE = 0;
 static const uint8_t CR1_RE = 2;
@@ -55,12 +53,14 @@ void uart__init(UART_s *config, USART_TypeDef *usart) {
   // Number of stop bits in CR2
   uart__set_stop_bit(config);
 
-  // Enable the USART CR1 (UE Bit)
-  uart__enable(config);
-
   // Activate TE Bit
   uart__set_mode(config);
+
+  // Enable the USART CR1 (UE Bit)
+  uart__enable(config);
 }
+
+void uart__deinit(UART_s *config) { uart__disable(config); }
 
 void uart__write(const UART_s *config, const char data) {
   USART_TypeDef *usart = config->usart;
@@ -145,6 +145,6 @@ static void uart__set_baud_rate(UART_s *config) {
 static void uart__set_mode(UART_s *config) {
   uint32_t cr1_data = config->usart->CR1;
   cr1_data &= ~(3 << CR1_RE);
-  cr1_data |= (config->mode << CR1_RE);
+  cr1_data |= (config->communication_mode << CR1_RE);
   config->usart->CR1 = cr1_data;
 }

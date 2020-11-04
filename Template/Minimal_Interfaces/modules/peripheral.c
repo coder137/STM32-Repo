@@ -1,8 +1,8 @@
 #include <stdint.h>
 
 #include "gpio.h"
+#include "uart.h"
 
-#include "uart/uart.h"
 #include "uart/uart_interrupt.h"
 
 // CONSTANTS
@@ -54,7 +54,7 @@ static void system_uart__init() {
   uart_config.baud_rate = USART1_BAUD_RATE;
   uart_config.stop_bit = UART_stop_bit_1_0;
   uart_config.word_length = UART_word_length_8;
-  uart_config.mode = UART_mode_RX_TX;
+  uart_config.communication_mode = UART_mode_RX_TX;
   uart__init(&uart_config, USART1);
 }
 
