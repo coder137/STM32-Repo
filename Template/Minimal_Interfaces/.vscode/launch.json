@@ -2,7 +2,7 @@
   "configurations": [
     {
       "cwd": "${workspaceFolder}",
-      "executable": "build/Minimal_Unit_Testing.elf",
+      "executable": "build/Minimal_Interfaces.elf",
       "configFiles": [
         "stm32l4discovery.cfg"
       ],

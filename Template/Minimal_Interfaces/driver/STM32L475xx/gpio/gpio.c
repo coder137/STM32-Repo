@@ -118,7 +118,7 @@ static void gpio__update_afr(const GPIO_s *config) {
     // Compute
     uint32_t afr_data = config->port->AFR[index];
     afr_data &= ~(0xF << shift);
-    afr_data |= (config->_internal.alternate << shift);
+    afr_data |= (config->alternate << shift);
 
     // Write to memory only once
     config->port->AFR[index] = afr_data;

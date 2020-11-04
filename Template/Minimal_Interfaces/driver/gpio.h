@@ -24,10 +24,31 @@ typedef enum {
   GPIO_pull_PULLDOWN,
 } GPIO_pull_e;
 
+typedef enum {
+  GPIO_alternate_0,
+  GPIO_alternate_1,
+  GPIO_alternate_2,
+  GPIO_alternate_3,
+  GPIO_alternate_4,
+  GPIO_alternate_5,
+  GPIO_alternate_6,
+  GPIO_alternate_7,
+
+  GPIO_alternate_8,
+  GPIO_alternate_9,
+  GPIO_alternate_10,
+  GPIO_alternate_11,
+  GPIO_alternate_12,
+  GPIO_alternate_13,
+  GPIO_alternate_14,
+  GPIO_alternate_15,
+} GPIO_alternate_e;
+
 typedef struct {
   GPIO_mode_e mode;
   GPIO_type_e type;
   GPIO_pull_e pull;
+  GPIO_alternate_e alternate;
 
   // Hardware specific should be typedef'ed
   GPIO_TypeDef *port;

@@ -45,16 +45,16 @@ static void system_uart__init() {
   config.mode = GPIO_mode_ALTERNATE_FUNCTION;
   config.type = GPIO_type_PUSH_PULL;
   config.pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
+  config.alternate = GPIO_alternate_7;
 
   config._internal.speed = GPIO_speed_VERY_HIGH_SPEED;
-  config._internal.alternate = GPIO_alternate_7;
   gpio__init(&config, GPIOB, USART1_TX_PIN);
   gpio__init(&config, GPIOB, USART1_RX_PIN);
 
   uart_config.baud_rate = USART1_BAUD_RATE;
   uart_config.stop_bit = UART_stop_bit_1_0;
   uart_config.word_length = UART_word_length_8;
-  uart_config.communication_mode = UART_mode_RX_TX;
+  uart_config.communication_mode = UART_communication_mode_RX_TX;
   uart__init(&uart_config, USART1);
 }
 

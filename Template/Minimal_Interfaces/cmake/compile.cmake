@@ -10,8 +10,11 @@ add_custom_command(
     ${CMAKE_OBJDUMP} --source --all-headers --demangle --line-numbers --wide
     ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf >
     ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.lst
-  COMMAND ${TOOLS_ARM_EABI_NONE_SIZE} --format=berkeley
-          ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf
+  VERBATIM USES_TERMINAL)
+
+add_custom_target(size ALL
+  DEPENDS ${USER_PROJECT_TARGET}
+  COMMAND ${TOOLS_ARM_EABI_NONE_SIZE} --format=berkeley ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.elf
   VERBATIM USES_TERMINAL)
 
 # TODO, Shift this to a new .cmake file Custom Target to Flash Hardware
