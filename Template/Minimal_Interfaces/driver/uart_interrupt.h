@@ -3,10 +3,32 @@
 
 #include <stdint.h>
 
-#include "stm32l4xx.h"
+#include "uart.h"
 
 #include "FreeRTOS.h"
 #include "queue.h"
+
+// platform specific
+#include "uart/uart_interrupt_internal.h"
+
+// USART Events
+typedef enum {
+  // TX
+  UART_interrupt_event_SEND_FRAME_COMPLETE, // Send completed; however USART may
+                                            // still transmit data
+  UART_interrupt_event_TRANSFER_COMPLETE, // Complete data has been transmitted
+  UART_interrupt_event_TX_COMPLETE,       // Queued to be sent
+
+  // RX
+  // TODO, Not used
+  UART_interrupt_event_RECEIVE_COMPLETE,
+
+  UART_interrupt_event_RX_OVERFLOW,
+  UART_interrupt_event_RX_TIMEOUT,
+  UART_interrupt_event_RX_BREAK,
+  UART_interrupt_event_RX_FRAMING_ERROR,
+  UART_interrupt_event_RX_PARITY_ERROR,
+} UART_interrupt_event_e;
 
 typedef struct {
   QueueHandle_t rx_queue;
@@ -14,12 +36,11 @@ typedef struct {
 } UART_interrupt_internal_s;
 
 typedef struct {
-  USART_TypeDef *usart;
+  UART_s *uart_config;
   uint32_t rx_queue_length;
   uint32_t tx_queue_length;
 
-  // Transmit Complete Callback
-  void (*UART_transmit_complete_cb)(void);
+  void (*UART_event_cb)(UART_interrupt_event_e);
 
   // Do not update this
   UART_interrupt_internal_s _internal;

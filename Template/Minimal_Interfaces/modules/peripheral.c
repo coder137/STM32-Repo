@@ -2,8 +2,7 @@
 
 #include "gpio.h"
 #include "uart.h"
-
-#include "uart/uart_interrupt.h"
+#include "uart_interrupt.h"
 
 // CONSTANTS
 static const uint32_t USART1_RX_BUF_SIZE = 100;
@@ -33,6 +32,24 @@ void peripheral__initialize(void) {
   // TODO, Initialize more systems here
 }
 
+// Currently used for debugging
+static void uart_interrupt_cb(UART_interrupt_event_e event) {
+  switch (event) {
+  case UART_interrupt_event_TX_COMPLETE:
+    __NOP();
+    break;
+  case UART_interrupt_event_SEND_FRAME_COMPLETE:
+    __NOP();
+    break;
+  case UART_interrupt_event_TRANSFER_COMPLETE:
+    __NOP();
+    break;
+  default:
+    __NOP();
+    break;
+  }
+}
+
 // STATIC FUNCTION
 static void system_uart__init() {
 
@@ -47,6 +64,7 @@ static void system_uart__init() {
   config.pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
   config.alternate = GPIO_alternate_7;
 
+  // TODO, Shift to a function
   config._internal.speed = GPIO_speed_VERY_HIGH_SPEED;
   gpio__init(&config, GPIOB, USART1_TX_PIN);
   gpio__init(&config, GPIOB, USART1_RX_PIN);
@@ -60,9 +78,10 @@ static void system_uart__init() {
 }
 
 static void system_uart_interrupt__init() {
-  uart_interrupt_config.usart = uart_config.usart;
+  uart_interrupt_config.uart_config = &uart_config;
   uart_interrupt_config.rx_queue_length = USART1_RX_BUF_SIZE;
   uart_interrupt_config.tx_queue_length = USART1_TX_BUF_SIZE;
+  uart_interrupt_config.UART_event_cb = uart_interrupt_cb;
   uart_interrupt__init(&uart_interrupt_config);
 }
 

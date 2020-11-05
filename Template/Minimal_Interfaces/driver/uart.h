@@ -6,59 +6,9 @@
 #include "gpio.h"
 
 // platform specific
-#include "uart/internal.h"
+#include "uart/uart_internal.h"
 
 // https://github.com/ARM-software/CMSIS_5/blob/develop/CMSIS/Driver/Include/Driver_USART.h
-
-// USART Events
-typedef enum {
-  ///< Send completed; however USART may still transmit data
-  USART_event_SEND_COMPLETE = (1UL << 0),
-  ///< Receive completed
-  USART_event_RECEIVE_COMPLETE = (1UL << 1),
-  ///< Transfer completed
-  USART_event_TRANSFER_COMPLETE = (1UL << 2),
-  ///< Transmit completed (optional)
-  USART_event_TX_COMPLETE = (1UL << 3),
-  ///< Transmit data not available (Synchronous Slave)
-  USART_event_TX_UNDERFLOW = (1UL << 4),
-  ///< Receive data overflow
-  USART_event_RX_OVERFLOW = (1UL << 5),
-  ///< Receive character timeout (optional)
-  USART_event_RX_TIMEOUT = (1UL << 6),
-  ///< Break detected on receive
-  USART_event_RX_BREAK = (1UL << 7),
-  ///< Framing error detected on receive
-  USART_event_RX_FRAMING_ERROR = (1UL << 8),
-  ///< Parity error detected on receive
-  USART_event_RX_PARITY_ERROR = (1UL << 9),
-  ///< CTS state changed (optional)
-  USART_event_CTS = (1UL << 10),
-  ///< DSR state changed (optional)
-  USART_event_DSR = (1UL << 11),
-  ///< DCD state changed (optional)
-  USART_event_DCD = (1UL << 12),
-  ///< RI  state changed (optional)
-  USART_event_RI = (1UL << 13),
-} usart_event_e;
-
-// Callback signals
-
-///< Pointer to \ref ARM_USART_SignalEvent : Signal USART Event
-typedef void (*USART_signal_event_t)(usart_event_e event);
-
-// config struct
-
-// Functions
-
-// ARM_USART_CAPABILITIES usart__get_capabilities(void);
-// int32_t usart__power_control();
-// ARM_USART_STATUS usart__get_status(void);
-// void usart__set_modem_control();
-// void usart__get_modem_status();
-
-int32_t usart__initialize(USART_signal_event_t cb_event);
-int32_t usart__uninitialize(void);
 
 typedef enum {
   UART_word_length_8,
@@ -88,9 +38,6 @@ typedef enum {
   UART_parity_ODD,
 } UART_parity_e;
 
-// Clock Polarity
-// Clock Phase
-
 // Main Struct
 typedef struct {
   USART_TypeDef *usart;
@@ -103,16 +50,15 @@ typedef struct {
   uint32_t baud_rate;
 } UART_s;
 
-// TODO, Find out how to send events
-
 void uart__init(UART_s *config, USART_TypeDef *usart);
 void uart__deinit(UART_s *config);
 
+// NOTE, These APIS Read and Write directly to the register in a polling manner.
 void uart__write(const UART_s *config, const char data);
 void uart__write_string(const UART_s *config, const char *buffer);
 
 // ! Error could take place in this function
-// * OE (Overflow Error)
+// * OE (Overflow Error) when writing data very fast
 uint8_t uart__read(const UART_s *config);
 
 #endif // DRIVER_UART_UART_H_

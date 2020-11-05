@@ -8,7 +8,7 @@
 #include "rcc/rcc.h"
 
 #include "uart.h"
-#include "uart/uart_interrupt.h"
+#include "uart_interrupt.h"
 
 // From HAL
 #include "input_gpio/input_gpio.h"
@@ -82,7 +82,7 @@ void gpio_task(void *arg) {
 }
 
 int main(void) {
-  printf("Starting main\r\n");
+  printf("Main\r\n");
   output_gpio__init(&output_config, GPIOA, 5, RCC_AHB2ENR_GPIOAEN);
   input_gpio__init(&input_config, GPIOC, 13, RCC_AHB2ENR_GPIOCEN);
   gpio__reset(&output_config);
