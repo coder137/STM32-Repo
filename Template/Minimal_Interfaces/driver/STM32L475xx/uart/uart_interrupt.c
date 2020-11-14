@@ -53,9 +53,9 @@ static void uart_interrupt__callback_notify(UART_interrupt_s *interrupt_config,
 // FUNCTION
 void uart_interrupt__init(UART_interrupt_s *interrupt_config) {
 
-  interrupt_config->_internal.rx_queue =
+  interrupt_config->rx_queue =
       xQueueCreate(interrupt_config->rx_queue_length, sizeof(uint8_t));
-  interrupt_config->_internal.tx_queue =
+  interrupt_config->tx_queue =
       xQueueCreate(interrupt_config->tx_queue_length, sizeof(uint8_t));
 
   // RX Interrupt
@@ -100,11 +100,13 @@ void uart_interrupt__write_string_n(UART_interrupt_s *interrupt_config,
 uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config,
                              uint32_t wait_for) {
   uint8_t data = 0;
-  xQueueReceive(interrupt_config->_internal.rx_queue, &data, wait_for);
+  xQueueReceive(interrupt_config->rx_queue, &data, wait_for);
   return data;
 }
 
-// TODO, Return Success or Error code
+// NOTE, We need to handle each individual bit in an if statement since multiple
+// bits can be set in the ISR register
+// Cannot make an FSM here
 void uart_interrupt__process(const UART_interrupt_s *interrupt_config) {
 
   // TODO, Process Errors here
@@ -160,15 +162,17 @@ uart_interrupt__transmit_enable(UART_interrupt_s *interrupt_config) {
 static void uart_interrupt__process_rxne(UART_interrupt_s *interrupt_config) {
   BaseType_t pxHigherPriorityTaskWoken = pdFALSE;
   uint8_t data = (uint8_t)interrupt_config->uart_config->usart->RDR;
-  xQueueSendFromISR(interrupt_config->_internal.rx_queue, &data,
+  xQueueSendFromISR(interrupt_config->rx_queue, &data,
                     &pxHigherPriorityTaskWoken);
+  uart_interrupt__callback_notify(interrupt_config,
+                                  UART_interrupt_event_RX_READY);
   portYIELD_FROM_ISR(pxHigherPriorityTaskWoken);
 }
 
 static void uart_interrupt_process_txe(UART_interrupt_s *interrupt_config) {
   uint8_t data;
   BaseType_t is_recv =
-      xQueueReceiveFromISR(interrupt_config->_internal.tx_queue, &data, NULL);
+      xQueueReceiveFromISR(interrupt_config->tx_queue, &data, NULL);
   if (is_recv) {
     interrupt_config->uart_config->usart->TDR = data;
     uart_interrupt__callback_notify(interrupt_config,
@@ -233,7 +237,7 @@ static void uart_interrupt__write_activate(UART_interrupt_s *interrupt_config) {
 
 static void uart_interrupt__internal_write(UART_interrupt_s *interrupt_config,
                                            uint8_t data) {
-  xQueueSend(interrupt_config->_internal.tx_queue, &data, portMAX_DELAY);
+  xQueueSend(interrupt_config->tx_queue, &data, portMAX_DELAY);
 }
 
 static void

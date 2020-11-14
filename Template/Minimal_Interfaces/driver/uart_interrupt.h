@@ -14,26 +14,24 @@
 // USART Events
 typedef enum {
   // TX
+  UART_interrupt_event_TX_COMPLETE,         // Queued to be sent
   UART_interrupt_event_SEND_FRAME_COMPLETE, // Send completed; however USART may
                                             // still transmit data
   UART_interrupt_event_TRANSFER_COMPLETE, // Complete data has been transmitted
-  UART_interrupt_event_TX_COMPLETE,       // Queued to be sent
 
   // RX
-  // TODO, Not used
-  UART_interrupt_event_RECEIVE_COMPLETE,
+  UART_interrupt_event_RX_READY, // Data ready to be read
 
+  // Errors
+  // TODO, Not used
   UART_interrupt_event_RX_OVERFLOW,
-  UART_interrupt_event_RX_TIMEOUT,
-  UART_interrupt_event_RX_BREAK,
   UART_interrupt_event_RX_FRAMING_ERROR,
   UART_interrupt_event_RX_PARITY_ERROR,
-} UART_interrupt_event_e;
 
-typedef struct {
-  QueueHandle_t rx_queue;
-  QueueHandle_t tx_queue;
-} UART_interrupt_internal_s;
+  // Other
+  // TODO, Not used
+  UART_interrupt_event_RX_BREAK,
+} UART_interrupt_event_e;
 
 typedef struct {
   UART_s *uart_config;
@@ -43,7 +41,8 @@ typedef struct {
   void (*UART_event_cb)(UART_interrupt_event_e);
 
   // Do not update this
-  UART_interrupt_internal_s _internal;
+  QueueHandle_t rx_queue;
+  QueueHandle_t tx_queue;
 } UART_interrupt_s;
 
 void uart_interrupt__init(UART_interrupt_s *interrupt_config);
