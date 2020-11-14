@@ -1,7 +1,4 @@
-ess_data(l0_lowlevel_sources 
-    startup_stm32l4xx.c 
-    system_stm32l4xx.c
-)
+ess_include(${CONTROLLER_NAME})
 ess_data(l0_lowlevel_dirs 
-    stm32
+    ${CONTROLLER_NAME}
 )

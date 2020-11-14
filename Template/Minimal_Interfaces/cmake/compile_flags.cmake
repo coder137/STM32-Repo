@@ -24,7 +24,7 @@ set(USER_LINK_FLAGS
     -static
     -Wl,--gc-sections
     -Wl,-Map,${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
-    -T${PROJECT_SOURCE_DIR}/l0_lowlevel/linker/gcc_arm.ld
+    -T${PROJECT_SOURCE_DIR}/l0_lowlevel/linker/${CONTROLLER_NAME}/gcc_arm.ld
 )
 
 set (USER_NO_SEMIHOSTING_FLAGS
