@@ -20,33 +20,11 @@
 #include "task.h"
 
 /**
- * STATIC FUNCTION DECLARATIONS
- */
-void main__gpio_input(void);
-void main__gpio_input_external_interrupt(void);
-
-/**
  * STATE VARIABLES
  */
-// GPIO OUTPUT
+// GPIO
 static GPIO_s output_config;
-
-// GPIO INPUT
 static GPIO_s input_config;
-static EXTI_s gpioC13_interrupt_config;
-volatile bool is_button_pressed = false;
-
-// MISC
-
-// INTERRUPTS
-void EXTI15_10_Handler(void) {
-  if (exti__gpio_is_pending_interrupt(&gpioC13_interrupt_config)) {
-    exti__gpio_clear_pending_interrupt(&gpioC13_interrupt_config);
-
-    // Your logic here
-    is_button_pressed = true;
-  }
-}
 
 // TASKS
 static void blink_task(void *arg) {
@@ -112,6 +90,23 @@ int main(void) {
   return 0;
 }
 
+// NOTE, Current device independent abstraction does not exist for this block of
+// code
+#ifdef STM32L475xx
+
+static EXTI_s gpioC13_interrupt_config;
+volatile bool is_button_pressed = false;
+
+// INTERRUPTS
+void EXTI15_10_Handler(void) {
+  if (exti__gpio_is_pending_interrupt(&gpioC13_interrupt_config)) {
+    exti__gpio_clear_pending_interrupt(&gpioC13_interrupt_config);
+
+    // Your logic here
+    is_button_pressed = true;
+  }
+}
+
 void main__gpio_input_external_interrupt(void) {
 
   RCC->APB2ENR |= (1 << 0);
@@ -129,3 +124,5 @@ void main__gpio_input_external_interrupt(void) {
 
   NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
+
+#endif

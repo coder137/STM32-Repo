@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
-# Set your constants here
-# NOTE, These should be options
-set(PROJECT_NAME "Minimal_Interfaces")
-set(CONTROLLER_NAME "STM32L475xx")
-set(USE_SEMIHOSTING OFF)
-option(TESTING OFF)
+# Set your constants inside this file
+include(options.cmake)
 
 if (NOT TESTING)
   set(CMAKE_TOOLCHAIN_FILE "cmake/toolchain.cmake")
@@ -51,8 +47,8 @@ if (TESTING)
   include(cmake/testing.cmake)
 
   # TODO, Add more mocks here
-  include(driver/${CONTROLLER_NAME}/rcc/mock/include.cmake)
-  include(driver/${CONTROLLER_NAME}/gpio/mock/include.cmake)
+  include(l2_driver/${CONTROLLER_NAME}/rcc/mock/include.cmake)
+  include(l2_driver/${CONTROLLER_NAME}/gpio/mock/include.cmake)
 
   # TODO, Update this w.r.t the mocks above
   set(USER_TEST_DIRS 
@@ -62,8 +58,8 @@ if (TESTING)
   )
 
   # TODO, Add more tests here
-  add_subdirectory(HAL/output_gpio/test)
-  add_subdirectory(HAL/input_gpio/test)
+  add_subdirectory(l2_HAL/output_gpio/test)
+  add_subdirectory(l2_HAL/input_gpio/test)
 
   # TODO, Add code coverage tool
 
