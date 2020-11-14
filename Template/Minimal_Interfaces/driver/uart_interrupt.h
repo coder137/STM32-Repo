@@ -23,14 +23,13 @@ typedef enum {
   UART_interrupt_event_RX_READY, // Data ready to be read
 
   // Errors
-  // TODO, Not used
   UART_interrupt_event_RX_OVERFLOW,
   UART_interrupt_event_RX_FRAMING_ERROR,
   UART_interrupt_event_RX_PARITY_ERROR,
 
-  // Other
-  // TODO, Not used
-  UART_interrupt_event_RX_BREAK,
+  // Optional
+  UART_interrupt_event_BREAK,
+  UART_interrupt_event_IDLE,
 } UART_interrupt_event_e;
 
 typedef struct {
@@ -57,6 +56,6 @@ uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config,
                              uint32_t wait_for);
 
 // Used by Interrupt Function
-void uart_interrupt__process(const UART_interrupt_s *interrupt_config);
+void uart_interrupt__process(UART_interrupt_s *interrupt_config);
 
 #endif // DRIVER_UART_UART_INTERRUPT_H_

@@ -15,24 +15,37 @@
 static const uint8_t CR1_RXINE = 5;
 static const uint8_t CR1_TCIE = 6;
 static const uint8_t CR1_TXEIE = 7;
-// static const uint8_t CR1_PEIE = 8;
+static const uint8_t CR1_PEIE = 8;
 // static const uint8_t CR1_CMIE = 14;
 // static const uint8_t CR1_RTOIE = 26;
 // static const uint8_t CR1_EOBIE = 27;
 
+static const uint8_t CR3_EIE = 0;
+static const uint8_t CR3_OVRDIS = 12;
+
+static const uint8_t ISR_PE = 0;
+static const uint8_t ISR_FE = 1;
+static const uint8_t ISR_ORE = 3;
 static const uint8_t ISR_RXNE = 5;
 static const uint8_t ISR_TC = 6;
 static const uint8_t ISR_TXE = 7;
 
+static const uint8_t ICR_PECF = 0;
+static const uint8_t ICR_FECF = 1;
+static const uint8_t ICR_ORECF = 3;
+
 // STATIC FUNCTION DEFINITION
 // Init functionality
+static void uart_interrupt__error_enable(UART_interrupt_s *interrupt_config);
 static void uart_interrupt__receive_enable(UART_interrupt_s *interrupt_config);
 static void uart_interrupt__transmit_enable(UART_interrupt_s *interrupt_config);
 
+// Error functionality
+static void uart_interrupt__error_handler(UART_interrupt_s *interrupt_config);
+
 // Interrupt functionality
 static void
-uart_interrupt__process_helper(const UART_interrupt_s *interrupt_config,
-                               uint8_t pin,
+uart_interrupt__process_helper(UART_interrupt_s *interrupt_config, uint8_t pin,
                                void (*interrupt_func)(UART_interrupt_s *));
 static void uart_interrupt__process_rxne(UART_interrupt_s *interrupt_config);
 static void uart_interrupt_process_txe(UART_interrupt_s *interrupt_config);
@@ -58,8 +71,9 @@ void uart_interrupt__init(UART_interrupt_s *interrupt_config) {
   interrupt_config->tx_queue =
       xQueueCreate(interrupt_config->tx_queue_length, sizeof(uint8_t));
 
-  // RX Interrupt
+  // Initialize interrupt peripherals
   uart_interrupt__receive_enable(interrupt_config);
+  uart_interrupt__error_enable(interrupt_config);
 
   // This is for FreeRTOS kernel APIs to be used within ISR.
   // ISR priority is set to be lower that the FreeRTOS kernel (higher number) so
@@ -107,12 +121,13 @@ uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config,
 // NOTE, We need to handle each individual bit in an if statement since multiple
 // bits can be set in the ISR register
 // Cannot make an FSM here
-void uart_interrupt__process(const UART_interrupt_s *interrupt_config) {
+void uart_interrupt__process(UART_interrupt_s *interrupt_config) {
 
-  // TODO, Process Errors here
-  // TODO, Send events here
+  // PE (Parity Error)
+  // FE (Frame Error)
+  // ORE (Overrun Error)
+  uart_interrupt__error_handler(interrupt_config);
 
-  // ELSE do the rest here
   // RXNE
   uart_interrupt__process_helper(interrupt_config, ISR_RXNE,
                                  uart_interrupt__process_rxne);
@@ -127,6 +142,19 @@ void uart_interrupt__process(const UART_interrupt_s *interrupt_config) {
 }
 
 // Init Functionality
+static void uart_interrupt__error_enable(UART_interrupt_s *interrupt_config) {
+  USART_TypeDef *usart = interrupt_config->uart_config->usart;
+  uint32_t cr1_data = usart->CR1;
+  cr1_data |= (1 << CR1_PEIE);
+
+  uint32_t cr3_data = usart->CR3;
+  cr3_data &= ~(1 << CR3_OVRDIS);
+  cr3_data |= (1 << CR3_EIE);
+
+  usart->CR1 = cr1_data;
+  usart->CR3 = cr3_data;
+}
+
 static void uart_interrupt__receive_enable(UART_interrupt_s *interrupt_config) {
   UART_s *uart_config = interrupt_config->uart_config;
   switch (uart_config->communication_mode) {
@@ -194,18 +222,44 @@ static void uart_interrupt__process_tc(UART_interrupt_s *interrupt_config) {
                                   UART_interrupt_event_SEND_FRAME_COMPLETE);
 }
 
+static void uart_interrupt__error_handler(UART_interrupt_s *interrupt_config) {
+  USART_TypeDef *usart = interrupt_config->uart_config->usart;
+  const uint32_t isr_data = usart->ISR;
+
+  uint32_t icr_data = usart->ICR;
+  if (isr_data & (1 << ISR_PE)) {
+    uart_interrupt__callback_notify(interrupt_config,
+                                    UART_interrupt_event_RX_PARITY_ERROR);
+    icr_data |= (1 << ICR_PECF);
+  }
+
+  if (isr_data & (1 << ISR_FE)) {
+    uart_interrupt__callback_notify(interrupt_config,
+                                    UART_interrupt_event_RX_FRAMING_ERROR);
+    icr_data |= (1 << ICR_FECF);
+  }
+
+  if (isr_data & (1 << ISR_ORE)) {
+    uart_interrupt__callback_notify(interrupt_config,
+                                    UART_interrupt_event_RX_OVERFLOW);
+    icr_data |= (1 << ICR_ORECF);
+  }
+
+  // Update the ICR register
+  usart->ICR = icr_data;
+}
+
 // `interrupt_func` should never be NULL
 // Since this is for internal use, NULL guard has not been placed
 static void
-uart_interrupt__process_helper(const UART_interrupt_s *interrupt_config,
-                               uint8_t pin,
+uart_interrupt__process_helper(UART_interrupt_s *interrupt_config, uint8_t pin,
                                void (*interrupt_func)(UART_interrupt_s *)) {
   USART_TypeDef *usart = interrupt_config->uart_config->usart;
   const bool is_interrupted = (usart->ISR >> pin) & 0x01;
   const bool interrupt_enabled = (usart->CR1 >> pin) & 0x01;
 
   if (is_interrupted && interrupt_enabled) {
-    interrupt_func((UART_interrupt_s *)interrupt_config);
+    interrupt_func(interrupt_config);
   }
 }
 

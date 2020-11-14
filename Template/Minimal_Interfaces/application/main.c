@@ -49,9 +49,8 @@ void EXTI15_10_Handler(void) {
 }
 
 // TASKS
-void blink_task(void *arg) {
+static void blink_task(void *arg) {
   while (1) {
-    printf("Hello %s\r\n", __FUNCTION__);
     gpio__set(&output_config);
     vTaskDelay(1000);
     gpio__reset(&output_config);
@@ -59,24 +58,32 @@ void blink_task(void *arg) {
   }
 }
 
-void uart_read(void *arg) {
-  char buf[20] = {0};
+static void uart_write_task(void *arg) {
+  uint32_t counter = 0;
   while (1) {
-    printf("Waiting for data>\r\n");
-    scanf("%s", buf);
-    printf("Data: %s\r\n", buf);
+    printf("Hello World: %ld\r\n", counter);
+    counter++;
+    vTaskDelay(1000);
   }
 }
 
-void gpio_task(void *arg) {
+static void uart_read_task(void *arg) {
+  char buf[20] = {0};
+  uint32_t counter = 0;
   while (1) {
+    scanf("%s", buf);
+    printf("Recv %ld: %s\r\n", counter, buf);
+    counter++;
+  }
+}
 
+static void gpio_input_task(void *arg) {
+  while (1) {
     // HIGH is not pressed
     // LOW is pressed
     if (gpio__read(&input_config) == false) {
       printf("Pressed\r\n");
     }
-
     vTaskDelay(200);
   }
 }
@@ -87,9 +94,15 @@ int main(void) {
   input_gpio__init(&input_config, GPIOC, 13, RCC_AHB2ENR_GPIOCEN);
   gpio__reset(&output_config);
 
-  xTaskCreate(blink_task, "printf test", 2000, NULL, 1, NULL);
-  xTaskCreate(gpio_task, "gpio input test", 1000, NULL, 1, NULL);
-  xTaskCreate(uart_read, "scanf test", 2000, NULL, 2, NULL);
+  // GPIO Tests
+  xTaskCreate(blink_task, "blink led test", 1000, NULL, 1, NULL);
+  xTaskCreate(gpio_input_task, "gpio input test", 1000, NULL, 1, NULL);
+
+  // UART Tests
+  xTaskCreate(uart_write_task, "printf test", 2000, NULL, 2, NULL);
+  xTaskCreate(uart_read_task, "scanf test", 2000, NULL, 2, NULL);
+
+  // Start the FreeRTOS scheduler
   vTaskStartScheduler();
 
   // vTaskStartSchedular should never exit
