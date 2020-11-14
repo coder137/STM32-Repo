@@ -22,17 +22,19 @@ include(cmake/test/target.cmake)
 
 # TODO, Add more subdirectory includes here
 ess_include(l0_lowlevel)
-ess_include(driver)
-ess_include(modules)
-ess_include(HAL)
-ess_include_script(third_party/FreeRTOS/FreeRTOS.cmake)
+ess_include_script(l1_third_party/FreeRTOS/FreeRTOS.cmake)
+ess_include(l2_driver)
+ess_include(l2_HAL)
+ess_include(l2_peripheral)
+ess_include(l5_application)
 
 set(USER_INCLUDE_DIRS 
   ${l0_lowlevel_dirs}
-  ${driver_dirs}
-  ${modules_dirs}
-  ${HAL_dirs}
+  ${l2_driver_dirs}
+  ${l2_peripheral_dirs}
+  ${l2_HAL_dirs}
   ${FreeRTOS_dirs}
+  ${l5_application_dirs}
 )
 
 # Set Global requirements for both unit-tests and arm targets
@@ -75,12 +77,12 @@ else()
   # Cross Compiled project
   set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
   add_executable(${USER_PROJECT_TARGET}
-      application/main.c
       ${l0_lowlevel_sources}
-      ${driver_sources}
-      ${modules_sources}
-      ${HAL_sources}
       ${FreeRTOS_sources}
+      ${l2_driver_sources}
+      ${l2_peripheral_sources}
+      ${l2_HAL_sources}
+      ${l5_application_sources}
   )
 
   target_include_directories(${USER_PROJECT_TARGET} PRIVATE
