@@ -12,6 +12,7 @@ set(COMMON_C_FLAGS
     -mfpu=auto
     -g
     -pipe
+    -Wl,--print-memory-usage
     ${WARNING_FLAGS})
 set(USER_C_FLAGS -std=c99 -fmessage-length=0 -ffunction-sections
                  -fdata-sections -fstack-usage -nostdlib)

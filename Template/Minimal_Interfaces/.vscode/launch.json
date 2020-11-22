@@ -9,7 +9,22 @@
       "postLaunchCommands": [
         "monitor arm semihosting enable",
       ],
-      "name": "Debug Microcontroller",
+      "name": "Debug",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "openocd"
+    },
+    {
+      "cwd": "${workspaceFolder}",
+      "executable": "build/Minimal_Interfaces.elf",
+      "configFiles": [
+        "stm32l4discovery.cfg"
+      ],
+      "preLaunchTask": "task_build_and_flash",
+      "postLaunchCommands": [
+        "monitor arm semihosting enable",
+      ],
+      "name": "Flash and Debug",
       "request": "launch",
       "type": "cortex-debug",
       "servertype": "openocd"
