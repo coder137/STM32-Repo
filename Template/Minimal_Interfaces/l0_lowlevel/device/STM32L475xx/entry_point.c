@@ -1,5 +1,5 @@
 #include "FreeRTOSConfig.h"
-#include "stm32l4xx.h"
+#include "stm32l475xx.h"
 
 // TODO, Shift this to a different file
 static void clock__init(void);

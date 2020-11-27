@@ -1,3 +1,4 @@
+// clang-format off
 /**
   ******************************************************************************
   * @file    system_stm32l4xx.c
@@ -88,7 +89,7 @@
 /** @addtogroup STM32L4xx_System_Private_Includes
   * @{
   */
-#include "stm32l4xx.h"
+#include "stm32l475xx.h"
 
 #if !defined  (HSE_VALUE)
   #define HSE_VALUE    8000000U  /*!< Value of the External oscillator in Hz */
@@ -257,7 +258,7 @@ void SystemCoreClockUpdate(void)
   uint32_t tmp = 0U, msirange = 0U, pllvco = 0U, pllr = 2U, pllsource = 0U, pllm = 2U;
 
   /* Get MSI Range frequency--------------------------------------------------*/
-  if((RCC->CR & RCC_CR_MSIRGSEL) == RESET)
+  if((RCC->CR & RCC_CR_MSIRGSEL) == 0)
   { /* MSISRANGE from RCC_CSR applies */
     msirange = (RCC->CSR & RCC_CSR_MSISRANGE) >> 8U;
   }

@@ -25,8 +25,7 @@
 /**
  * USER ADDDED
  */
-#include "FreeRTOS.h"
-#include "stm32l4xx.h"
+#include "stm32l475xx.h"
 
 typedef void (*VECTOR_TABLE_Type)(void);
 

@@ -1,6 +1,6 @@
 #include "exti.h"
 
-#include "stm32l4xx.h"
+#include "stm32l475xx.h"
 
 // STATIC FUNCTION DECLARATION
 static void exti__update_imr1(EXTI_s *config);
