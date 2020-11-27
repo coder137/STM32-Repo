@@ -18,10 +18,7 @@ static void system_uart_interrupt__init();
 
 // STATE VARIABLES
 static UART_s uart_config;
-
-// CAN BE EXTERNED
-// Called by syscalls.c
-UART_interrupt_s uart_interrupt_config;
+static UART_interrupt_s uart_interrupt_config;
 
 // FUNCTION
 void peripheral__initialize(void) {
@@ -85,5 +82,16 @@ static void system_uart_interrupt__init() {
   uart_interrupt__init(&uart_interrupt_config);
 }
 
-// INTERRUPT FUNCTION
+// Interrupt function
 void USART1_Handler(void) { uart_interrupt__process(&uart_interrupt_config); }
+
+// Newlib Overrides
+int _read(int file, char *ptr, int len) {
+  *ptr = uart_interrupt__read(&uart_interrupt_config, portMAX_DELAY);
+  return 1;
+}
+
+int _write(int file, char *ptr, int len) {
+  uart_interrupt__write_string_n(&uart_interrupt_config, ptr, len);
+  return len;
+}
