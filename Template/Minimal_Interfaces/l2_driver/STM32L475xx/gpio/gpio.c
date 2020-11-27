@@ -75,6 +75,22 @@ bool gpio__read(const GPIO_s *config) {
   return ispressed;
 }
 
+void gpio__init_as_output(GPIO_s *config, GPIO_TypeDef *port, uint32_t pin) {
+  config->mode = GPIO_mode_OUTPUT;
+  config->type = GPIO_type_PUSH_PULL;
+  config->_internal.speed = GPIO_speed_LOW_SPEED;
+  config->pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
+  gpio__init(config, port, pin);
+}
+
+void gpio__init_as_input(GPIO_s *config, GPIO_TypeDef *port, uint32_t pin) {
+  config->mode = GPIO_mode_INPUT;
+  config->type = GPIO_type_PUSH_PULL;
+  config->_internal.speed = GPIO_speed_LOW_SPEED;
+  config->pull = GPIO_pull_NO_PULLUP_OR_PULLDOWN;
+  gpio__init(config, port, pin);
+}
+
 // STATIC FUNCTION DEFINITIONS
 static void gpio__update_moder(const GPIO_s *config) {
   uint32_t moder_data = config->port->MODER;

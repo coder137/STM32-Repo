@@ -20,7 +20,6 @@ include(cmake/test/target.cmake)
 ess_include(l0_lowlevel)
 ess_include_script(l1_third_party/FreeRTOS/FreeRTOS.cmake)
 ess_include(l2_driver)
-ess_include(l2_HAL)
 ess_include(l2_peripheral)
 ess_include(l5_application)
 
@@ -28,7 +27,6 @@ set(USER_INCLUDE_DIRS
   ${l0_lowlevel_dirs}
   ${l2_driver_dirs}
   ${l2_peripheral_dirs}
-  ${l2_HAL_dirs}
   ${FreeRTOS_dirs}
   ${l5_application_dirs}
 )
@@ -58,8 +56,6 @@ if (TESTING)
   )
 
   # TODO, Add more tests here
-  add_subdirectory(l2_HAL/output_gpio/test)
-  add_subdirectory(l2_HAL/input_gpio/test)
 
   # TODO, Add code coverage tool
 
@@ -77,7 +73,6 @@ else()
       ${FreeRTOS_sources}
       ${l2_driver_sources}
       ${l2_peripheral_sources}
-      ${l2_HAL_sources}
       ${l5_application_sources}
   )
 

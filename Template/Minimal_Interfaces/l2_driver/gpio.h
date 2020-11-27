@@ -67,4 +67,8 @@ void gpio__reset(const GPIO_s *config);
 
 bool gpio__read(const GPIO_s *config);
 
+// High level APIs
+void gpio__init_as_output(GPIO_s *config, GPIO_TypeDef *port, uint32_t pin);
+void gpio__init_as_input(GPIO_s *config, GPIO_TypeDef *port, uint32_t pin);
+
 #endif

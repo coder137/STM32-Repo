@@ -3,21 +3,21 @@
 #include <string.h>
 
 // From Driver
-#include "exti/exti.h"
 #include "gpio.h"
-#include "rcc/rcc.h"
 
 #include "uart.h"
 #include "uart_interrupt.h"
-
-// From HAL
-#include "input_gpio/input_gpio.h"
-#include "output_gpio/output_gpio.h"
 
 // FreeRTOS
 #include "FreeRTOS.h"
 #include "queue.h"
 #include "task.h"
+
+// Conditional includes
+#if STM32L475xx
+#include "exti/exti.h"
+#include "rcc/rcc.h"
+#endif
 
 /**
  * STATE VARIABLES
@@ -68,8 +68,13 @@ static void gpio_input_task(void *arg) {
 
 int main(void) {
   printf("Main\r\n");
-  output_gpio__init(&output_config, GPIOA, 5, RCC_AHB2ENR_GPIOAEN);
-  input_gpio__init(&input_config, GPIOC, 13, RCC_AHB2ENR_GPIOCEN);
+// Port specific code
+#if STM32L475xx
+  rcc__set_ahb2_peripheral_clock_enable(RCC_AHB2ENR_GPIOAEN |
+                                        RCC_AHB2ENR_GPIOCEN);
+#endif
+  gpio__init_as_output(&output_config, GPIOA, 5);
+  gpio__init_as_input(&input_config, GPIOC, 13);
   gpio__reset(&output_config);
 
   // GPIO Tests
