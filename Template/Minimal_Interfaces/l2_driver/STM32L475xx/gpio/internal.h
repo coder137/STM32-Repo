@@ -1,7 +1,6 @@
 #ifndef DRIVER_GPIO_INTERNAL_H_
 #define DRIVER_GPIO_INTERNAL_H_
 
-#include <stdbool.h>
 #include <stdint.h>
 
 #include "stm32l475xx.h"

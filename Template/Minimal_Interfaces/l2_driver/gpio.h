@@ -1,6 +1,7 @@
 #ifndef DRIVER_INTERFACE_GPIO_H_
 #define DRIVER_INTERFACE_GPIO_H_
 
+#include <stdbool.h>
 #include <stdint.h>
 
 // platform specific
