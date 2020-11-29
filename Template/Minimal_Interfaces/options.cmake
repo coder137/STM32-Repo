@@ -2,7 +2,11 @@
 set(PROJECT_NAME "Minimal_Interfaces")
 
 # Device Information
-set(CONTROLLER_NAME "STM32L475xx")
+# STM32L475VGT6
+# set(CONTROLLER_NAME "STM32L475xx")
+
+# LPC4078FBD80
+set(CONTROLLER_NAME "LPC4078xx")
 
 # Features
 set(USE_SEMIHOSTING OFF)
