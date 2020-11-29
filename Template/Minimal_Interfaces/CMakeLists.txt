@@ -16,9 +16,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(cmake/function.cmake)
 include(cmake/test/target.cmake)
 
+# Cross Compilation Flags
+include(cmake/compile_flags.cmake)
+
 # TODO, Add more subdirectory includes here
 ess_include(l0_lowlevel)
-# ess_include_script(l1_third_party/FreeRTOS/FreeRTOS.cmake)
+ess_include_script(l1_third_party/FreeRTOS/FreeRTOS.cmake)
 ess_include(l2_driver)
 # ess_include(l2_peripheral)
 # ess_include(l5_application)
@@ -45,8 +48,6 @@ if (TESTING)
   include(cmake/testing.cmake)
 
   # TODO, Add more mocks here
-  include(l2_driver/${CONTROLLER_NAME}/rcc/mock/include.cmake)
-  include(l2_driver/${CONTROLLER_NAME}/gpio/mock/include.cmake)
 
   # TODO, Update this w.r.t the mocks above
   set(USER_TEST_DIRS 
@@ -62,9 +63,6 @@ if (TESTING)
 else()
 
   message("Configuring ARM Project")
-
-  # Cross Compilation Flags
-  include(cmake/compile_flags.cmake)
 
   # Cross Compiled project
   set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")

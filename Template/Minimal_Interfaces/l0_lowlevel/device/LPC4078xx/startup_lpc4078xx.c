@@ -85,11 +85,11 @@ const VECTOR_TABLE_Type __VECTOR_TABLE[] __VECTOR_TABLE_ATTRIBUTE = {
     0,                                  /*     Reserved */
     0,                                  /*     Reserved */
     0,                                  /*     Reserved */
-    SVC_Handler,                        /*  -5 SVCall Handler */
+    vPortSVCHandler,                    /*  -5 SVCall Handler */
     DebugMon_Handler,                   /*  -4 Debug Monitor Handler */
     0,                                  /*     Reserved */
-    PendSV_Handler,                     /*  -2 PendSV Handler */
-    SysTick_Handler,                    /*  -1 SysTick Handler */
+    xPortPendSVHandler,                 /*  -2 PendSV Handler */
+    xPortSysTickHandler,                /*  -1 SysTick Handler */
 
     WDT_Handler,
     TIMER0_Handler,

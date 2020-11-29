@@ -21,7 +21,7 @@ ess_data(FreeRTOS_sources
 # ~~~
 ess_data(FreeRTOS_dirs
     include
-    config
+    config/${CONTROLLER_NAME}
 )
 
 # ~~~
