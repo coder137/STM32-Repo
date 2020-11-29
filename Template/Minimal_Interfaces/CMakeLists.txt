@@ -18,10 +18,10 @@ include(cmake/test/target.cmake)
 
 # TODO, Add more subdirectory includes here
 ess_include(l0_lowlevel)
-ess_include_script(l1_third_party/FreeRTOS/FreeRTOS.cmake)
+# ess_include_script(l1_third_party/FreeRTOS/FreeRTOS.cmake)
 ess_include(l2_driver)
-ess_include(l2_peripheral)
-ess_include(l5_application)
+# ess_include(l2_peripheral)
+# ess_include(l5_application)
 
 set(USER_INCLUDE_DIRS 
   ${l0_lowlevel_dirs}
@@ -95,6 +95,7 @@ else()
 
   # Tools
   include(cmake/compile.cmake)
+  include(cmake/flash.cmake)
   # TODO, Add Static Analysis tool
   # TODO, Add documentation generator tool
 
