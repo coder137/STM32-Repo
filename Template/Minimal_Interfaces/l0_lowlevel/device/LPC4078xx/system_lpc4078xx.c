@@ -1,6 +1,7 @@
 #include "system_lpc4078xx.h"
 #include "lpc4078xx.h"
 
+uint32_t SystemCoreClock = 96U * 1000U * 1000U;
 static void system__initialize_fpu(void);
 static void system__initialize_clock(void);
 

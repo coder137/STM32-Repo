@@ -318,16 +318,16 @@ SECTIONS
     . = . + __HEAP_SIZE;
     . = ALIGN(8);
     __HeapLimit = .;
-  } > RAM
+  } > RAM2
 
-  .stack (ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE) (COPY) :
+  .stack (ORIGIN(RAM2) + LENGTH(RAM2) - __STACK_SIZE) (COPY) :
   {
     . = ALIGN(8);
     __StackLimit = .;
     . = . + __STACK_SIZE;
     . = ALIGN(8);
     __StackTop = .;
-  } > RAM
+  } > RAM2
   PROVIDE(__stack = __StackTop);
 
   /* Check if data + heap + stack exceeds RAM limit */
