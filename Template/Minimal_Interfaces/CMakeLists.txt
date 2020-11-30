@@ -23,8 +23,8 @@ include(cmake/compile_flags.cmake)
 ess_include(l0_lowlevel)
 ess_include_script(l1_third_party/FreeRTOS/FreeRTOS.cmake)
 ess_include(l2_driver)
-# ess_include(l2_peripheral)
-# ess_include(l5_application)
+ess_include(l2_peripheral)
+ess_include(l5_application)
 
 set(USER_INCLUDE_DIRS 
   ${l0_lowlevel_dirs}
