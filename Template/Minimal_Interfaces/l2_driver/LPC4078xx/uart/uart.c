@@ -54,7 +54,7 @@ void uart__write(const UART_s *config, const char data) {
 }
 
 void uart__write_string(const UART_s *config, const char *buffer) {
-  while (buffer != 0) {
+  while (*buffer != 0) {
     char data = *buffer;
     uart__write(config, data);
     buffer++;
