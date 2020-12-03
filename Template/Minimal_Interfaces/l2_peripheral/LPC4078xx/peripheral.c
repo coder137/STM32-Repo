@@ -4,8 +4,8 @@
 // Constants
 static const uint32_t UART0_RX_BUF_SIZE = 100;
 static const uint32_t UART0_TX_BUF_SIZE = 100;
-// static const uint32_t UART0_TX_PIN = 6;
-// static const uint32_t UART0_RX_PIN = 7;
+static const uint32_t UART0_TX_PIN = 2;
+static const uint32_t UART0_RX_PIN = 3;
 static const uint32_t UART0_BAUD_RATE = 115200;
 
 // Static functions
@@ -25,9 +25,8 @@ static void system_uart__init() {
   GPIO_s gpio_u_config = {
       .alternate = GPIO_alternate_1,
   };
-  // TODO, Replace with constants
-  gpio__init(&gpio_u_config, LPC_GPIO0, 2);
-  gpio__init(&gpio_u_config, LPC_GPIO0, 3);
+  gpio__init(&gpio_u_config, LPC_GPIO0, UART0_TX_PIN);
+  gpio__init(&gpio_u_config, LPC_GPIO0, UART0_RX_PIN);
 
   uart_config.baud_rate = UART0_BAUD_RATE;
   uart_config.communication_mode = UART_communication_mode_RX_TX;
@@ -75,7 +74,6 @@ int _write(int file, char *ptr, int len) {
 }
 
 int _read(int file, char *ptr, int len) {
-  // TODO, Write this code
-  *ptr = uart_interrupt__read(&uart_interrupt_config, 1000);
+  *ptr = uart_interrupt__read(&uart_interrupt_config, portMAX_DELAY);
   return 1;
 }

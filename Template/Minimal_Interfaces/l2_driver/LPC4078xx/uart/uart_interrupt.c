@@ -7,7 +7,7 @@
 
 // Constants
 
-// static const uint8_t IER_RBRIE = 0;
+static const uint8_t IER_RBRIE = 0;
 static const uint8_t IER_THREIE = 1;
 // static const uint8_t IER_RXIE = 2;
 
@@ -25,6 +25,7 @@ static void uart_interrupt__activate_write(UART_interrupt_s *interrupt_config);
 
 // Interrupts
 static void uart_interrupt__handle_thre(UART_interrupt_s *interrupt_config);
+static void uart_interrupt__handle_rda(UART_interrupt_s *interrupt_config);
 static void uart_interrupt__callback_notify(UART_interrupt_s *interrupt_config,
                                             UART_interrupt_event_e event);
 
@@ -34,8 +35,8 @@ void uart_interrupt__init(UART_interrupt_s *interrupt_config) {
   interrupt_config->tx_queue =
       xQueueCreate(interrupt_config->tx_queue_length, sizeof(uint8_t));
 
-  // TODO, Activate RX Interrupts here
-  // USART_TypeDef *usart = interrupt_config->uart_config->usart;
+  USART_TypeDef *usart = interrupt_config->uart_config->usart;
+  usart->IER |= ((1 << IER_RBRIE));
 }
 
 void uart_interrupt__write(UART_interrupt_s *interrupt_config, uint8_t data) {
@@ -60,13 +61,13 @@ void uart_interrupt__write_string_n(UART_interrupt_s *interrupt_config,
   uart_interrupt__activate_write(interrupt_config);
 }
 
-// TODO, Incomplete
 uint8_t uart_interrupt__read(const UART_interrupt_s *interrupt_config,
                              uint32_t wait_for) {
-  return 0;
+  uint8_t data = 0;
+  xQueueReceive(interrupt_config->rx_queue, (void *)&data, wait_for);
+  return data;
 }
 
-// TODO, Incomplete
 void uart_interrupt__process(UART_interrupt_s *interrupt_config) {
   USART_TypeDef *usart = interrupt_config->uart_config->usart;
 
@@ -84,6 +85,7 @@ void uart_interrupt__process(UART_interrupt_s *interrupt_config) {
     break;
   case 0x2:
     // RDA (Receive data available)
+    uart_interrupt__handle_rda(interrupt_config);
     break;
   case 0x3:
     // RLS (Receive Line Status)
@@ -130,6 +132,17 @@ static void uart_interrupt__handle_thre(UART_interrupt_s *interrupt_config) {
     uart_interrupt__callback_notify(interrupt_config,
                                     UART_interrupt_event_TRANSFER_COMPLETE);
   }
+}
+
+static void uart_interrupt__handle_rda(UART_interrupt_s *interrupt_config) {
+  BaseType_t pxHigherPriorityTaskWoken = pdFALSE;
+  USART_TypeDef *usart = interrupt_config->uart_config->usart;
+  uint8_t data = usart->RBR;
+  xQueueSendFromISR(interrupt_config->rx_queue, (void *)&data,
+                    &pxHigherPriorityTaskWoken);
+  uart_interrupt__callback_notify(interrupt_config,
+                                  UART_interrupt_event_RX_READY);
+  portYIELD_FROM_ISR(pxHigherPriorityTaskWoken);
 }
 
 static void uart_interrupt__callback_notify(UART_interrupt_s *interrupt_config,
