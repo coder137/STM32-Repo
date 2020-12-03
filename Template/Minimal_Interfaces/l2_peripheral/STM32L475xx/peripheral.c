@@ -80,6 +80,13 @@ static void system_uart_interrupt__init() {
   uart_interrupt_config.tx_queue_length = USART1_TX_BUF_SIZE;
   uart_interrupt_config.UART_event_cb = uart_interrupt_cb;
   uart_interrupt__init(&uart_interrupt_config);
+
+  // This is for FreeRTOS kernel APIs to be used within ISR.
+  // ISR priority is set to be lower that the FreeRTOS kernel (higher number) so
+  // that we can call the FreeRTOS ISR functions
+  NVIC_SetPriority(USART1_IRQn,
+                   configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY + 1);
+  NVIC_EnableIRQ(USART1_IRQn);
 }
 
 // Interrupt function

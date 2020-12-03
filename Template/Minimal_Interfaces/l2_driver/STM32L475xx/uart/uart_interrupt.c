@@ -65,7 +65,6 @@ static void uart_interrupt__callback_notify(UART_interrupt_s *interrupt_config,
 
 // FUNCTION
 void uart_interrupt__init(UART_interrupt_s *interrupt_config) {
-
   interrupt_config->rx_queue =
       xQueueCreate(interrupt_config->rx_queue_length, sizeof(uint8_t));
   interrupt_config->tx_queue =
@@ -74,13 +73,6 @@ void uart_interrupt__init(UART_interrupt_s *interrupt_config) {
   // Initialize interrupt peripherals
   uart_interrupt__receive_enable(interrupt_config);
   uart_interrupt__error_enable(interrupt_config);
-
-  // This is for FreeRTOS kernel APIs to be used within ISR.
-  // ISR priority is set to be lower that the FreeRTOS kernel (higher number) so
-  // that we can call the FreeRTOS ISR functions
-  NVIC_SetPriority(USART1_IRQn,
-                   configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY + 1);
-  NVIC_EnableIRQ(USART1_IRQn);
 }
 
 void uart_interrupt__write(UART_interrupt_s *interrupt_config, uint8_t data) {
