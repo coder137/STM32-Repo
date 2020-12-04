@@ -13,7 +13,7 @@ static void system_uart__init();
 static void system_uart_interrupt__init();
 
 // Variables
-UART_s uart_config;
+static UART_s uart_config;
 static UART_interrupt_s uart_interrupt_config;
 
 void peripheral__initialize() {
@@ -36,7 +36,6 @@ static void system_uart__init() {
   uart__init(&uart_config, LPC_UART0);
 }
 
-// TODO, Unused
 static void UART_event_cb(UART_interrupt_event_e event) {
   switch (event) {
   case UART_interrupt_event_TX_COMPLETE:
