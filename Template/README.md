@@ -13,6 +13,7 @@
   - [Minimal C Stdlib](#minimal-c-stdlib)
   - [Minimal Unit Testing](#minimal-unit-testing)
   - [Minimal Unit Testing Meson](#minimal-unit-testing-meson)
+  - [Minimal Interfaces](#minimal-interfaces)
 
 # Template
 
@@ -56,16 +57,16 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
 
 # Project Order
 
-- [x] Minimal_Initial
+- [x] **Minimal_Initial**
   - Writing 2 low level drivers GPIO and UART
-- [x] Minimal_Interrupt
+- [x] **Minimal_Interrupt**
   - Writing GPIO and UART using interrupts
-- [x] Minimal_FreeRTOS
+- [x] **Minimal_FreeRTOS**
   - Integrate Amazon FreeRTOS with the project
   - Create example for `task` and `queue` systems
   - Updated interrupt drivers with FreeRTOS functions
   - Fork from `Minimal_Interrupt`
-- [x] Minimal_C_Stdlib
+- [x] **Minimal_C_Stdlib**
   - Contains C Standard Library syscalls
   - Attached `printf` and `scanf` to UART low level driver 
   - Adding openocd debugging
@@ -73,20 +74,33 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
     - openocd cmake integration
     - openocd vscode integration with plugin
   - Fork from `Minimal_FreeRTOS`
-- [x] Minimal_Unit_Testing
+- [x] **Minimal_Unit_Testing**
   - Unity and FFF for Assertion and Mocking
   - CMake and CTest
     - Command line usage
     - VSCode usage
   - Fork from `Minimal_C_Stdlib`
+- [x] **Minimal_Interfaces**
+  - Creating platform agnostic inteface files for common peripherals
+  - This can be extended to other modules as well
+  - Fork from `Minimal_Unit_Testing`
+  - This project structure is vastly different from the previous projects
+- [ ] **Minimal_Libraries**
+  - Compiling each individual layer as its own **static** library
+  - NOTE: We cannot have dynamic libraries here since our generated .elf needs to be flashed/loaded to our microcontroller
+- [ ] **Minimal_Tools**
+  - Third party tool integration for cleaner code.
+  - `cppcheck` for static analysis
+  - `clang-format` for code formatting
+  - TODO, Add more tools here as required
 
 # Other Templates
 
-- [ ] Minimal_ThreadX
+- [ ] **Minimal_ThreadX**
   - Integrate Microsoft ThreadX with the project
   - Create example for `task` and `queue` systems
   - Fork from `Minimal_Interrupt` 
-- [x] Minimal_Unit_Testing_Meson
+- [x] **Minimal_Unit_Testing_Meson**
   - Unity and FFF for Assertion and Mocking
   - Meson build system
   - Changes to source files have also been added to CMake and tested
@@ -131,3 +145,7 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
 ## Minimal Unit Testing Meson
 
 **Open the `Minimal_Unit_Testing` project README**
+
+## Minimal Interfaces
+
+- [x] Platform_Agnostic_Interfaces

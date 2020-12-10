@@ -102,7 +102,7 @@ Under **FreeRTOSv`<version>`/FreeRTOS/Source**
     - Since we want FreeRTOS kernel to manage our generic ISR functions we set the priorty to be `configMAX_SYSCALL_INTERRUPT_PRIORITY + 1` (to make it a lesser priority than the kernel)
     - See image below to understand
 
-![configMAX_SYSCALL_INTERRUPT_PRIORITY](https://www.freertos.org/wp-content/uploads/2018/07/Interrupt-priorities-interrupt-nesting.jpg)
+![configMAX_SYSCALL_INTERRUPT_PRIORITY](https://www.freertos.org/fr-content-src/uploads/2018/07/Interrupt-priorities-interrupt-nesting.jpg)
 
 
 ### Disabled Macros
