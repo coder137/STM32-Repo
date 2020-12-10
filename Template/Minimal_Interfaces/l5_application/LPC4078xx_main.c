@@ -36,9 +36,39 @@ static void read_task(void *arg) {
   }
 }
 
+// Overriding the default GPIO_Handler
+volatile bool is_pressed = false;
+void GPIO_Handler(void) {
+  is_pressed = true;
+
+  // Clear pin 29
+  LPC_GPIOINT->IO0IntClr |= (1 << 29);
+}
+
+static void gpio_interrupt(void *arg) {
+  // Configure the interrupt
+  GPIO_s iconfig;
+  gpio__init_as_input(&iconfig, LPC_GPIO0, 29);
+  LPC_GPIOINT->IO0IntEnR |= (1 << iconfig.pin);
+
+  NVIC_EnableIRQ(GPIO_IRQn);
+
+  // Check for the interrupt here
+  while (1) {
+    if (is_pressed) {
+      printf("Pressed\r\n");
+      is_pressed = false;
+    } else {
+      vTaskDelay(10);
+    }
+  }
+}
+
 int main() {
+
   xTaskCreate(print_task, "print_task", 2048, NULL, 2, NULL);
   xTaskCreate(blink_task, "blink_task", 2048, NULL, 2, NULL);
+  xTaskCreate(gpio_interrupt, "gpio_interrupt", 2048, NULL, 2, NULL);
   xTaskCreate(read_task, "read_task", 2048, NULL, 2, NULL);
   vTaskStartScheduler();
 
