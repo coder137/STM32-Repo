@@ -1,0 +1,18 @@
+# Exclude these files from root level .gitignore
+build
+
+# Files
+!stm32l4discovery.cfg
+
+# Remove everything
+.vscode/*.DB*
+.vscode/*.json
+
+# Keep these for reference
+!.vscode/launch.json
+!.vscode/c_cpp_properties.json
+!.vscode/tasks.json
+
+# Python
+__pycache__
+*.pyc
