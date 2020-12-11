@@ -1,4 +1,3 @@
-#include "FreeRTOSConfig.h"
 #include "stm32l475xx.h"
 
 // TODO, Shift this to a different file

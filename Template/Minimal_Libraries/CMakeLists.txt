@@ -19,24 +19,13 @@ include(cmake/test/target.cmake)
 # Cross Compilation Flags
 include(cmake/compile_flags.cmake)
 
-# TODO, Add more subdirectory includes here
-ess_include(l0_lowlevel)
-ess_include_script(l1_third_party/FreeRTOS/FreeRTOS.cmake)
-ess_include(l2_driver)
-ess_include(l2_peripheral)
-ess_include(l5_application)
-
-set(USER_INCLUDE_DIRS 
-  ${l0_lowlevel_dirs}
-  ${l2_driver_dirs}
-  ${l2_peripheral_dirs}
-  ${FreeRTOS_dirs}
-  ${l5_application_dirs}
-)
+set(USER_INCLUDE_DIRS "")
 
 # Set Global requirements for both unit-tests and arm targets
 add_compile_definitions(${CONTROLLER_NAME})
 
+# NOTE!, Testing does not work when adding static libraries
+# We need to manually populate the above USER_INCLUDE_DIRS to mocks and unit-tests
 if (TESTING)
 
   message("Configuring Testing")
@@ -64,14 +53,23 @@ else()
 
   message("Configuring ARM Project")
 
+  # Each layer as libraries
+  # l0_lowlevel
+  add_subdirectory(l0_lowlevel/arm)
+  add_subdirectory(l0_lowlevel/device/${CONTROLLER_NAME})
+  add_subdirectory(l0_lowlevel/newlib)
+
+  # l1_third_party
+  add_subdirectory(l1_third_party/FreeRTOS)
+
+  # l2_layer
+  add_subdirectory(l2_driver/${CONTROLLER_NAME})
+  add_subdirectory(l2_peripheral/${CONTROLLER_NAME})
+
   # Cross Compiled project
   set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
   add_executable(${USER_PROJECT_TARGET}
-      ${l0_lowlevel_sources}
-      ${FreeRTOS_sources}
-      ${l2_driver_sources}
-      ${l2_peripheral_sources}
-      ${l5_application_sources}
+      l5_application/${CONTROLLER_NAME}_main.c
   )
 
   target_include_directories(${USER_PROJECT_TARGET} PRIVATE
@@ -86,6 +84,15 @@ else()
   target_link_options(${USER_PROJECT_TARGET} PRIVATE 
     ${COMMON_C_FLAGS}
     ${USER_LINK_FLAGS}
+  )
+
+  target_link_libraries(${USER_PROJECT_TARGET} PRIVATE 
+    arm_cmsis_core
+    device
+    newlib
+    freertos
+    driver
+    peripheral
   )
 
   # Features
