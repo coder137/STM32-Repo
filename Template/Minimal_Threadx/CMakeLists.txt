@@ -14,7 +14,9 @@ add_subdirectory(threadx)
 
 set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
 add_executable(${USER_PROJECT_TARGET} 
-  application/main.c
+  # application/main.c
+  application/sample_threadx.c
+  application/tx_initialize_low_level.S
 )
 
 target_compile_definitions(${USER_PROJECT_TARGET} PRIVATE ${CONTROLLER_NAME})

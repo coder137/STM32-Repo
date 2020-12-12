@@ -1,0 +1,5 @@
+# Exclude these files from root level .gitignore
+build
+.vscode
+
+*example_build*
