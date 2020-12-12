@@ -154,4 +154,4 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
 
 ## Minimal Threadx
 
-> TODO,
+- [x] Integrate_ThreadX

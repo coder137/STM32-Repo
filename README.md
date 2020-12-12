@@ -190,7 +190,7 @@ Writing code for various hardwares i.e
 ## RTOS
 
 - [x] Amazon FreeRTOS
-- [ ] Microsoft ThreadX
+- [x] Microsoft ThreadX
 
 ## Languages
 
