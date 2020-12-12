@@ -14,6 +14,7 @@
   - [Minimal Unit Testing](#minimal-unit-testing)
   - [Minimal Unit Testing Meson](#minimal-unit-testing-meson)
   - [Minimal Interfaces](#minimal-interfaces)
+  - [Minimal Threadx](#minimal-threadx)
 
 # Template
 
@@ -85,9 +86,10 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
   - This can be extended to other modules as well
   - Fork from `Minimal_Unit_Testing`
   - This project structure is vastly different from the previous projects
-- [ ] **Minimal_Libraries**
+- [x] **Minimal_Libraries**
   - Compiling each individual layer as its own **static** library
   - NOTE: We cannot have dynamic libraries here since our generated .elf needs to be flashed/loaded to our microcontroller
+  - Forked from `Minimal_Interfaces`
 - [ ] **Minimal_Tools**
   - Third party tool integration for cleaner code.
   - `cppcheck` for static analysis
@@ -149,3 +151,7 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
 ## Minimal Interfaces
 
 - [x] Platform_Agnostic_Interfaces
+
+## Minimal Threadx
+
+> TODO,
