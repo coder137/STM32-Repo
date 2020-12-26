@@ -5,4 +5,6 @@ mod entry_point;
 mod rust_entry_point;
 
 #[no_mangle]
-fn main() -> ! {}
+fn main() -> ! {
+    loop {}
+}
