@@ -98,7 +98,7 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
 
 # Other Templates
 
-- [ ] **Minimal_ThreadX**
+- [x] **Minimal_ThreadX**
   - Integrate Microsoft ThreadX with the project
   - Create example for `task` and `queue` systems
   - Fork from `Minimal_Interrupt` 

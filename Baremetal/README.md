@@ -1,3 +1,12 @@
+- [List](#list)
+  - [High Level Overview of Baremetal Cross Compilation Process](#high-level-overview-of-baremetal-cross-compilation-process)
+  - [Important](#important)
+    - [**dump** folder](#dump-folder)
+- [Projects](#projects)
+  - [Embedded C](#embedded-c)
+  - [Embedded C++](#embedded-c-1)
+  - [Embedded Rust](#embedded-rust)
+
 # List
 
 Examples have been built on the **B-L475E-IOT01A STM32L4 based board**
@@ -30,7 +39,9 @@ Examples have been built on the **B-L475E-IOT01A STM32L4 based board**
 ### **dump** folder
   - contains various compilation dumps to learn the various flags that are used during compilation
 
-## C Programming
+# Projects
+
+## Embedded C
 
 - [x] Minimal_Linker
   - Basic understanding of Linker Scripts
@@ -51,7 +62,7 @@ Examples have been built on the **B-L475E-IOT01A STM32L4 based board**
   - Using the ARM CMSIS Base Toolchain 
   - Device specific data added
 
-## C++ Programming
+## Embedded C++
 
 - [x] Minimal_Cpp
   - Adding C++17 support to Linker script
@@ -65,3 +76,14 @@ Examples have been built on the **B-L475E-IOT01A STM32L4 based board**
   - Standard C++ library and syscalls
 - [ ] Minimal_Cpp_Advanced
   - C++11/C++14/C++17 static library features
+
+## Embedded Rust
+
+- [x] Minimal_Baremetal
+  - Uses C FFI with rust (CMSIS and Device Headers)
+  - No external crate support
+  - Interrupt Vector Table in rust
+  - Similar to `Minimal_CMSIS` C project
+- [ ] Minimal_Tools
+  - Basic inbuilt libraries and crates for embedded development
+  - Basic tools for your embedded workflow
