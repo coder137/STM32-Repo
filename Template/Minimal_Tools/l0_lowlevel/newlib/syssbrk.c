@@ -28,8 +28,10 @@ caddr_t _sbrk(int increment) {
 
   char *heap_limit = (char *)&__HeapLimit;
   char *prev_heap_end = heap_end;
-  if ((heap_end + increment) > (char *)heap_limit) {
-    return ((void *)-1); // error - no more memory
+
+  // We are comparing addresses here
+  if ((size_t)(heap_end + increment) > (size_t)heap_limit) {
+    return NULL; // error - no more memory
   }
 
   heap_end += increment;

@@ -64,6 +64,8 @@ else()
 
   message("Configuring ARM Project")
 
+  include(cmake/tool/cppcheck.cmake)
+
   # Cross Compiled project
   set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
   add_executable(${USER_PROJECT_TARGET}

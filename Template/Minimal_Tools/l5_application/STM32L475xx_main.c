@@ -39,7 +39,7 @@ static void blink_task(void *arg) {
 static void uart_write_task(void *arg) {
   uint32_t counter = 0;
   while (1) {
-    printf("Hello World: %ld\r\n", counter);
+    printf("Hello World: %u\r\n", counter);
     counter++;
     vTaskDelay(1000);
   }
@@ -49,8 +49,8 @@ static void uart_read_task(void *arg) {
   char buf[20] = {0};
   uint32_t counter = 0;
   while (1) {
-    scanf("%s", buf);
-    printf("Recv %ld: %s\r\n", counter, buf);
+    scanf("%19s", buf);
+    printf("Recv %u: %s\r\n", counter, buf);
     counter++;
   }
 }
@@ -65,6 +65,15 @@ static void gpio_input_task(void *arg) {
     vTaskDelay(200);
   }
 }
+
+// * Uncomment the function below to see how cppcheck works
+// int foo(int x) {
+//   int buf[10] = {0};
+//   if (x == 1000) {
+//     buf[x] = x; // <- ERROR
+//   }
+//   return buf[x];
+// }
 
 int main(void) {
   printf("Main\r\n");
