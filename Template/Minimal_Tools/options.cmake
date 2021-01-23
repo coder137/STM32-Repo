@@ -13,3 +13,8 @@ set(USE_SEMIHOSTING OFF)
 option(TESTING OFF)
 
 # FreeRTOS Features
+
+# Project Features
+
+## CPPCHECK
+set(CPPCHECK_REQUIRED ON)

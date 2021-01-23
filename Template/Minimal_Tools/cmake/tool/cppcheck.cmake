@@ -1,3 +1,14 @@
+if(NOT CPPCHECK_REQUIRED)
+    message("TOOL: CPPCHECK NOT required")
+    return()
+endif()
+
+message("TOOL: CPPCHECK required")
+find_program(cppcheck_program 
+    "cppcheck"
+    REQUIRED
+)
+
 set(CPPCHECK_ENABLE "--enable=all" "--force")
 set(CPPCHECK_STD "--std=c11")
 
@@ -27,7 +38,7 @@ set(CPPCHECK_BUILDDIR "--cppcheck-build-dir=${CMAKE_CURRENT_BINARY_DIR}/cppcheck
 set(CPPCHECK_PROJECT "--project=${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json")
 
 # Final command
-set(CMAKE_C_CPPCHECK "cppcheck"
+set(CMAKE_C_CPPCHECK ${cppcheck_program}
     ${CPPCHECK_BUILDDIR}
     ${CPPCHECK_ENABLE}
     ${CPPCHECK_SUPPRESS}
