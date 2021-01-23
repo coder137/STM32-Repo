@@ -28,9 +28,29 @@ ess_include(l5_application)
 
 set(USER_INCLUDE_DIRS 
   ${l0_lowlevel_dirs}
+  ${FreeRTOS_dirs}
   ${l2_driver_dirs}
   ${l2_peripheral_dirs}
-  ${FreeRTOS_dirs}
+  ${l5_application_dirs}
+)
+
+set(USER_SOURCES
+  ${l0_lowlevel_sources}
+  ${FreeRTOS_sources}
+  ${l2_driver_sources}
+  ${l2_peripheral_sources}
+  ${l5_application_sources}
+)
+
+set(USER_CLANG_SOURCES
+  ${l2_driver_sources}
+  ${l2_peripheral_sources}
+  ${l5_application_sources}
+)
+
+set(USER_CLANG_INC_DIRS
+  ${l2_driver_dirs}
+  ${l2_peripheral_dirs}
   ${l5_application_dirs}
 )
 
@@ -58,37 +78,22 @@ if (TESTING)
 
   # TODO, Add more tests here
 
+  # NOTE, Append to USER_CLANG_SOURCES and USER_CLANG_INC_DIRS
+  # to add unit-tests to clang format
+
   # TODO, Add code coverage tool
 
 else()
 
   message("Configuring ARM Project")
 
+  # Tools to add before target is defined
+  ## Static analysis tool
   include(cmake/tool/cppcheck.cmake)
 
   # Cross Compiled project
-  set(USER_PROJECT_TARGET "${PROJECT_NAME}.elf")
-  add_executable(${USER_PROJECT_TARGET}
-      ${l0_lowlevel_sources}
-      ${FreeRTOS_sources}
-      ${l2_driver_sources}
-      ${l2_peripheral_sources}
-      ${l5_application_sources}
-  )
-
-  target_include_directories(${USER_PROJECT_TARGET} PRIVATE
-     ${USER_INCLUDE_DIRS}
-  )
-
-  target_compile_options(${USER_PROJECT_TARGET} PRIVATE 
-      ${COMMON_C_FLAGS}
-      ${USER_C_FLAGS}
-  )
-
-  target_link_options(${USER_PROJECT_TARGET} PRIVATE 
-    ${COMMON_C_FLAGS}
-    ${USER_LINK_FLAGS}
-  )
+  include(cmake/project/project_release.cmake)
+  # TODO, Add more projects here
 
   # Features
   include(cmake/cross/semihosting.cmake)
@@ -96,9 +101,9 @@ else()
   # Tools
   include(cmake/compile.cmake)
   include(cmake/flash.cmake)
-  # TODO, Add Static Analysis tool
   # TODO, Add documentation generator tool
 
 endif()
 
 # TODO, Add Clang format tool
+include(cmake/tool/clangformat.cmake)

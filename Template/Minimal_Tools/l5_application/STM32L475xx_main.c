@@ -15,8 +15,8 @@
 
 // Conditional includes
 #if STM32L475xx
-#include "exti/exti.h"
-#include "rcc/rcc.h"
+#include "exti.h"
+#include "rcc.h"
 #endif
 
 /**

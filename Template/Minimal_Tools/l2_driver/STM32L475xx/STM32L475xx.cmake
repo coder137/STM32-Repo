@@ -6,3 +6,9 @@ ess_data(l2_driver_sources
     uart/uart.c
     uart/uart_interrupt.c
 )
+ess_data(l2_driver_dirs
+    exti
+    gpio
+    rcc
+    uart
+)
