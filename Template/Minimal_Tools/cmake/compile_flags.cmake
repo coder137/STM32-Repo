@@ -1,7 +1,11 @@
 # ~~~
 # https://gcc.gnu.org/onlinedocs/gcc-3.2/gcc/Warning-Options.html#Warning%20Options
 # ~~~
-set(WARNING_FLAGS -Wall -Werror)
+set(WARNING_FLAGS 
+    -Wall 
+    -Werror
+    -Wno-format
+)
 
 # Project Variables
 set(COMMON_C_FLAGS
@@ -14,8 +18,14 @@ set(COMMON_C_FLAGS
     -pipe
     -Wl,--print-memory-usage
     ${WARNING_FLAGS})
-set(USER_C_FLAGS -std=c99 -fmessage-length=0 -ffunction-sections
-                 -fdata-sections -fstack-usage -nostdlib)
+set(USER_C_FLAGS 
+    -std=c11
+    -fmessage-length=0 
+    -ffunction-sections
+    -fdata-sections 
+    -fstack-usage 
+    -nostdlib
+)
 
 set(USER_LINK_FLAGS
     -nostartfiles

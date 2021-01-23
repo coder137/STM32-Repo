@@ -13,5 +13,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 # ~~~
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
-set(CMAKE_C_COMPILER_WORKS 1)
-set(CMAKE_CXX_COMPILER_WORKS 1)
+
+# This is necessary to populate `CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES`
+# a lot of tools could potentitally require cmake variable
+set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
