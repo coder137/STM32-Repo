@@ -1,0 +1,33 @@
+{
+  "configurations": [
+    {
+      "cwd": "${workspaceFolder}",
+      "executable": "build/minimal_startup.elf",
+      "configFiles": [
+        "stm32l4discovery.cfg"
+      ],
+      "postLaunchCommands": [
+        "monitor arm semihosting enable",
+      ],
+      "name": "Debug",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "openocd"
+    },
+    {
+      "cwd": "${workspaceFolder}",
+      "executable": "build/minimal_startup.elf",
+      "configFiles": [
+        "stm32l4discovery.cfg"
+      ],
+      "postLaunchCommands": [
+        "load",
+        "monitor arm semihosting enable",
+      ],
+      "name": "Flash and Debug",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "openocd"
+    }
+  ]
+}

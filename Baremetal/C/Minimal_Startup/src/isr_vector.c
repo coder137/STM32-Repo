@@ -39,13 +39,13 @@ static void initialize_data_section(void) {
   extern void *_edata;
   extern void *_lma_data;
 
-  const uint8_t *end_of_vma_data = (uint8_t *)_edata;
-  const uint8_t *start_of_vma_data = (uint8_t *)_sdata;    // vma
-  const uint8_t *start_of_lma_data = (uint8_t *)_lma_data; // lma
+  const uint8_t *end_of_vma_data = (uint8_t *)&_edata;
+  uint8_t *start_of_vma_data = (uint8_t *)&_sdata;     // vma
+  uint8_t *start_of_lma_data = (uint8_t *)&_lma_data;  // lma
 
   const uint32_t size = end_of_vma_data - start_of_vma_data;
-  for (int i = 0; i < size; i++) {
-    start_of_vma_data = start_of_lma_data;
+  for (uint32_t i = 0; i < size; i++) {
+    *start_of_vma_data = *start_of_lma_data;
     start_of_vma_data++;
     start_of_lma_data++;
   }
@@ -55,9 +55,10 @@ static void initialize_bss_section(void) {
   extern void *_sbss;
   extern void *_ebss;
 
-  uint8_t *ptr = (uint8_t *)&_sbss;
-  while (ptr < (uint8_t *)&_ebss) {
-    *ptr = 0;
-    ptr++;
+  uint8_t *sbss_ptr = (uint8_t *)&_sbss;
+  const uint32_t ebss_address = (uint32_t)&_ebss;
+  while ((uint32_t)sbss_ptr < ebss_address) {
+    *sbss_ptr = 0;
+    sbss_ptr++;
   }
 }
