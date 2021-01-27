@@ -11,7 +11,8 @@
   - [L3 Functional third party library](#l3-functional-third-party-library)
   - [L4 Modules](#l4-modules)
   - [L5 Application](#l5-application)
-- [Startup to Main](#startup-to-main)
+- [Startup to Main (Use-case)](#startup-to-main-use-case)
+- [Startup to Main (Sequence)](#startup-to-main-sequence)
 
 <div class="page"/>
 
@@ -145,7 +146,11 @@ Writing code for various hardwares i.e
 
 :[l5_application](uml/l5_application.md)
 
-# Startup to Main
+# Startup to Main (Use-case)
 
-:[startup_to_main](uml/functions.md)
+:[startup_to_main_usecase](uml/functions.md)
 <div class="page"/>
+
+# Startup to Main (Sequence)
+
+:[startup_to_main_sequence](uml/sequence.md)
