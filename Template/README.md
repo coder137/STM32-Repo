@@ -15,6 +15,7 @@
   - [Minimal Unit Testing Meson](#minimal-unit-testing-meson)
   - [Minimal Interfaces](#minimal-interfaces)
   - [Minimal Threadx](#minimal-threadx)
+  - [Minimal Tools](#minimal-tools)
 
 # Template
 
@@ -155,3 +156,10 @@ Application templates have been built on the **B-L475E-IOT01A STM32L4 based boar
 ## Minimal Threadx
 
 - [x] Integrate_ThreadX
+
+## Minimal Tools
+
+- [ ] Cppcheck
+- [ ] Clang-format
+- Third Party libraries
+  - [ ] tinyprintf
